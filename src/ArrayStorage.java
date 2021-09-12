@@ -17,7 +17,7 @@ public class ArrayStorage {
                     break;
                 }
                 storage[z] = r;
-                System.out.println("storage z= " + storage[z].uuid);
+                System.out.println("storage[" + z + "].uuid= " + storage[z].uuid);
                 break;
 
             }
@@ -40,6 +40,16 @@ public class ArrayStorage {
     }
 
     int size() {
-        return 0;
+        int size=0;
+        for (int z = 0; z < storage.length - 1; z++) {
+            if (storage[z] == null) {
+                if (z == 0) {
+                    return 0;
+                }
+                return z ;
+            }
+            size= z;
+        }  return size;
     }
 }
+
