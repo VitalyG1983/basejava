@@ -4,29 +4,28 @@
 
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    public static int size;
 
     void clear() {
-
-        // ищем резюме = null и присваиваем их uuid=0- или может я неправильно понял задание?
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) {
-                storage[z] = new Resume();
-                storage[z].uuid = "0";
-            }
+        // ищем готовые резюме и присваиваем им null
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) continue;
+            else storage[i] = new Resume();
         }
+        size=0;
         System.out.println("Количество резюме в БД без null= ");
     }
 
     void save(Resume r) {
-
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) {                            //пустая ячейка
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) {                            //пустая ячейка
                 if (r.uuid == null | r.uuid == "0" | r.uuid == "") {
                     System.out.println("Введите правильный uuid, а не " + r.uuid);
                     break;
                 }
-                storage[z] = r;
-                System.out.println("storage[" + z + "].uuid= " + storage[z].uuid);
+                storage[i] = r;
+                size++;
+                System.out.println("storage[" + i + "].uuid= " + storage[i].uuid);
                 break;
             }
         }
@@ -34,33 +33,30 @@ public class ArrayStorage {
 
 
     Resume get(String uuid) {
-
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) continue;
-            if (storage[z].uuid == uuid) return storage[z];
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) continue;
+            if (storage[i].uuid == uuid) return storage[i];
         }
         return null;
     }
 
     void delete(String uuid) {
-
         // ищем резюме в базе по String uuid  и перезаписываем его следующим за ним в базе резюме
-        int del_flag=0;  // флаг говорящий об удалении резюме
-
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) continue;
-            if (storage[z].uuid == uuid) {
-                del_flag=1;
-                if (z == storage.length - 1) {
-                    storage[z] = null;
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) continue;
+            if (storage[i].uuid == uuid) {
+                if (i == storage.length - 1) {
+                    storage[i] = null;
+                    size--;
                     System.out.println("Резюме с uuid="+uuid+" удалено");
                     break;
                 }
-                for (int a = z; a < storage.length; a++) {
-                    if ((a + 1) < 10000) {
-                        storage[a] = storage[a + 1];
+                for (int j = i; j < storage.length; j++) {
+                    if ((j + 1) < 10000) {
+                        storage[j] = storage[j + 1];
                     }
                 }
+                size--;
                 System.out.println("Резюме с uuid="+uuid+" удалено");
                 break;
             }
@@ -74,22 +70,19 @@ public class ArrayStorage {
     Resume[] getAll() {
         //return new Resume[0];
 // сначала найдем количество резюме- которые не null
-        int res_count = 0;
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) {
-                continue;
-            }
-            res_count = res_count + 1;
+        int resCount = 0;
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) continue;
+            resCount++;
         }
-        Resume[] res = new Resume[res_count];         // создаем массив резюме
+        Resume[] res = new Resume[resCount];         // создаем массив резюме
         // ищем резюме - не null и копируем в новый массив res -без null
-        int res_index = 0;                // индекс для нового массива res
-        for (int a = 0; a < storage.length; a++) {
-            if (storage[a] == null) {
-                continue;
-            } else {
-                res[res_index] = storage[a];
-                res_index = res_index + 1;
+        int resIndex = 0;                // индекс для нового массива res
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) continue;
+            else {
+                res[resIndex] = storage[i];
+                resIndex++;
             }
         }
         //   System.out.println("Вывод резюме из БД не равных null ");
@@ -97,13 +90,8 @@ public class ArrayStorage {
     }
 
     int size() {
-        int res_count = 0;
-        for (int z = 0; z < storage.length; z++) {
-            if (storage[z] == null) continue;
-            else res_count = res_count + 1;
-        }
         System.out.println("Количество резюме в БД без null= ");
-        return res_count;
+        return size;
     }
 }
 
