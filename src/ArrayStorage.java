@@ -11,13 +11,13 @@ public class ArrayStorage {
     void clear() {
         // ищем готовые резюме и присваиваем им null
         for (int i = 0; i < size; i++) {
-            storage[i] = new Resume();
+            storage[i] = null;
         }
         size = 0;
     }
 
     void save(Resume r) {
-        if (r.uuid == null | r.uuid == "0" | r.uuid == "") {
+        if (r.uuid == null || r.uuid == "") {
             System.out.println("Введите правильный uuid, а не " + r.uuid);
         } else {
             storage[size] = r;
@@ -59,11 +59,11 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size);         // создаем копию массива резюме без null
+        // создаем копию массива резюме без null
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
         return size;
     }
 }
-
