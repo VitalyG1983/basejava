@@ -39,20 +39,18 @@ public class ArrayStorage {
             if (storage[i].uuid == uuid) {
                 if (i == size - 1) {
                     storage[i] = null;
-                    size--;
-                    System.out.println("Резюме с uuid=" + uuid + " удалено");
                     break;
                 }
                 for (int j = i; j < size; j++) {
-                    if ((j + 1) < 10000) {
+                    if ((j + 1) < storage.length) {
                         storage[j] = storage[j + 1];
                     }
                 }
-                size--;
-                System.out.println("Резюме с uuid=" + uuid + " удалено");
                 break;
             }
         }
+        size--;
+        System.out.println("Резюме с uuid=" + uuid + " удалено");
     }
 
     /**
