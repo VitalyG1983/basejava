@@ -35,10 +35,12 @@ public class ArrayStorage {
 
     void delete(String uuid) {
         // ищем резюме в базе по String uuid  и перезаписываем его следующим за ним в базе резюме
+        int delFlag = 0;
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid == uuid) {
                 if (i == size - 1) {
                     storage[i] = null;
+                    delFlag = 1;
                     break;
                 }
                 for (int j = i; j < size; j++) {
@@ -46,11 +48,14 @@ public class ArrayStorage {
                         storage[j] = storage[j + 1];
                     }
                 }
+                delFlag = 1;
                 break;
             }
         }
-        size--;
-        System.out.println("Резюме с uuid=" + uuid + " удалено");
+        if (delFlag == 1) {
+            size--;
+            System.out.println("Резюме с uuid=" + uuid + " удалено");
+        }
     }
 
     /**
