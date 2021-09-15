@@ -4,6 +4,7 @@
 
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    int size;
 
     void clear() {
 
@@ -97,11 +98,14 @@ public class ArrayStorage {
     }
 
     int size() {
+        //ArrayStorage sto=new ArrayStorage();
+        //if (size>0) return size;
         int res_count = 0;
         for (int z = 0; z < storage.length; z++) {
             if (storage[z] == null) continue;
             else res_count = res_count + 1;
         }
+        size=res_count;
         System.out.println("Количество резюме в БД без null= ");
         return res_count;
     }
