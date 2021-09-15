@@ -4,19 +4,20 @@
 
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    public static int size;
+    public int size;
 
     void clear() {
         // ищем готовые резюме и присваиваем им null
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) continue;
-            else storage[i] = new Resume();
+        for (int i = 0; i < size-1; i++) {
+             storage[i] = new Resume();
         }
-        size=0;
-        System.out.println("Количество резюме в БД без null= ");
+        size = 0;
     }
 
     void save(Resume r) {
+        if (r.uuid == null | r.uuid == "0" | r.uuid == "") {
+            System.out.println("Введите правильный uuid, а не " + r.uuid);
+        }
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {                            //пустая ячейка
                 if (r.uuid == null | r.uuid == "0" | r.uuid == "") {
@@ -30,7 +31,6 @@ public class ArrayStorage {
             }
         }
     }
-
 
     Resume get(String uuid) {
         for (int i = 0; i < storage.length; i++) {
@@ -48,7 +48,7 @@ public class ArrayStorage {
                 if (i == storage.length - 1) {
                     storage[i] = null;
                     size--;
-                    System.out.println("Резюме с uuid="+uuid+" удалено");
+                    System.out.println("Резюме с uuid=" + uuid + " удалено");
                     break;
                 }
                 for (int j = i; j < storage.length; j++) {
@@ -57,7 +57,7 @@ public class ArrayStorage {
                     }
                 }
                 size--;
-                System.out.println("Резюме с uuid="+uuid+" удалено");
+                System.out.println("Резюме с uuid=" + uuid + " удалено");
                 break;
             }
         }
@@ -85,15 +85,10 @@ public class ArrayStorage {
                 resIndex++;
             }
         }
-        //   System.out.println("Вывод резюме из БД не равных null ");
         return res;
     }
 
     int size() {
-        System.out.println("Количество резюме в БД без null= ");
         return size;
     }
 }
-
-
-
