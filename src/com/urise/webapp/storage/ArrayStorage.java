@@ -1,3 +1,7 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -5,39 +9,38 @@ import java.util.Arrays;
  */
 
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    public int size;
+    private Resume[] storage = new Resume[10000];
+    private int size;
 
-    void clear() {
+   public void clear() {
         // ищем готовые резюме и присваиваем им null
         for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
-
-    void save(Resume r) {
-        if (r.uuid == null || r.uuid == "") {
-            System.out.println("Введите правильный uuid, а не " + r.uuid);
+    public void save(Resume r) {
+        if (r.getUuid() == null || r.getUuid() == "") {
+            System.out.println("Введите правильный uuid, а не " + r.getUuid());
         } else {
             storage[size] = r;
-            System.out.println("storage[" + size + "].uuid= " + storage[size].uuid);
+            System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
             size++;
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid == uuid) return storage[i];
+            if (storage[i].getUuid() == uuid) return storage[i];
         }
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         // ищем резюме в базе по String uuid  и перезаписываем его следующим за ним в базе резюме
         int delFlag = 0;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid == uuid) {
+            if (storage[i].getUuid() == uuid) {
                 if (i == size - 1) {
                     storage[i] = null;
                     delFlag = 1;
@@ -61,12 +64,12 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         // создаем копию массива резюме без null
         return Arrays.copyOf(storage, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
