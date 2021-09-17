@@ -82,6 +82,7 @@ public class ArrayStorage {
         Resume[] sto = Arrays.copyOf(storage, size);
         for (Resume res : sto) {
             if (res.getUuid() == resume.getUuid()) {
+                // resume founded, -> update
                 res.setUuid(resume.getUuid());
                 return true;
             }
