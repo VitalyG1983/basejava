@@ -12,27 +12,32 @@ public class ArrayStorage {
     private Resume[] storage = new Resume[10000];
     private int size;
 
-   public void clear() {
+    public void clear() {
         // ищем готовые резюме и присваиваем им null
         for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
+
     public void save(Resume r) {
         if (r.getUuid() == null || r.getUuid() == "") {
             System.out.println("Введите правильный uuid, а не " + r.getUuid());
-        } else {
-            storage[size] = r;
-            System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
-            size++;
-        }
+        } else if (update(r) == false) {
+            if (size < storage.length) {
+                storage[size] = r;
+                System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
+                size++;
+            }
+        } else System.out.println("резюме с uuid=" + r.getUuid() + " обновлено");
+
     }
 
     public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid() == uuid) return storage[i];
         }
+        System.out.println("Резюме с uuid= " + uuid + " нет в базе");
         return null;
     }
 
@@ -58,7 +63,7 @@ public class ArrayStorage {
         if (delFlag == 1) {
             size--;
             System.out.println("Резюме с uuid=" + uuid + " удалено");
-        }
+        } else System.out.println("Резюме с uuid=" + uuid + " отсутствует в базе");
     }
 
     /**
@@ -71,5 +76,16 @@ public class ArrayStorage {
 
     public int size() {
         return size;
+    }
+
+    public boolean update(Resume resume) {
+        Resume[] sto = Arrays.copyOf(storage, size);
+        for (Resume res : sto) {
+            if (res.getUuid() == resume.getUuid()) {
+                res.setUuid(resume.getUuid());
+                return true;
+            }
+        }
+        return false;
     }
 }
