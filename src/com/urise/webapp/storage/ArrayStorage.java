@@ -23,6 +23,8 @@ public class ArrayStorage {
     public void save(Resume r) {
         if (r.getUuid() == null || r.getUuid() == "") {
             System.out.println("Введите правильный uuid, а не " + r.getUuid());
+        } else if (size == storage.length) {
+            System.out.println("Нет места в базе данных для сохранения резюме");
         } else if (update(r) == false) {
             if (size < storage.length) {
                 storage[size] = r;
