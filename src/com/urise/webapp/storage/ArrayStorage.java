@@ -79,11 +79,10 @@ public class ArrayStorage {
     }
 
     public boolean update(Resume resume) {
-        Resume[] sto = Arrays.copyOf(storage, size);
-        for (Resume res : sto) {
-            if (res.getUuid() == resume.getUuid()) {
-                // resume founded, -> update
-                res.setUuid(resume.getUuid());
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid() == resume.getUuid()) {
+                // resume founded, -> load new resume instead old
+                storage[i] = resume;
                 return true;
             }
         }
