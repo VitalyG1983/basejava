@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -13,10 +14,8 @@ public class ArrayStorage {
     private int size;
 
     public void clear() {
-        // ищем готовые резюме и присваиваем им null
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
-        }
+        // fill 'null' instead real resumes
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
@@ -32,7 +31,6 @@ public class ArrayStorage {
                 size++;
             }
         } else System.out.println("резюме с uuid=" + r.getUuid() + " обновлено");
-
     }
 
     public Resume get(String uuid) {
