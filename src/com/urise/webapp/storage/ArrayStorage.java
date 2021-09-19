@@ -20,23 +20,23 @@ public class ArrayStorage {
 
     public void save(Resume r) {
         if (r.getUuid() == null || r.getUuid() == "") {
-            System.out.println("Введите правильный uuid, а не " + r.getUuid());
+            System.out.println("Enter valid uuid, not " + r.getUuid());
         } else if (update(r) == false) {
             if (size == storage.length) {
-                System.out.println("Нет места в базе данных для сохранения резюме");
+                System.out.println("Not enough space in Data base for save new resume");
             } else if (size < storage.length) {
                 storage[size] = r;
                 System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
                 size++;
             }
-        } else System.out.println("резюме с uuid=" + r.getUuid() + " обновлено");
+        } else System.out.println("resume with uuid=" + r.getUuid() + " updated");
     }
 
     public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid() == uuid) return storage[i];
         }
-        System.out.println("Резюме с uuid= " + uuid + " нет в базе");
+        System.out.println("Resume with uuid= " + uuid + " is not present in Database");
         return null;
     }
 
@@ -61,8 +61,8 @@ public class ArrayStorage {
         }
         if (delFlag == 1) {
             size--;
-            System.out.println("Резюме с uuid=" + uuid + " удалено");
-        } else System.out.println("Резюме с uuid=" + uuid + " отсутствует в базе");
+            System.out.println("Resume with uuid=" + uuid + " deleted");
+        } else System.out.println("Resume with uuid=" + uuid + " is not present in Database");
     }
 
     /**
