@@ -32,7 +32,6 @@ public class ArrayStorage {
         }
     }
 
-
     public Resume get(String uuid) {
         int ind = searchInd(null, uuid);
         if (ind >= 0) return storage[ind];
