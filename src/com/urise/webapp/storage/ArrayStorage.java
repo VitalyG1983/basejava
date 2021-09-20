@@ -24,7 +24,7 @@ public class ArrayStorage {
         } else if (searchInd(r.getUuid()) >= 0) {
             System.out.println("Resume with uuid=" + r.getUuid() + " already exist in Database");
         } else if (size >= storage.length) {
-            System.out.println("Not enough space in Data base for save new resume");
+            System.out.println("Not enough space in Database for save new resume");
         } else {
             //if (size < storage.length)
             storage[size] = r;
@@ -34,22 +34,20 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int i = searchInd(uuid);
-        if (i >= 0) return storage[i];
-        else {
-            System.out.println("Resume with uuid= " + uuid + " is not present in Database");
-            return null;
-        }
+        int index = searchInd(uuid);
+        if (index >= 0) return storage[index];
+        System.out.println("Resume with uuid= " + uuid + " is not present in Database");
+        return null;
     }
 
     public void delete(String uuid) {
         // ищем резюме в базе по String uuid  и перезаписываем его следующим за ним в базе резюме
-        int i = searchInd(uuid);
-        if (i >= 0) {
-            if (i == size - 1) {
-                storage[i] = null;
+        int index = searchInd(uuid);
+        if (index >= 0) {
+            if (index == size - 1) {
+                storage[index] = null;
             } else {
-                System.arraycopy(storage, i + 1, storage, i, size - i + 1);
+                System.arraycopy(storage, index + 1, storage, index, size - index + 1);
                 size--;
                 System.out.println("Resume with uuid=" + uuid + " deleted");
             }
@@ -60,7 +58,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        // создаем копию массива резюме без null
+        // Create copy of resumes without 'null'
         return Arrays.copyOf(storage, size);
     }
 
@@ -69,15 +67,15 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int i = searchInd(resume.getUuid());
-        if (i >= 0) {
-            // resume founded, -> load new resume instead old
-            storage[i] = resume;
+        int index = searchInd(resume.getUuid());
+        if (index >= 0) {
+            // resume founded, -> save new resume instead old
+            storage[index] = resume;
             System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
-        }
+        } else System.out.println("Resume with uuid=" + resume.getUuid() + " not founded in Database");
     }
 
-    public int searchInd(String uuid) {
+    private int searchInd(String uuid) {
         if (uuid != null) {
             for (int i = 0; i < size; i++) {
                 if (storage[i].getUuid() == uuid) return i;
