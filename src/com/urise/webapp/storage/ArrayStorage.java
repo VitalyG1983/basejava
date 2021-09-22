@@ -8,9 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 
-public class ArrayStorage {
-    private Resume[] storage = new Resume[10_000];
-    private int size;
+public class ArrayStorage extends AbstractArrayStorage {
 
     public void clear() {
         // fill 'null' instead real resumes
@@ -31,13 +29,6 @@ public class ArrayStorage {
             System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
             size++;
         }
-    }
-
-    public Resume get(String uuid) {
-        int index = searchInd(uuid);
-        if (index >= 0) return storage[index];
-        System.out.println("Resume with uuid= " + uuid + " is not present in Database");
-        return null;
     }
 
     public void delete(String uuid) {
@@ -62,10 +53,6 @@ public class ArrayStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    public int size() {
-        return size;
-    }
-
     public void update(Resume resume) {
         int index = searchInd(resume.getUuid());
         if (index >= 0) {
@@ -75,10 +62,10 @@ public class ArrayStorage {
         } else System.out.println("Resume with uuid=" + resume.getUuid() + " not founded in Database");
     }
 
-    private int searchInd(String uuid) {
+    protected int searchInd(String uuid) {
         if (uuid != null) {
             for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid() == uuid) return i;
+                if (uuid.equals(storage[i].getUuid() == uuid)) return i;
             }
         }
         return -1;
