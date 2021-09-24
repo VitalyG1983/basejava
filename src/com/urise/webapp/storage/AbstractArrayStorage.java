@@ -13,10 +13,33 @@ public abstract class AbstractArrayStorage implements Storage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
+    protected abstract int searchInd(String uuid);
+
+    protected abstract void saveResume(Resume r);
+
+    public int size() {
+        return size;
+    }
+
     public void clear() {
         // fill 'null' instead real resumes
         Arrays.fill(storage, 0, size, null);
         size = 0;
+    }
+
+    public void save(Resume r) {
+        if (r.getUuid() == null || r.getUuid() == "") {
+            System.out.println("Enter valid uuid, not " + r.getUuid());
+        } else if (searchInd(r.getUuid()) >= 0) {
+            System.out.println("Resume with uuid=" + r.getUuid() + " already exist in Database");
+        } else if (size >= storage.length) {
+            System.out.println("Not enough space in Database for save new resume");
+            //if (size < storage.length)
+        } else {
+            saveResume(r);
+            System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
+            size++;
+        }
     }
 
     public void delete(String uuid) {
@@ -33,14 +56,6 @@ public abstract class AbstractArrayStorage implements Storage {
         } else System.out.println("Resume with uuid=" + uuid + " is not present in Database");
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        // Create copy of resumes without 'null'
-        return Arrays.copyOf(storage, size);
-    }
-
     public void update(Resume resume) {
         int index = searchInd(resume.getUuid());
         if (index >= 0) {
@@ -50,8 +65,12 @@ public abstract class AbstractArrayStorage implements Storage {
         } else System.out.println("Resume with uuid=" + resume.getUuid() + " not founded in Database");
     }
 
-    public int size() {
-        return size;
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        // Create copy of resumes without 'null'
+        return Arrays.copyOf(storage, size);
     }
 
     public Resume get(String uuid) {
@@ -60,6 +79,4 @@ public abstract class AbstractArrayStorage implements Storage {
         System.out.println("Resume with uuid= " + uuid + " is not present in Database");
         return null;
     }
-
-    protected abstract int searchInd(String uuid);
 }
