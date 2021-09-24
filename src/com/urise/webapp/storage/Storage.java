@@ -2,8 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
-
 public interface Storage {
 
     void clear();
@@ -18,7 +16,6 @@ public interface Storage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll();
-    // Create copy of resumes without 'null'
 
     int size();
 
