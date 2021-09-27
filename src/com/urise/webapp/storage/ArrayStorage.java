@@ -8,16 +8,14 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume r) {
+    protected void saveResume(Resume r, int index) {
         storage[size] = r;
     }
 
     @Override
     protected int searchInd(String uuid) {
-        if (uuid != null) {
-            for (int i = 0; i < size; i++) {
-                if (uuid.equals(storage[i].getUuid())) return i;
-            }
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) return i;
         }
         return -1;
     }

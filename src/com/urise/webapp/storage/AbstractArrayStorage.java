@@ -15,7 +15,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract int searchInd(String uuid);
 
-    protected abstract void saveResume(Resume r);
+    protected abstract void saveResume(Resume r, int index);
 
     public int size() {
         return size;
@@ -28,15 +28,15 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume r) {
+        int index = searchInd(r.getUuid());
         if (r.getUuid() == null || r.getUuid() == "") {
             System.out.println("Enter valid uuid, not " + r.getUuid());
-        } else if (searchInd(r.getUuid()) >= 0) {
+        } else if (index >= 0) {
             System.out.println("Resume with uuid=" + r.getUuid() + " already exist in Database");
         } else if (size >= storage.length) {
             System.out.println("Not enough space in Database for save new resume");
-            //if (size < storage.length)
         } else {
-            saveResume(r);
+            saveResume(r, index);
             System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
             size++;
         }
