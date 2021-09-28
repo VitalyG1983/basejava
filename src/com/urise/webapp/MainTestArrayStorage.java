@@ -11,11 +11,11 @@ public class MainTestArrayStorage {
     private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
-        final Resume r1 = new Resume();
+        final Resume r1 = new Resume(uuid);
         r1.setUuid("uuid1");
-        final Resume r2 = new Resume();
+        final Resume r2 = new Resume(uuid);
         r2.setUuid("uuid2");
-        final Resume r3 = new Resume();
+        final Resume r3 = new Resume(uuid);
         r3.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
