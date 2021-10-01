@@ -39,7 +39,7 @@ public abstract class AbstractArrayStorage implements Storage {
             //System.out.println("Resume with uuid=" + r.getUuid() + " already exist in Database");
         } else if (size >= storage.length) {
             //System.out.println("Not enough space in Database for save new resume");
-            throw new new StorageException("Not enough space in Database for save new resume", r.getUuid());
+            throw new StorageException("Not enough space in Database for save new resume", r.getUuid());
         } else {
             saveResume(r, index);
             System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
@@ -59,7 +59,7 @@ public abstract class AbstractArrayStorage implements Storage {
                 System.out.println("Resume with uuid=" + uuid + " deleted");
             }
         } else //System.out.println("Resume with uuid=" + uuid + " is not present in Database");
-                throw new NotExistStorageException(uuid);
+            throw new NotExistStorageException(uuid);
     }
 
     public void update(Resume resume) {
@@ -69,7 +69,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[index] = resume;
             System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
         } else  //System.out.println("Resume with uuid=" + resume.getUuid() + " not founded in Database");
-              throw new NotExistStorageException(resume.getUuid());
+            throw new NotExistStorageException(resume.getUuid());
     }
 
     /**
