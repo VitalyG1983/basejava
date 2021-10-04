@@ -2,11 +2,8 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractArrayStorageTest {
     private Storage storage = new ArrayStorage();
@@ -14,9 +11,9 @@ class AbstractArrayStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
 
-    public AbstractArrayStorageTest(Storage storage) {
-        this.storage = storage;
-    }
+    //  public AbstractArrayStorageTest(Storage storage) {
+    //      this.storage = storage;
+    // }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -33,10 +30,14 @@ class AbstractArrayStorageTest {
 
     @Test
     void clear() {
+        storage.clear();
+        Assert.assertEquals(0, storage.size());
     }
 
     @Test
     void save() {
+
+
     }
 
     @Test
