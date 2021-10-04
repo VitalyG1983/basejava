@@ -6,14 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class AbstractArrayStorageTest {
-    private Storage storage = new ArrayStorage();
+    // private Storage storage = new ArrayStorage();
+    private Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
 
-    //  public AbstractArrayStorageTest(Storage storage) {
-    //      this.storage = storage;
-    // }
+    public AbstractArrayStorageTest(Storage storage) {
+        this.storage = storage;
+    }
 
     @BeforeEach
     public void setUp() throws Exception {

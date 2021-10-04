@@ -1,12 +1,21 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.model.Resume;
+import org.junit.jupiter.api.Test;
 
-public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    protected static final int STORAGE_LIMIT = 10_000;
-    protected Resume[] storage = new Resume[STORAGE_LIMIT];
+import static org.junit.jupiter.api.Assertions.*;
 
-   // public SortedArrayStorageTest(Storage storage) {
-    //    super(storage);
-    //}
+class SortedArrayStorageTest extends AbstractArrayStorageTest {
+    private static final Storage storage = new SortedArrayStorage();
+
+    public SortedArrayStorageTest() {
+        super(storage);
+    }
+
+    @Test
+    void saveResume() {
+    }
+
+    @Test
+    void searchInd() {
+    }
 }
