@@ -13,6 +13,7 @@ class ArrayStorageTest extends AbstractArrayStorageTest {
 
     @Test
     void saveResume() {
+
     }
 
     @Test
