@@ -1,5 +1,7 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
@@ -33,6 +35,11 @@ public class AbstractArrayStorageTest {
             // If we want to test fail if STORAGE_LIMIT not exceeded
             if (storage.size() <= AbstractArrayStorage.STORAGE_LIMIT)
                 Assert.fail("StorageException thrown is too early, DataBase not full");
+            //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown
+            storage.save(new Resume(UUID_4));
+        } catch (ExistStorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test overFlowAndFail() succesfully catched ExistStorageException. Resume already exist DataBase");
         } catch (StorageException e) {
             System.out.println(e.getMessage());
             System.out.println("Test overFlowAndFail() succesfully catched StorageException. DataBase overflow occured.");
@@ -63,8 +70,16 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void delete() {
-        storage.delete(UUID_2);
-        Assert.assertEquals(2, storage.size());
+        try {
+            storage.delete(UUID_2);
+            // Testing size after resume was removed
+            Assert.assertEquals(2, storage.size());
+            //If we want to delete the resume which are not exist, then NotExistStorageException will be thrown
+            storage.delete("Not_exist_UUID");
+        } catch (NotExistStorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test overFlowAndFail() succesfully catched NotExistStorageException. Resume not exist in  DataBase");
+        }
     }
 
     @Test
