@@ -1,21 +1,22 @@
 package com.urise.webapp.storage;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    private static final Storage storage = new SortedArrayStorage();
+public class SortedArrayStorageTest extends AbstractArrayStorageTest {
+    static Storage storage;
 
-  //  public SortedArrayStorageTest() {
-     //   super(storage);
-   // }
-
-    @Test
-    void saveResume() {
+    public SortedArrayStorageTest() {
+        this.storage = new SortedArrayStorage();
+        super.storage = storage;
     }
 
     @Test
-    void searchInd() {
+    public void saveResume() {
+    }
+
+    @Test
+    public void searchInd() {
     }
 }

@@ -2,106 +2,87 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-class AbstractArrayStorageTest {
-    private static Storage storage= new ArrayStorage();
+public class AbstractArrayStorageTest {
+    static Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
+    private static final String UUID_4 = "uuid4";
 
     public AbstractArrayStorageTest() {
-        //this(new ArrayStorage());
+        if (storage == null) storage = new ArrayStorage();
     }
 
-//    public AbstractArrayStorageTest(Storage storage) {
-//        this.storage = storage;
-//    }
-
-    @BeforeEach
-    public void setUp() throws StorageException {
+    @Before
+    public void setUp() {
         storage.clear();
+        storage.save(new Resume(UUID_1));
+        storage.save(new Resume(UUID_2));
+        storage.save(new Resume(UUID_3));
+    }
+
+    @Test
+    public void overFlowAndFail() {
         try {
-            storage.save(new Resume(UUID_1));
-            storage.save(new Resume(UUID_2));
-            storage.save(new Resume(UUID_3));
-         //   Assertions.fail("StorageException thrown is too early");
-        } catch (Exception e) {
-            Class excClass = e.getClass();
-            String exName = excClass.getName();
-            if (exName.intern() == "StorageException" & storage.size() < 3) {
-                Assertions.fail("StorageException thrown is too early");
-            }
+            //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
+            storage.save(new Resume(UUID_4));
+            // If we want to test fail if STORAGE_LIMIT not exceeded
+            if (storage.size() <= AbstractArrayStorage.STORAGE_LIMIT)
+                Assert.fail("StorageException thrown is too early, DataBase not full");
+        } catch (StorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test overFlowAndFail() succesfully catched StorageException. DataBase overflow occured.");
         }
     }
 
     @Test
-    void size() {
-        Assertions.assertEquals(3, storage.size());
+    public void size() {
+        Assert.assertEquals(3, storage.size());
     }
 
     @Test
-    void clear() {
+    public void clear() {
         storage.clear();
-        Assertions.assertEquals(0, storage.size());
+        Assert.assertEquals(0, storage.size());
     }
 
-    @Test (Exception)
-    void save() throws AssertionFailedError {
+    @Test
+    public void save() throws StorageException {
         Resume resume1 = storage.get(UUID_1);
         Resume resume2 = storage.get(UUID_2);
         Resume resume3 = storage.get(UUID_3);
-        Assertions.assertEquals(new Resume(UUID_1), resume1);
-        Assertions.assertEquals(new Resume(UUID_2), resume2);
-        Assertions.assertEquals(new Resume(UUID_3), resume3);
-        Assertions.assertEquals(3, storage.size());
-        Assertions.fail("StorageException thrown is too early");
+        Assert.assertEquals(new Resume(UUID_1), resume1);
+        Assert.assertEquals(new Resume(UUID_2), resume2);
+        Assert.assertEquals(new Resume(UUID_3), resume3);
+        Assert.assertEquals(3, storage.size());
     }
 
     @Test
-    void delete() {
+    public void delete() {
         storage.delete(UUID_2);
-        Assertions.assertEquals(2, storage.size());
+        Assert.assertEquals(2, storage.size());
     }
 
     @Test
-    void update() {
+    public void update() {
         Resume resumeNew = new Resume(UUID_1);
         storage.update(resumeNew);
-        Assertions.assertEquals(resumeNew, storage.get(UUID_1));
+        Assert.assertEquals(resumeNew, storage.get(UUID_1));
     }
 
     @Test
-    void getAll() {
+    public void getAll() {
         Resume[] resumeArray = storage.getAll();
-        Assertions.assertEquals(2, resumeArray.length);
+        Assert.assertEquals(storage.size(), resumeArray.length);
     }
 
     @Test
-    void get() {
+    public void get() {
         Resume resume = storage.get(UUID_1);
-        Assertions.assertEquals(storage.getAll()[0], resume);
+        Assert.assertEquals(storage.getAll()[0], resume);
     }
-
-    private void fail(String exception_not_thrown) {
-    }
-
- //   public static void main(String... args) {
-//       // AbstractArrayStorageTest abstractArrayStorageTest = new AbstractArrayStorageTest(new ArrayStorage());
-//        // try {
-//        abstractArrayStorageTest.setUp();
-//        abstractArrayStorageTest.size();
-//        // } catch (Exception e) {
-//        //      e.getMessage();
-//        //  }
-//        abstractArrayStorageTest.save();
-//        abstractArrayStorageTest.delete();
-//        abstractArrayStorageTest.update();
-//        abstractArrayStorageTest.getAll();
-//        abstractArrayStorageTest.get();
-//        abstractArrayStorageTest.clear();
-//    }
 }

@@ -1,22 +1,22 @@
 package com.urise.webapp.storage;
 
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class ArrayStorageTest extends AbstractArrayStorageTest {
-    private static final Storage storage = new ArrayStorage();
+public class ArrayStorageTest extends AbstractArrayStorageTest {
+    static Storage storage;
 
-  //  public ArrayStorageTest() {
-//        super(storage);
-//    }
-
-    @Test
-    void saveResume() {
+    public ArrayStorageTest() {
+        this.storage = new ArrayStorage();
+        super.storage = storage;
     }
 
     @Test
-    void searchInd() {
+    public void testSaveResume() {
+    }
+
+    @Test
+    public void testSearchInd() {
     }
 }
