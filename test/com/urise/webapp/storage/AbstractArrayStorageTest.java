@@ -15,8 +15,8 @@ public class AbstractArrayStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    public AbstractArrayStorageTest() {
-        if (storage == null) storage = new ArrayStorage();
+    public   AbstractArrayStorageTest(Storage storage) {
+        this.storage=storage;
     }
 
     @Before
@@ -26,13 +26,13 @@ public class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_2));
         storage.save(new Resume(UUID_3));
     }
-
+//if (storage == null) storage = new ArrayStorage();
     @Test
     public void overFlowAndFail() {
         try {
             //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
             storage.save(new Resume(UUID_4));
-            // If we want to test fail if STORAGE_LIMIT not exceeded
+            // If we want to test fail then STORAGE_LIMIT not exceeded
             if (storage.size() <= AbstractArrayStorage.STORAGE_LIMIT)
                 Assert.fail("StorageException thrown is too early, DataBase not full");
             //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown

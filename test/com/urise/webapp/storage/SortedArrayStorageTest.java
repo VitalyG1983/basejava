@@ -5,11 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    static Storage storage;
+    static Storage storage= new SortedArrayStorage();
 
     public SortedArrayStorageTest() {
-        this.storage = new SortedArrayStorage();
-        super.storage = storage;
+        super(storage);
+//        this.storage = new SortedArrayStorage();
+//        super.storage = storage;
     }
 
     @Test
