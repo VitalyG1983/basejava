@@ -10,7 +10,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected void saveResume(Resume r, int index) {
         storage[size] = r;
-        System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
     }
 
     @Override

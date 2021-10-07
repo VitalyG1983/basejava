@@ -14,6 +14,7 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
+    private static final String UUID_5 = "5";
 
 //    public AbstractArrayStorageTest() {
 //    }
@@ -27,21 +28,37 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void overFlowAndFail() {
+    public void StorageExceptionOverFlow() {
         try {
             //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
             storage.save(new Resume(UUID_4));
-            // If we want to test fail then STORAGE_LIMIT not exceeded
-            if (storage.size() <= AbstractArrayStorage.STORAGE_LIMIT)
-                Assert.fail("StorageException thrown is too early, DataBase not full");
+            storage.save(new Resume(UUID_5));
+        } catch (StorageException e) {
+            if (storage.size() >= AbstractArrayStorage.STORAGE_LIMIT) {
+                System.out.println(e.getMessage());
+                System.out.println("Test overFlowAndFail() succesfully catched StorageException. DataBase overflow occured.");
+            }
+        }
+    }
+
+    @Test
+    public void ExistStorageException() {
+        try {
             //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown
-            storage.save(new Resume(UUID_4));
+            storage.save(new Resume(UUID_3));
         } catch (ExistStorageException e) {
             System.out.println(e.getMessage());
             System.out.println("Test overFlowAndFail() succesfully catched ExistStorageException. Resume already exist DataBase");
+        }
+    }
+
+    @Test
+    public void StorageExceptionThrow() {
+        try {
+            // If we want to test fail then STORAGE_LIMIT not exceeded
+            throw new StorageException("Not enough space in Database for save new resume", UUID_5);
         } catch (StorageException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Test overFlowAndFail() succesfully catched StorageException. DataBase overflow occured.");
+            Assert.fail("StorageException thrown is too early, (size= " + storage.size() + " of " + AbstractArrayStorage.STORAGE_LIMIT + "- DataBase not full");
         }
     }
 
