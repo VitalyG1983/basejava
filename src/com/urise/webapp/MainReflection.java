@@ -12,6 +12,6 @@ public class MainReflection {
         Class resClass = r.getClass();
         Method toString = resClass.getDeclaredMethod("toString", null);
         String s = (String) toString.invoke(r, null);
-        System.out.println("Metod 'toString' via reflection= "+s);
+        System.out.println("Metod 'toString' via reflection= " + s);
     }
 }

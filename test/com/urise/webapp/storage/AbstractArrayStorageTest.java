@@ -15,8 +15,9 @@ public class AbstractArrayStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    public   AbstractArrayStorageTest(Storage storage) {
-        this.storage=storage;
+    public AbstractArrayStorageTest(Storage storage) {
+        this.storage = storage;
+        //if (storage == null) storage = new ArrayStorage();
     }
 
     @Before
@@ -26,7 +27,7 @@ public class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_2));
         storage.save(new Resume(UUID_3));
     }
-//if (storage == null) storage = new ArrayStorage();
+
     @Test
     public void overFlowAndFail() {
         try {
