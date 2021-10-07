@@ -3,7 +3,7 @@ package com.urise.webapp.storage;
 import org.junit.Test;
 
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    static Storage storage= new SortedArrayStorage();
+    static Storage storage = new SortedArrayStorage();
 
     public SortedArrayStorageTest() {
         super.storage = storage;
