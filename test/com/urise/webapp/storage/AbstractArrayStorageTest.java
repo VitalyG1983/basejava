@@ -50,7 +50,7 @@ public abstract class AbstractArrayStorageTest {
         }
     }
 
-    @Test
+    @Test (expected = AssertionError.class)
     public void storageExceptionThrow() {
         try {
             // If we want to test fail then STORAGE_LIMIT not exceeded
