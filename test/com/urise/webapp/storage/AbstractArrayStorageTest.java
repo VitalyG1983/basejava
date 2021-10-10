@@ -15,9 +15,7 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
     private static final String UUID_5 = "5";
-
-//    public AbstractArrayStorageTest() {
-//    }
+  //  private static final String UUID_6 = "6";
 
     @Before
     public void setUp() {
@@ -28,7 +26,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void StorageExceptionOverFlow() {
+    public void storageExceptionOverFlow() {
         try {
             //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
             storage.save(new Resume(UUID_4));
@@ -42,7 +40,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void ExistStorageException() {
+    public void existStorageException() {
         try {
             //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown
             storage.save(new Resume(UUID_3));
@@ -53,7 +51,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void StorageExceptionThrow() {
+    public void storageExceptionThrow() {
         try {
             // If we want to test fail then STORAGE_LIMIT not exceeded
             throw new StorageException("Not enough space in Database for save new resume", UUID_5);
@@ -63,7 +61,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void size() {
+    public void size()  {
         Assert.assertEquals(3, storage.size());
     }
 
@@ -75,13 +73,11 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() throws StorageException {
-        Resume resume1 = storage.get(UUID_1);
-        Resume resume2 = storage.get(UUID_2);
-        Resume resume3 = storage.get(UUID_3);
-        Assert.assertEquals(new Resume(UUID_1), resume1);
-        Assert.assertEquals(new Resume(UUID_2), resume2);
-        Assert.assertEquals(new Resume(UUID_3), resume3);
-        Assert.assertEquals(3, storage.size());
+        Resume resume4 = new Resume(UUID_4);
+        storage.save(resume4);
+        Resume r = storage.get(UUID_4);
+        Assert.assertEquals(resume4, r);
+        Assert.assertEquals(4, storage.size());
     }
 
     @Test
@@ -94,7 +90,7 @@ public abstract class AbstractArrayStorageTest {
             storage.delete("Not_exist_UUID");
         } catch (NotExistStorageException e) {
             System.out.println(e.getMessage());
-            System.out.println("Test overFlowAndFail() succesfully catched NotExistStorageException. Resume not exist in  DataBase");
+            System.out.println("Test overFlowAndFail() succesfully catched NotExistStorageException. Resume not exist in DataBase");
         }
     }
 
@@ -107,8 +103,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] resumeArray = storage.getAll();
-        Assert.assertEquals(storage.size(), resumeArray.length);
+        Resume[] resumes = new Resume[]{storage.get(UUID_1), storage.get(UUID_2), storage.get(UUID_3)};
+        Resume[] resumeStorage = storage.getAll();
+        Assert.assertArrayEquals(resumes, resumeStorage);
     }
 
     @Test
