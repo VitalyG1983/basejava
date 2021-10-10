@@ -54,8 +54,9 @@ public abstract class AbstractArrayStorageTest {
     public void storageExceptionThrow() {
         try {
             // If we want to test fail then STORAGE_LIMIT not exceeded
-            throw new StorageException("Not enough space in Database for save new resume", UUID_5);
+            throw new StorageException("Not enough space in Database for save new resume", "OverFlow UUID");
         } catch (StorageException e) {
+            System.out.println(e.getMessage());
             Assert.fail("StorageException thrown is too early, (size= " + storage.size() + " of " + AbstractArrayStorage.STORAGE_LIMIT + "- DataBase not full");
         }
     }
