@@ -83,6 +83,7 @@ public abstract class AbstractArrayStorageTest {
         } catch (NotExistStorageException e) {
             System.out.println(e.getMessage());
             System.out.println("Test deleteNotExistResume() succesfully catched NotExistStorageException. Resume not exist in DataBase");
+            throw new NotExistStorageException("");
         }
     }
 
