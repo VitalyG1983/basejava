@@ -9,13 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractArrayStorageTest {
-    static Storage storage;
+    protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
     private static final String UUID_5 = "5";
-  //  private static final String UUID_6 = "6";
+    //  private static final String UUID_6 = "6";
 
     @Before
     public void setUp() {
@@ -25,44 +25,81 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_3));
     }
 
-    @Test
+    @Test(expected = StorageException.class)
     public void storageExceptionOverFlow() {
         try {
             //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
-            storage.save(new Resume(UUID_4));
-            storage.save(new Resume(UUID_5));
-        } catch (StorageException e) {
+            for (int i = 3; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+        } catch (Exception e) {
             if (storage.size() >= AbstractArrayStorage.STORAGE_LIMIT) {
                 System.out.println(e.getMessage());
-                System.out.println("Test overFlowAndFail() succesfully catched StorageException. DataBase overflow occured.");
+                System.out.println("Test storageExceptionOverFlow() succesfully catched StorageException. DataBase overflow occured.");
+                throw new StorageException("", "");
             }
         }
     }
 
-    @Test
-    public void existStorageException() {
+    @Test(expected = ExistStorageException.class)
+    public void saveExistResume() {
         try {
             //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown
             storage.save(new Resume(UUID_3));
         } catch (ExistStorageException e) {
             System.out.println(e.getMessage());
-            System.out.println("Test overFlowAndFail() succesfully catched ExistStorageException. Resume already exist DataBase");
+            System.out.println("Test saveExistResume() succesfully catched ExistStorageException. Resume already exist DataBase");
+            throw new ExistStorageException(UUID_3);
         }
     }
 
-    @Test (expected = AssertionError.class)
+    @Test(expected = NotExistStorageException.class)
+    public void updateNotExistResume() {
+        try {
+            Resume resumeNew = new Resume(UUID_4);
+            storage.update(resumeNew);
+        } catch (NotExistStorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test updateNotExistResume() succesfully catched NotExistStorageException. Resume not exist in DataBase");
+            throw new NotExistStorageException("");
+        }
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void getNotExistResume() {
+        try {
+            Resume resume = storage.get(UUID_4);
+        } catch (NotExistStorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test getNotExistResume() succesfully catched NotExistStorageException. Resume not exist in DataBase");
+            throw new NotExistStorageException("");
+        }
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExistResume() {
+        try {
+            storage.delete("Not_exist_UUID");
+        } catch (NotExistStorageException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Test deleteNotExistResume() succesfully catched NotExistStorageException. Resume not exist in DataBase");
+        }
+    }
+
+    @Test(expected = StorageException.class)
     public void storageExceptionThrow() {
         try {
             // If we want to test fail then STORAGE_LIMIT not exceeded
-            throw new StorageException("Not enough space in Database for save new resume", "OverFlow UUID");
+            throw new StorageException("Test StorageException then STORAGE_LIMIT not exceeded", "");
         } catch (StorageException e) {
             System.out.println(e.getMessage());
-            Assert.fail("StorageException thrown is too early, (size= " + storage.size() + " of " + AbstractArrayStorage.STORAGE_LIMIT + "- DataBase not full");
+            System.out.println("Test storageExceptionThrow() succesfully catched StorageException. DataBase STORAGE_LIMIT not exceeded");
+            throw new StorageException("", "");
         }
     }
 
     @Test
-    public void size()  {
+    public void size() {
         Assert.assertEquals(3, storage.size());
     }
 
@@ -83,16 +120,8 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void delete() {
-        try {
-            storage.delete(UUID_2);
-            // Testing size after resume was removed
-            Assert.assertEquals(2, storage.size());
-            //If we want to delete the resume which are not exist, then NotExistStorageException will be thrown
-            storage.delete("Not_exist_UUID");
-        } catch (NotExistStorageException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Test overFlowAndFail() succesfully catched NotExistStorageException. Resume not exist in DataBase");
-        }
+        storage.delete(UUID_2);
+        Assert.assertEquals(2, storage.size());
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Array based storage for Resumes
@@ -32,14 +33,12 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume r) {
         int index = searchInd(r.getUuid());
-        if (r.getUuid() == null || r.getUuid() == "") {
+        if (r.getUuid() == null || Objects.equals(r.getUuid(), "")) {
             System.out.println("Enter valid uuid, not " + r.getUuid());
         } else if (index >= 0) {
             throw new ExistStorageException(r.getUuid());
-            //System.out.println("Resume with uuid=" + r.getUuid() + " already exist in Database");
         } else if (size >= storage.length) {
-            //System.out.println("Not enough space in Database for save new resume");
-            throw new StorageException("Not enough space in Database for save new resume", r.getUuid());
+            throw new StorageException("Not enough space in Database for save new resume ", r.getUuid());
         } else {
             saveResume(r, index);
             System.out.println("storage[" + size + "].uuid= " + storage[size].getUuid());
@@ -58,8 +57,7 @@ public abstract class AbstractArrayStorage implements Storage {
                 size--;
                 System.out.println("Resume with uuid=" + uuid + " deleted");
             }
-        } else //System.out.println("Resume with uuid=" + uuid + " is not present in Database");
-            throw new NotExistStorageException(uuid);
+        } else throw new NotExistStorageException(uuid);
     }
 
     public void update(Resume resume) {
@@ -68,8 +66,7 @@ public abstract class AbstractArrayStorage implements Storage {
             // resume founded, -> save new resume instead old
             storage[index] = resume;
             System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
-        } else  //System.out.println("Resume with uuid=" + resume.getUuid() + " not founded in Database");
-            throw new NotExistStorageException(resume.getUuid());
+        } else throw new NotExistStorageException(resume.getUuid());
     }
 
     /**
