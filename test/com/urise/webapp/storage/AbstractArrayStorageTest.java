@@ -32,7 +32,7 @@ public abstract class AbstractArrayStorageTest {
             for (int i = 3; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
-        } catch (Exception e) {
+        } catch (StorageException e) {
             if (storage.size() >= AbstractArrayStorage.STORAGE_LIMIT) {
                 System.out.println(e.getMessage());
                 System.out.println("Test storageExceptionOverFlow() succesfully catched StorageException. DataBase overflow occured.");
