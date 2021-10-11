@@ -15,30 +15,26 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
     private static final String UUID_5 = "5";
-    //  private static final String UUID_6 = "6";
 
-    @Before
-    public void setUp() {
-        storage.clear();
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
-    }
+    Resume resume1 = new Resume(UUID_1);
+    Resume resume2 = new Resume(UUID_2);
+    Resume resume3 = new Resume(UUID_3);
+
+
+//    @Before
+//    public void setUp() {
+//        storage.clear();
+//        storage.save(new Resume(UUID_1));
+//        storage.save(newResume(UUID_2));
+//        storage.save(newResume(UUID_3));
+    //  }
 
     @Test(expected = StorageException.class)
     public void storageExceptionOverFlow() {
-        try {
             //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
-            for (int i = 3; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+            for (int i = 0; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
-        } catch (StorageException e) {
-            if (storage.size() >= AbstractArrayStorage.STORAGE_LIMIT) {
-                System.out.println(e.getMessage());
-                System.out.println("Test storageExceptionOverFlow() succesfully catched StorageException. DataBase overflow occured.");
-                throw new StorageException("", "");
-            }
-        }
     }
 
     @Test(expected = ExistStorageException.class)
@@ -134,9 +130,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] resumes = new Resume[]{storage.get(UUID_1), storage.get(UUID_2), storage.get(UUID_3)};
-        Resume[] resumeStorage = storage.getAll();
-        Assert.assertArrayEquals(resumes, resumeStorage);
+        Resume[] expectedResumes = new Resume[]{storage.get(UUID_1), storage.get(UUID_2), storage.get(UUID_3)};
+        Resume[] actualResumes = storage.getAll();
+        Assert.assertArrayEquals(expectedResumes, actualResumes);
     }
 
     @Test
