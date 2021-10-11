@@ -55,7 +55,7 @@ public abstract class AbstractArrayStorage implements Storage {
             } else {
                 System.arraycopy(storage, index + 1, storage, index, size - index + 1);
                 size--;
-                System.out.println("Resume with uuid=" + uuid + " deleted");
+                System.out.println("Resume with uuid=" + uuid + " deleted ");
             }
         } else throw new NotExistStorageException(uuid);
     }
