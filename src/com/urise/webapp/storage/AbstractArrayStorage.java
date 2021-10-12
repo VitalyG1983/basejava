@@ -52,6 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             if (index == size - 1) {
                 storage[index] = null;
+                size--;
             } else {
                 System.arraycopy(storage, index + 1, storage, index, size - index + 1);
                 size--;
