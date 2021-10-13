@@ -40,6 +40,7 @@ public abstract class AbstractArrayStorageTest {
     public void storageExceptionOverFlow() {
         //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
         try {
+            clear();
             for (int i = 0; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
@@ -107,6 +108,6 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExistResume() {
-        storage.get("UUID_4");
+        storage.get(UUID_4);
     }
 }
