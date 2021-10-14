@@ -15,10 +15,10 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
 
-    private final Resume resume1 = new Resume(UUID_1);
-    private final Resume resume2 = new Resume(UUID_2);
-    private final Resume resume3 = new Resume(UUID_3);
-    private final Resume resume4 = new Resume(UUID_4);
+    private static final Resume resume1 = new Resume(UUID_1);
+    private static final Resume resume2 = new Resume(UUID_2);
+    private static final Resume resume3 = new Resume(UUID_3);
+    private static final Resume resume4 = new Resume(UUID_4);
 
     @Before
     public void setUp() {
