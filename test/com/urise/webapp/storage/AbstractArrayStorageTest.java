@@ -41,13 +41,11 @@ public abstract class AbstractArrayStorageTest {
         //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
         try {
             clear();
-            for (int i = 0; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            if (storage.size() < AbstractArrayStorage.STORAGE_LIMIT) {
-                Assert.fail("StorageException catched is too early, Database not full");
-            }
+            Assert.fail("StorageException catched is too early, Database not full");
         }
         storage.save(new Resume());
     }

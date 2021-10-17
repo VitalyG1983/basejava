@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 /**
@@ -8,9 +9,8 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume r, int index) {
-        if (index<0) storage[size] = r;
-        else storage[index] = r;
+    protected void saveByIndex(Resume r, int index) {
+        storage[size] = r;
     }
 
     @Override

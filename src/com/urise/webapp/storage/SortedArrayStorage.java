@@ -11,10 +11,8 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume r, int index) {
-        if (index < 0) {
-            index = -(index + 1);
-        }
+    protected void saveByIndex(Resume r, int index) {
+        index = -(index + 1);
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = r;
     }
