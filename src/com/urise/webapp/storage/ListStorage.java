@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 import java.util.ArrayList;
 
 public class ListStorage extends AbstractStorage {
-    protected final ArrayList<Resume> storage = new ArrayList<>();
+    private final ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
     public int size() {
@@ -23,8 +23,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveNewResume(Resume r, int index) {
-        if (index < 0) storage.add(r);
+    protected void saveResume(Resume r, int index) {
+        storage.add(r);
         System.out.println("element(" + (storage.size() - 1) + ").uuid= " + r.getUuid());
     }
 

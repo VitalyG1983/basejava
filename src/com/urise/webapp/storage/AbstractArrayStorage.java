@@ -10,11 +10,11 @@ import java.util.Arrays;
  */
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    final Resume[] storage = new Resume[STORAGE_LIMIT];
-    static final int STORAGE_LIMIT = 10_000;
-    int size;
+    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected static final int STORAGE_LIMIT = 10_000;
+    protected int size;
 
-    protected abstract void saveByIndex(Resume r, int index);
+    protected abstract void saveToArray(Resume r, int index);
 
     public int size() {
         return size;
@@ -27,11 +27,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveNewResume(Resume r, int index) {
+    protected void saveResume(Resume r, int index) {
         if (size >= AbstractArrayStorage.STORAGE_LIMIT) {
             throw new StorageException("Not enough space in Database for save new resume ", r.getUuid());
         }
-        saveByIndex(r, index);
+        saveToArray(r, index);
         System.out.println("storage[" + size + "].uuid= " + r.getUuid());
         size++;
     }

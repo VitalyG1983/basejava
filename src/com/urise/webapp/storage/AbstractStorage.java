@@ -4,13 +4,11 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.Objects;
-
 public abstract class AbstractStorage implements Storage {
 
     protected abstract int searchInd(String uuid);
 
-    protected abstract void saveNewResume(Resume r, int index);
+    protected abstract void saveResume(Resume r, int index);
 
     protected abstract void updateByIndex(Resume resume, int index);
 
@@ -20,14 +18,14 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume r) {
         int index = searchInd(r.getUuid());
-        if (r.getUuid() == null || Objects.equals(r.getUuid(), "")) {
+        if (r.getUuid() == null || r.getUuid().isBlank()) {
             System.out.println("Enter valid uuid, not " + r.getUuid());
         } else if (index >= 0) {
             throw new ExistStorageException(r.getUuid());
             // } else if (storage.size()>= AbstractArrayStorage.STORAGE_LIMIT) {
             // throw new StorageException("Not enough space in Database for save new resume ", r.getUuid());
         } else {
-            saveNewResume(r, index);
+            saveResume(r, index);
 //            System.out.println("storage[" + storage.size + "].uuid= " + r.getUuid());
 //            storage.size++;
         }
