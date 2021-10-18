@@ -12,7 +12,7 @@ public class MainTestArrayStorage {
 
     public static void main(String[] args) {
         //String uuid = null;
-        final Resume r1 = new Resume(null);
+        final Resume r1 = new Resume("");
         final Resume r2 = new Resume("2");
         final Resume r3 = new Resume("3");
 
