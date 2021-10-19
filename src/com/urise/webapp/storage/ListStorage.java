@@ -29,11 +29,11 @@ public class ListStorage extends AbstractStorage {
         System.out.println("element(" + (storage.size() - 1) + ").uuid= " + r.getUuid());
     }
 
-    protected void updateByIndex(Resume r, int index) {
+    protected void updateResume(Resume r, int index) {
         storage.set(index, r);
     }
 
-    protected void deleteByIndex(int index) {
+    protected void deleteResume(int index) {
         storage.remove(index);
     }
 
@@ -43,7 +43,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getByIndex(int index) {
+    public Resume getResume(int index) {
         return storage.get(index);
     }
 }

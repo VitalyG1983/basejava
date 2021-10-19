@@ -41,7 +41,7 @@ public class MainCollections {
         for (String UUID_1 : map.keySet()) {
             System.out.println(map.get(UUID_1));
         }
-        for (Map.Entry<String,Resume> entry: map.entrySet()){
+        for (Map.Entry<String, Resume> entry : map.entrySet()) {
             System.out.println(entry.getValue());
         }
     }
