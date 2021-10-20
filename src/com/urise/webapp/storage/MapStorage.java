@@ -18,6 +18,7 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume r, int index) {
         storage.put(r.getUuid(), r);
+        System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
