@@ -11,28 +11,28 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected int searchInd(String uuid) {
         boolean isKey = storage.containsKey(uuid);
-        if (isKey) return 0;
-        else return -1;
+        return (isKey) ? 0 : -1;
+
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, int searchKey) {
         storage.put(r.getUuid(), r);
         System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
+    protected void updateResume(Resume resume, int searchKey) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(int index, String uuid) {
+    protected void deleteResume(String uuid) {
         storage.remove(uuid);
     }
 
     @Override
-    protected Resume getResume(int index, String uuid) {
+    protected Resume getResume(String uuid) {
         return storage.get(uuid);
     }
 
