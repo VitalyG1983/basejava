@@ -47,8 +47,6 @@ public abstract class AbstractArrayStorageTest {
         } catch (StorageException e) {
             Assert.fail("StorageException catched is too early, Database not full");
         }
-        if (getClass() == MapStorageTest.class || getClass() == ListStorageTest.class)
-            throw new StorageException("StorageException not need to test with MapStorage or ListStorage", null);
         storage.save(new Resume());
     }
 

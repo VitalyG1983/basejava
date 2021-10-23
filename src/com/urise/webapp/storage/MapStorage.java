@@ -10,9 +10,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected int searchInd(String uuid) {
-        boolean isKey = storage.containsKey(uuid);
-        return (isKey) ? 0 : -1;
-
+        return (storage.containsKey(uuid)) ? 0 : -1;
     }
 
     @Override
@@ -27,13 +25,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteResume(String uuid) {
-        storage.remove(uuid);
+    protected void deleteResume(Object key) {
+        storage.remove((String) key);
     }
 
     @Override
-    protected Resume getResume(String uuid) {
-        return storage.get(uuid);
+    protected Resume getResume(Object key) {
+        return storage.get((String) key);
     }
 
     @Override

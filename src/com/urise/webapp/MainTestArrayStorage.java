@@ -1,17 +1,15 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ListStorage;
-import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.*;
 
 /**
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final Storage ARRAY_STORAGE = new MapStorage();
 
     public static void main(String[] args) {
-        //String uuid = null;
         final Resume r1 = new Resume("1");
         final Resume r2 = new Resume("2");
         final Resume r3 = new Resume("3");
