@@ -4,11 +4,13 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
+import java.lang.reflect.Method;
+
 
 public abstract class AbstractArrayStorageTest {
+
     protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";

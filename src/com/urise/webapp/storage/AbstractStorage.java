@@ -8,62 +8,47 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract int searchInd(String uuid);
 
-    protected abstract void saveResume(Resume r, int index);
+    protected abstract void saveResume(Resume r, int searchKey);
 
-    protected abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, int searchKey);
 
     protected abstract void deleteResume(Object o);
 
     protected abstract Resume getResume(Object o);
 
-    protected int checkIndex(String uuid, boolean save) {
-        int index = searchInd(uuid);
+    protected int checkKey(String uuid, boolean save) {
+        int searchKey = searchInd(uuid);
         if (save) {
-            if (index >= 0) throw new ExistStorageException(uuid);
-        } else if (index < 0) throw new NotExistStorageException(uuid);
-        return index;
+            if (searchKey >= 0) throw new ExistStorageException(uuid);
+        } else if (searchKey < 0) throw new NotExistStorageException(uuid);
+        return searchKey;
     }
 
     public void save(Resume r) {
-        //int index = searchInd(r.getUuid());
         if (r.getUuid() == null || r.getUuid().isBlank()) {
             System.out.println("Enter valid uuid, not " + r.getUuid());
-        }
-//        else if (index >= 0) {
-//            throw new ExistStorageException(r.getUuid());}
-        else saveResume(r, checkIndex(r.getUuid(), true));
-
+        } else saveResume(r, checkKey(r.getUuid(), true));
     }
 
     public void delete(String uuid) {
-        // ищем резюме в базе по String uuid  и перезаписываем его следующим за ним в базе резюме
-        //   int index = searchInd(uuid);
-        //  if (index >= 0) {
-        int index = checkIndex(uuid, false);
+        int searchKey = checkKey(uuid, false);
         if (getClass() == MapStorage.class)
             deleteResume(uuid);
-        else deleteResume(index);
+        else deleteResume(searchKey);
         System.out.println("Resume with uuid=" + uuid + " deleted ");
-        // } else throw new NotExistStorageException(uuid);
     }
 
     public void update(Resume resume) {
-        //  int index = searchInd(resume.getUuid());
-        //  if (index >= 0) {
-        int index = checkIndex(resume.getUuid(), false);
+        int searchKey = checkKey(resume.getUuid(), false);
         // resume founded, -> save new resume instead old
-        updateResume(resume, index);
+        updateResume(resume, searchKey);
         System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
-        // } else throw new NotExistStorageException(resume.getUuid());
     }
 
     public Resume get(String uuid) {
-        // int index = searchInd(uuid);
-        //if (index >= 0) {
-        int index = checkIndex(uuid, false);
+        int searchKey = checkKey(uuid, false);
         if (getClass() == MapStorage.class)
             return getResume(uuid);
-        else return getResume(index);
+        else return getResume(searchKey);
     }
-    // throw new NotExistStorageException(uuid);
 }
