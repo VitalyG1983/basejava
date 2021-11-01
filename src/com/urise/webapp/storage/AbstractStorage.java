@@ -6,7 +6,7 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected abstract int searchInd(String uuid);
+    protected abstract int searchKey(String uuid);
 
     protected abstract void saveResume(Resume r, int searchKey);
 
@@ -17,7 +17,7 @@ public abstract class AbstractStorage implements Storage {
     protected abstract Resume getResume(Object o);
 
     protected int checkKey(String uuid, boolean save) {
-        int searchKey = searchInd(uuid);
+        int searchKey = searchKey(uuid);
         if (save) {
             if (searchKey >= 0) throw new ExistStorageException(uuid);
         } else if (searchKey < 0) throw new NotExistStorageException(uuid);

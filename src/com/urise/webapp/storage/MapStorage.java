@@ -9,7 +9,7 @@ public class MapStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected int searchInd(String uuid) {
+    protected int searchKey(String uuid) {
         return (storage.containsKey(uuid)) ? 0 : -1;
     }
 
