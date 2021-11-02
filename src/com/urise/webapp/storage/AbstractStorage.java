@@ -20,7 +20,7 @@ public abstract class AbstractStorage implements Storage {
         int searchKey = searchKey(uuid);
         if (save) {
             if (searchKey >= 0) throw new ExistStorageException(uuid);
-        } else if (searchKey < 0) throw new NotExistStorageException(uuid);
+        } else if (searchKey < 0) ;//throw new NotExistStorageException(uuid);
         return searchKey;
     }
 

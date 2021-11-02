@@ -20,7 +20,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected int searchKey(String uuid) {
-        return storage.indexOf(new Resume(uuid));
+        return storage.indexOf(new Resume(uuid, "fullName"));
     }
 
     @Override
@@ -34,16 +34,16 @@ public class ListStorage extends AbstractStorage {
     }
 
     protected void deleteResume(Object index) {
-          storage.remove((int)index);
+        storage.remove((int) index);
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.toArray(Resume[]::new);
+    public List<Resume> getAllSorted() {
+        return storage;
     }
 
     @Override
     public Resume getResume(Object index) {
-        return storage.get((int)index);
+        return storage.get((int) index);
     }
 }
