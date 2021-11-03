@@ -3,7 +3,9 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,28 +30,30 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, Object index) {
         if (size >= AbstractArrayStorage.STORAGE_LIMIT) {
             throw new StorageException("Not enough space in Database for save new resume ", r.getUuid());
         }
-        saveToArray(r, index);
+        saveToArray(r, (int) index);
         System.out.println("storage[" + size + "].uuid= " + r.getUuid());
         size++;
     }
 
     protected void deleteResume(Object index) {
-        System.arraycopy(storage, (int)index + 1, storage, (int)index, size - (int)index);
+        System.arraycopy(storage, (int) index + 1, storage, (int) index, size - (int) index);
         size--;
     }
 
     public List<Resume> getAllSorted() {
         // Create copy of resumes without 'null'
-        return     Arrays.asList(Arrays.copyOf(storage, size));   //Arrays.copyOf(storage, size);
+        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, size));
+        resumes.sort(RESUME_NAME_COMPARATOR);//Comparator.comparing(Resume::getFullName));
+        return resumes;
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
+    protected void updateResume(Resume r, Object index) {
+        storage[(int)index] = r;
     }
 
     @Override

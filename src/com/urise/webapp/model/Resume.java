@@ -22,6 +22,9 @@ public class Resume //implements Comparable<Resume>
     public String getUuid() {
         return uuid;
     }
+    public String getFullName() {
+        return fullName;
+    }
 
     @Override
     public boolean equals(Object o) {

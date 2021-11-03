@@ -10,9 +10,7 @@ import java.util.Comparator;
  */
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(resume -> {
-        return resume.getUuid();
-    });
+    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
    /*private static class ResumeComparator implements Comparator<Resume> {
         @Override
@@ -29,8 +27,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected int searchKey(String uuid) {
-        Resume searchKey = new Resume(uuid, "fullName");
+    protected Object searchKey(String uuid) {
+        Resume searchKey = new Resume(uuid, null);
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 }
