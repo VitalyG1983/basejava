@@ -6,7 +6,7 @@ import org.junit.Test;
 public class MapResumeStorageTest extends AbstractArrayStorageTest {
 
     public MapResumeStorageTest() {
-        super.storage = new MapResumeStorage();
+        super.setStorage(new MapResumeStorage());
     }
 
     @Ignore

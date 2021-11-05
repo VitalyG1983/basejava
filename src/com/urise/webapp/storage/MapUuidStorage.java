@@ -9,7 +9,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected Object searchKey(String uuid) {
-        return (storage.containsKey(uuid)) ? 0 : -1;
+        return (storage.containsKey(uuid)) ? uuid : null;
     }
 
     @Override

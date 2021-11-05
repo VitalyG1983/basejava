@@ -6,7 +6,7 @@ import org.junit.Test;
 public class MapUuidStorageTest extends AbstractArrayStorageTest {
 
     public MapUuidStorageTest() {
-        super.storage = new MapUuidStorage();
+        super.setStorage(new MapUuidStorage());
     }
 
     @Ignore

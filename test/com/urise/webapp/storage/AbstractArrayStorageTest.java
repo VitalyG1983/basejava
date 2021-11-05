@@ -12,16 +12,20 @@ import java.util.List;
 
 public abstract class AbstractArrayStorageTest {
 
-    protected Storage storage;
+    private Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
 
-    private static final Resume resume1 = new Resume(UUID_1, "fullName");
-    private static final Resume resume2 = new Resume(UUID_2, "fullName");
-    private static final Resume resume3 = new Resume(UUID_3, "fullName");
-    private static final Resume resume4 = new Resume(UUID_4, "fullName");
+    private final Resume resume1 = new Resume(UUID_1, "fullName");
+    private final Resume resume2 = new Resume(UUID_2, "fullName");
+    private final Resume resume3 = new Resume(UUID_3, "fullName");
+    private final Resume resume4 = new Resume(UUID_4, "fullName");
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
     @Before
     public void setUp() {
@@ -56,14 +60,14 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExistResume() {
         //If we want to save new resume with already exist UUID, then ExistStorageException will be thrown
-        storage.save(new Resume(UUID_1, "fullName"));
+        storage.save(resume1);
     }
 
     @Test
     public void update() {
         Resume expectedResume = new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
-        Assert.assertEquals(expectedResume, storage.get(UUID_1));
+        Assert.assertSame(expectedResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -96,13 +100,13 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAllSorted() {
-       List<Resume> expectedResumes = new ArrayList<>();
+        List<Resume> expectedResumes = new ArrayList<>();
         expectedResumes.add(resume1);
         expectedResumes.add(resume2);
         expectedResumes.add(resume3);
 
         List<Resume> actualResumes = storage.getAllSorted();
-        Assert.assertArrayEquals(expectedResumes.toArray(), actualResumes.toArray());
+        Assert.assertEquals(expectedResumes, actualResumes);
     }
 
     @Test

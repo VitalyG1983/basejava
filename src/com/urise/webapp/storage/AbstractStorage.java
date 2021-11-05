@@ -21,14 +21,13 @@ public abstract class AbstractStorage implements Storage {
 
     protected Object checkKey(String uuid, boolean save) {
         Object searchKey = searchKey(uuid);
-        boolean MapResumeStorage = getClass() == MapResumeStorage.class;
-        if (MapResumeStorage) {
+        //  boolean MapResumeStorage = getClass() == MapResumeStorage.class;
+        if (getClass() == MapResumeStorage.class || getClass() == MapUuidStorage.class) {
             if (save) {
                 if (searchKey != null) throw new ExistStorageException(uuid);
             } else if (searchKey == null) throw new NotExistStorageException(uuid);
             return searchKey;
-        }
-        if (save) {
+        } else if (save) {
             if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
         } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
         return searchKey;
@@ -42,9 +41,10 @@ public abstract class AbstractStorage implements Storage {
 
     public void delete(String uuid) {
         Object searchKey = checkKey(uuid, false);
-        if (getClass() == MapUuidStorage.class)
-            deleteResume(uuid);
-        else deleteResume(searchKey);
+//        if (getClass() == MapUuidStorage.class)
+//            deleteResume(uuid);
+        //       else
+        deleteResume(searchKey);
         System.out.println("Resume with uuid=" + uuid + " deleted ");
     }
 
@@ -57,8 +57,9 @@ public abstract class AbstractStorage implements Storage {
 
     public Resume get(String uuid) {
         Object searchKey = checkKey(uuid, false);
-        if (getClass() == MapUuidStorage.class)
-            return getResume(uuid);
-        else return getResume(searchKey);
+//        if (getClass() == MapUuidStorage.class)
+//            return getResume(uuid);
+//        else
+        return getResume(searchKey);
     }
 }
