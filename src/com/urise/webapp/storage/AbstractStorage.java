@@ -15,9 +15,9 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void updateResume(Resume resume, Object searchKey);
 
-    protected abstract void deleteResume(Object o);
+    protected abstract void deleteResume(Object searchKey);
 
-    protected abstract Resume getResume(Object o);
+    protected abstract Resume getResume(Object searchKey);
 
     protected Object checkKey(String uuid, boolean save) {
         Object searchKey = searchKey(uuid);
