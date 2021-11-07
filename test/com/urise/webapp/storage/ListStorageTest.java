@@ -6,7 +6,7 @@ import org.junit.Test;
 public class ListStorageTest extends AbstractArrayStorageTest {
 
     public ListStorageTest() {
-        super.setStorage(new ListStorage());
+        super(new ListStorage());
     }
 
     @Ignore

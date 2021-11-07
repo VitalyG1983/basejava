@@ -1,11 +1,21 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.*;
 
 public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
+
+    protected Object isExist(String uuid, boolean save) {
+        Object searchKey = searchKey(uuid);
+        if (save) {
+            if (searchKey != null) throw new ExistStorageException(uuid);
+        } else if (searchKey == null) throw new NotExistStorageException(uuid);
+        return searchKey;
+    }
 
     @Override
     protected Object searchKey(String uuid) {

@@ -1,11 +1,11 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -18,6 +18,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int size;
 
     protected abstract void saveToArray(Resume r, int index);
+
+    protected Object isExist(String uuid, boolean save) {
+        Object searchKey = searchKey(uuid);
+        if (save) {
+            if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
+        } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
+        return searchKey;
+    }
 
     public int size() {
         return size;
@@ -53,11 +61,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Resume r, Object index) {
-        storage[(int)index] = r;
+        storage[(int) index] = r;
     }
 
     @Override
     public Resume getResume(Object index) {
-        return storage[(int)index];
+        return storage[(int) index];
     }
 }

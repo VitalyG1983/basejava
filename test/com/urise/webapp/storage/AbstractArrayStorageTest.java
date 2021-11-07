@@ -9,10 +9,8 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public abstract class AbstractArrayStorageTest {
-
-    private Storage storage;
+    private final Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
@@ -23,7 +21,7 @@ public abstract class AbstractArrayStorageTest {
     private final Resume resume3 = new Resume(UUID_3, "fullName");
     private final Resume resume4 = new Resume(UUID_4, "fullName");
 
-    public void setStorage(Storage storage) {
+    public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 

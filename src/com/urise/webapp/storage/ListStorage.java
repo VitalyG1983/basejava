@@ -1,13 +1,22 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private final List<Resume> storage = new ArrayList<>();
+
+    protected Object isExist(String uuid, boolean save) {
+        Object searchKey = searchKey(uuid);
+        if (save) {
+            if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
+        } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
+        return searchKey;
+    }
 
     @Override
     public int size() {
@@ -31,7 +40,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     protected void updateResume(Resume r, Object index) {
-        storage.set((int)index, r);
+        storage.set((int) index, r);
     }
 
     protected void deleteResume(Object index) {
