@@ -10,12 +10,8 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     private final List<Resume> storage = new ArrayList<>();
 
-    protected Object isExist(String uuid, boolean save) {
-        Object searchKey = searchKey(uuid);
-        if (save) {
-            if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
-        } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
-        return searchKey;
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     @Override

@@ -19,12 +19,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void saveToArray(Resume r, int index);
 
-    protected Object isExist(String uuid, boolean save) {
-        Object searchKey = searchKey(uuid);
-        if (save) {
-            if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
-        } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
-        return searchKey;
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     public int size() {

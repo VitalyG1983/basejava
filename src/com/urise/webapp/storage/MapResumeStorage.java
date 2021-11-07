@@ -13,12 +13,8 @@ import java.util.Map;
 public class MapResumeStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
 
-    protected Object isExist(String uuid, boolean save) {
-        Object searchKey = searchKey(uuid);
-        if (save) {
-            if (searchKey != null) throw new ExistStorageException(uuid);
-        } else if (searchKey == null) throw new NotExistStorageException(uuid);
-        return searchKey;
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override

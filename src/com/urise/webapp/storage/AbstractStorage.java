@@ -19,6 +19,18 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getResume(Object searchKey);
 
+    protected Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = searchKey(uuid);
+        if (isExist(searchKey)) throw new ExistStorageException(uuid);
+        else return searchKey;
+    }
+
+    protected Object getExistedSearchKey(String uuid) {
+        Object searchKey = searchKey(uuid);
+        if (!isExist(searchKey)) throw new NotExistStorageException(uuid);
+        else return searchKey;
+    }
+
    /* protected Object checkKey(String uuid, boolean save) {
         Object searchKey = searchKey(uuid);
         //  boolean MapResumeStorage = getClass() == MapResumeStorage.class;
@@ -33,29 +45,32 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }*/
 
-    protected abstract Object isExist(String uuid, boolean b);
+    protected abstract boolean isExist(Object searchKey);
 
     public void save(Resume r) {
         if (r.getUuid() == null || r.getUuid().isBlank()) {
             System.out.println("Enter valid uuid, not " + r.getUuid());
-        } else saveResume(r, isExist(r.getUuid(), true));
+        } else {
+            Object searchKey = getNotExistedSearchKey(r.getUuid());
+            saveResume(r, searchKey);
+        }
     }
 
     public void delete(String uuid) {
-        Object searchKey = isExist(uuid, false);
+        Object searchKey = getExistedSearchKey(uuid);
         deleteResume(searchKey);
         System.out.println("Resume with uuid=" + uuid + " deleted ");
     }
 
     public void update(Resume resume) {
-        Object searchKey = isExist(resume.getUuid(), false);
+        Object searchKey = getExistedSearchKey(resume.getUuid());
         // resume founded, -> save new resume instead old
         updateResume(resume, searchKey);
         System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
     }
 
     public Resume get(String uuid) {
-        Object searchKey = isExist(uuid, false);
+        Object searchKey = getExistedSearchKey(uuid);
         return getResume(searchKey);
     }
 }
