@@ -5,6 +5,7 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -43,9 +44,13 @@ public class ListStorage extends AbstractStorage {
         storage.remove((int) index);
     }
 
-    @Override
+    /*@Override
     public List<Resume> getAllSorted() {
         storage.sort(RESUME_NAME_COMPARATOR);
+        return storage;
+    }*/
+
+    protected List<Resume> getStorage() {
         return storage;
     }
 

@@ -48,11 +48,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    public List<Resume> getAllSorted() {
+   /* public List<Resume> getAllSorted() {
         // Create copy of resumes without 'null'
         List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, size));
-        resumes.sort(RESUME_NAME_COMPARATOR);//Comparator.comparing(Resume::getFullName));
+        resumes.sort(RESUME_NAME_COMPARATOR);
         return resumes;
+    }*/
+
+    protected List<Resume> getStorage() {
+        // Create copy of resumes without 'null'
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override

@@ -4,7 +4,9 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
     static final Comparator<Resume> RESUME_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
@@ -19,33 +21,15 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getResume(Object searchKey);
 
-    protected Object getNotExistedSearchKey(String uuid) {
-        Object searchKey = searchKey(uuid);
-        if (isExist(searchKey)) throw new ExistStorageException(uuid);
-        else return searchKey;
-    }
-
-    protected Object getExistedSearchKey(String uuid) {
-        Object searchKey = searchKey(uuid);
-        if (!isExist(searchKey)) throw new NotExistStorageException(uuid);
-        else return searchKey;
-    }
-
-   /* protected Object checkKey(String uuid, boolean save) {
-        Object searchKey = searchKey(uuid);
-        //  boolean MapResumeStorage = getClass() == MapResumeStorage.class;
-        if (getClass() == MapResumeStorage.class || getClass() == MapUuidStorage.class) {
-            if (save) {
-                if (searchKey != null) throw new ExistStorageException(uuid);
-            } else if (searchKey == null) throw new NotExistStorageException(uuid);
-            return searchKey;
-        } else if (save) {
-            if ((int) searchKey >= 0) throw new ExistStorageException(uuid);
-        } else if ((int) searchKey < 0) throw new NotExistStorageException(uuid);
-        return searchKey;
-    }*/
-
     protected abstract boolean isExist(Object searchKey);
+
+    protected abstract List<Resume> getStorage();
+
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = getStorage();
+        resumes.sort(RESUME_NAME_COMPARATOR);
+        return resumes;
+    }
 
     public void save(Resume r) {
         if (r.getUuid() == null || r.getUuid().isBlank()) {
@@ -72,5 +56,17 @@ public abstract class AbstractStorage implements Storage {
     public Resume get(String uuid) {
         Object searchKey = getExistedSearchKey(uuid);
         return getResume(searchKey);
+    }
+
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = searchKey(uuid);
+        if (isExist(searchKey)) throw new ExistStorageException(uuid);
+        return searchKey;
+    }
+
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = searchKey(uuid);
+        if (!isExist(searchKey)) throw new NotExistStorageException(uuid);
+        return searchKey;
     }
 }
