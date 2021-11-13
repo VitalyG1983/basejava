@@ -44,12 +44,6 @@ public class ListStorage extends AbstractStorage {
         storage.remove((int) index);
     }
 
-    /*@Override
-    public List<Resume> getAllSorted() {
-        storage.sort(RESUME_NAME_COMPARATOR);
-        return storage;
-    }*/
-
     protected List<Resume> getStorage() {
         return storage;
     }

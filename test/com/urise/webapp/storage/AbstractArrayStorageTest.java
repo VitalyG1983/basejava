@@ -5,7 +5,7 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.*;
 
@@ -50,12 +50,12 @@ public abstract class AbstractArrayStorageTest {
         try {
             clear();
             for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+                storage.save(new Resume("Test"));
             }
         } catch (StorageException e) {
-            Assert.fail("StorageException catched is too early, Database not full");
+            fail("StorageException catched is too early, Database not full");
         }
-        storage.save(new Resume());
+        storage.save(new Resume("Test"));
     }
 
     @Test(expected = ExistStorageException.class)
@@ -68,7 +68,7 @@ public abstract class AbstractArrayStorageTest {
     public void update() {
         Resume expectedResume = new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
-        Assert.assertSame(expectedResume, storage.get(UUID_1));
+        assertSame(expectedResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
