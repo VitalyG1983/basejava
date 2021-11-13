@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
@@ -10,39 +8,39 @@ import java.util.List;
 import java.util.Map;
 
 // class MapResumeStorage with searchKey = value of the Entry
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
     private final Map<String, Resume> storage = new HashMap<>();
 
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(Resume searchKey) {
         return searchKey != null;
     }
 
     @Override
-    protected Object searchKey(String uuid) {
+    protected Resume searchKey(String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    protected void saveResume(Resume r, Object searchKey) {
+    protected void saveResume(Resume r, Resume searchKey) {
         storage.put(r.getUuid(), r);
         System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
-    protected void updateResume(Resume resume, Object searchKey) {
-        Resume res = (Resume) searchKey;
+    protected void updateResume(Resume resume, Resume searchKey) {
+        Resume res = searchKey;
         storage.replace(res.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
-        Resume res = (Resume) searchKey;
+    protected void deleteResume(Resume searchKey) {
+        Resume res = searchKey;
         storage.remove(res.getUuid(), res);
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return (Resume) searchKey;
+    protected Resume getResume(Resume searchKey) {
+        return searchKey;
     }
 
     @Override

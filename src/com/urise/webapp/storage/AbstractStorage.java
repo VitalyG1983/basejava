@@ -4,24 +4,23 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
     static final Comparator<Resume> RESUME_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
-    protected abstract Object searchKey(String uuid);
+    protected abstract SK searchKey(String uuid);
 
-    protected abstract void saveResume(Resume r, Object searchKey);
+    protected abstract void saveResume(Resume r, SK searchKey);
 
-    protected abstract void updateResume(Resume resume, Object searchKey);
+    protected abstract void updateResume(Resume resume, SK searchKey);
 
-    protected abstract void deleteResume(Object searchKey);
+    protected abstract void deleteResume(SK searchKey);
 
-    protected abstract Resume getResume(Object searchKey);
+    protected abstract Resume getResume(SK searchKey);
 
-    protected abstract boolean isExist(Object searchKey);
+    protected abstract boolean isExist(SK searchKey);
 
     protected abstract List<Resume> getStorage();
 
@@ -35,37 +34,37 @@ public abstract class AbstractStorage implements Storage {
         if (r.getUuid() == null || r.getUuid().isBlank()) {
             System.out.println("Enter valid uuid, not " + r.getUuid());
         } else {
-            Object searchKey = getNotExistedSearchKey(r.getUuid());
+            SK searchKey = getNotExistedSearchKey(r.getUuid());
             saveResume(r, searchKey);
         }
     }
 
     public void delete(String uuid) {
-        Object searchKey = getExistedSearchKey(uuid);
+        SK searchKey = getExistedSearchKey(uuid);
         deleteResume(searchKey);
         System.out.println("Resume with uuid=" + uuid + " deleted ");
     }
 
     public void update(Resume resume) {
-        Object searchKey = getExistedSearchKey(resume.getUuid());
+        SK searchKey = getExistedSearchKey(resume.getUuid());
         // resume founded, -> save new resume instead old
         updateResume(resume, searchKey);
         System.out.println("Resume with uuid=" + resume.getUuid() + " updated in Database");
     }
 
     public Resume get(String uuid) {
-        Object searchKey = getExistedSearchKey(uuid);
+        SK searchKey = getExistedSearchKey(uuid);
         return getResume(searchKey);
     }
 
-    private Object getNotExistedSearchKey(String uuid) {
-        Object searchKey = searchKey(uuid);
+    private SK getNotExistedSearchKey(String uuid) {
+        SK searchKey = searchKey(uuid);
         if (isExist(searchKey)) throw new ExistStorageException(uuid);
         return searchKey;
     }
 
-    private Object getExistedSearchKey(String uuid) {
-        Object searchKey = searchKey(uuid);
+    private SK getExistedSearchKey(String uuid) {
+        SK searchKey = searchKey(uuid);
         if (!isExist(searchKey)) throw new NotExistStorageException(uuid);
         return searchKey;
     }

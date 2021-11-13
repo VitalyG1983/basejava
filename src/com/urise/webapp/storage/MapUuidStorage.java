@@ -1,42 +1,40 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.*;
 
-public class MapUuidStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage<String> {
     private final Map<String, Resume> storage = new HashMap<>();
 
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(String searchKey) {
         return searchKey != null;
     }
 
     @Override
-    protected Object searchKey(String uuid) {
+    protected String searchKey(String uuid) {
         return (storage.containsKey(uuid)) ? uuid : null;
     }
 
     @Override
-    protected void saveResume(Resume r, Object searchKey) {
+    protected void saveResume(Resume r, String searchKey) {
         storage.put(r.getUuid(), r);
         System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
-    protected void updateResume(Resume resume, Object searchKey) {
+    protected void updateResume(Resume resume, String searchKey) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(Object key) {
-        storage.remove((String) key);
+    protected void deleteResume(String key) {
+        storage.remove(key);
     }
 
     @Override
-    protected Resume getResume(Object key) {
-        return storage.get((String) key);
+    protected Resume getResume(String key) {
+        return storage.get(key);
     }
 
     @Override
