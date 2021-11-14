@@ -24,7 +24,7 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Integer searchKey(String uuid) {
-        return storage.indexOf(new Resume(uuid, null));
+        return storage.indexOf(new Resume(uuid, "fullName"));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     protected void deleteResume(Integer index) {
-        storage.remove(index);
+        storage.remove((int) index);
     }
 
     protected List<Resume> getStorage() {
