@@ -1,5 +1,8 @@
 package com.urise.webapp.model;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -8,6 +11,8 @@ import java.util.UUID;
 public class Resume {
     private final String uuid;
     private final String fullName;
+    private final EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final EnumMap<SectionType, String> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -42,5 +47,17 @@ public class Resume {
     @Override
     public String toString() {
         return uuid;
+    }
+
+    public class ResumeText {
+        private String tel;
+        private String Skype;
+        private String mail;
+        private String linkedLn;
+        private String gitHub;
+        private String stackOverflow;
+
+        private final List<String> sectionText = new ArrayList<>();
+
     }
 }
