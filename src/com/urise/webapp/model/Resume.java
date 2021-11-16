@@ -58,6 +58,6 @@ public class Resume {
         private String stackOverflow;
 
         private final List<String> sectionText = new ArrayList<>();
-
     }
+
 }

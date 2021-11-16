@@ -1,12 +1,11 @@
 @startuml
 'https://plantuml.com/class-diagram
-
+   Resume  *--  ResumeText
  class Resume {
     private final String uuid;
     private final String fullName;
-    private final EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private final EnumMap<SectionType, String> sections = new EnumMap<>(SectionType.class);
-
+    private final EnumMap<ContactType, String> contacts
+    private final EnumMap<SectionType, ???String???> sections
      getUuid()
      getFullName()
      equals(Object o)
@@ -14,7 +13,27 @@
      hashCode()
      toString()
 }
- ResumeText *--  Resume
+
+ Resume  *-- ContactType
+ enum ContactType{
+     TEL
+     SKYPE
+     MAIL
+     LINKEDLN
+     GITHUB
+     STACKOVERFLOW
+ }
+
+Resume  *-- SectionType
+ enum SectionType{
+      PERSONAL
+      OBJECTIVE
+      ACHIEVEMENT
+      QUALIFICATIONS
+      EXPERIENCE
+      EDUCATION
+ }
+
      class ResumeText {
         private String tel;
         private String Skype;
@@ -22,11 +41,6 @@
         private String linkedLn;
         private String gitHub;
         private String stackOverflow;
-
-        private final List<String> sectionText = new ArrayList<>();
-
+        private final List<String> sectionText
     }
-
-
-
 @enduml
