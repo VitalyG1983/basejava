@@ -5,11 +5,10 @@
     private final String uuid;
     private final String fullName;
     private final EnumMap<ContactType, String> contacts
-    private final EnumMap<SectionType, ???String???> sections
+    private final EnumMap<SectionType, ResumeText> sections
      getUuid()
      getFullName()
      equals(Object o)
-     hashCode()
      hashCode()
      toString()
 }
@@ -22,6 +21,9 @@
      LINKEDLN
      GITHUB
      STACKOVERFLOW
+     private String title
+     ContactType(String title)
+     getTitle()
  }
 
 Resume  *-- SectionType
@@ -32,15 +34,13 @@ Resume  *-- SectionType
       QUALIFICATIONS
       EXPERIENCE
       EDUCATION
+       private String title
+           ContactType(String title)
+           getTitle()
  }
 
      class ResumeText {
-        private String tel;
-        private String Skype;
-        private String mail;
-        private String linkedLn;
-        private String gitHub;
-        private String stackOverflow;
+        private String text;
         private final List<String> sectionText
     }
 @enduml
