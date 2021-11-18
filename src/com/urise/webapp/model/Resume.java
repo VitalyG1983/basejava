@@ -21,9 +21,6 @@ public class Resume {
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
         this.fullName = fullName;
-//        ResumeText resumeText=new ResumeText();
-//        contacts.put(ContactType.TEL,resumeText.tel);
-//        sections.put(SectionType.ACHIEVEMENT,resumeText.sectionText.get(0));
     }
 
     public String getUuid() {
@@ -51,16 +48,4 @@ public class Resume {
     public String toString() {
         return uuid;
     }
-
-   //public class ResumeText {
-        //        private String tel;
-//        private String Skype;
-//        private String mail;
-//        private String linkedLn;
-//        private String gitHub;
-//        private String stackOverflow;
-//        private String text;
-//        private final List<String> sectionText = new ArrayList<>();
-//    }
-
 }

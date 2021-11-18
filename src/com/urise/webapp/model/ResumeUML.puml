@@ -41,6 +41,8 @@ Resume  *-- SectionType : композиция
 
 Resume  *--  AbstractSection : композиция
      abstract class AbstractSection {
+         private final EnumMap<JobName, TextListSection> experienceSection
+         private final EnumMap<Education, TextSection> educationSection
     }
 
 AbstractSection <|-- TextSection : extends
@@ -48,9 +50,36 @@ class TextSection {
       private String textSection
 }
 
-AbstractSection <|-- ListSection : extends
-class ListSection {
-    private final List<String> listSection
+AbstractSection <|-- TextListSection : extends
+class TextListSection {
+    private final List<String> textListSection
 }
 
+AbstractSection  *--  JobName : композиция
+enum JobName {
+    JAVAONLINEPROJECTS
+    WRIKE
+    RITCENTER
+    LUXOFT
+    YOTA
+    ENKATA
+    SIEMENSAG
+    ALCATEL
+    private String title
+    JobName(String title)
+    public String getTitle()
+}
+
+AbstractSection  *--  Education : композиция
+enum Education {
+    COURSERA
+    LUXOFT
+    SIEMENSAG
+    ALCATEL
+    SPBNIUITMO
+    SCHOOL
+    private String title;
+    Education(String title)
+    getTitle()
+ }
 @enduml

@@ -5,8 +5,6 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class AbstractSection {
-//    private String text;
-//    private List<String> sectionText;
-private final EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
-
+    private final EnumMap<JobName, TextListSection> experienceSection = new EnumMap<>(JobName.class);
+    private final EnumMap<Education, TextSection> educationSection = new EnumMap<>(Education.class);
 }
