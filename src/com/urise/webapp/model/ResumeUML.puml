@@ -1,6 +1,6 @@
 @startuml
 'https://plantuml.com/class-diagram
-   Resume  *--  ResumeText
+
  class Resume {
     private final String uuid;
     private final String fullName;
@@ -22,8 +22,8 @@
      GITHUB
      STACKOVERFLOW
      private String title
-     ContactType(String title)
-     getTitle()
+      ContactType(String title)
+      getTitle()
  }
 
 Resume  *-- SectionType
@@ -34,13 +34,21 @@ Resume  *-- SectionType
       QUALIFICATIONS
       EXPERIENCE
       EDUCATION
-       private String title
-           ContactType(String title)
-           getTitle()
+      private String title
+       ContactType(String title)
+       getTitle()
  }
 
-     class ResumeText {
-        private String text;
-        private final List<String> sectionText
+Resume  *--  AbstractSection
+     abstract class AbstractSection {
     }
+
+class TextSection extends AbstractSection{
+      private String textSection
+}
+
+class ListSection extends AbstractSection{
+    private final List<String> listSection
+}
+
 @enduml

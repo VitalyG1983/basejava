@@ -12,7 +12,7 @@ public class Resume {
     private final String uuid;
     private final String fullName;
     private final EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private final EnumMap<SectionType, ResumeText> sections = new EnumMap<>(SectionType.class);
+    private final EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -52,15 +52,15 @@ public class Resume {
         return uuid;
     }
 
-    public class ResumeText {
+   //public class ResumeText {
         //        private String tel;
 //        private String Skype;
 //        private String mail;
 //        private String linkedLn;
 //        private String gitHub;
 //        private String stackOverflow;
-        private String text;
-        private final List<String> sectionText = new ArrayList<>();
-    }
+//        private String text;
+//        private final List<String> sectionText = new ArrayList<>();
+//    }
 
 }
