@@ -13,7 +13,7 @@
      toString()
 }
 
- Resume  *-- ContactType
+ Resume  *-- ContactType : композиция
  enum ContactType{
      TEL
      SKYPE
@@ -26,7 +26,7 @@
       getTitle()
  }
 
-Resume  *-- SectionType
+Resume  *-- SectionType : композиция
  enum SectionType{
       PERSONAL
       OBJECTIVE
@@ -39,15 +39,17 @@ Resume  *-- SectionType
        getTitle()
  }
 
-Resume  *--  AbstractSection
+Resume  *--  AbstractSection : композиция
      abstract class AbstractSection {
     }
 
-class TextSection extends AbstractSection{
+AbstractSection <|-- TextSection : extends
+class TextSection {
       private String textSection
 }
 
-class ListSection extends AbstractSection{
+AbstractSection <|-- ListSection : extends
+class ListSection {
     private final List<String> listSection
 }
 
