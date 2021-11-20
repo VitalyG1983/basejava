@@ -53,15 +53,16 @@ class TextListSection {
     private final List<String> textListSection
 }
 
-AbstractSection  <|--  JobEducationNameSection : extends
-class JobEducationNameSection {
-    private String JobEducationName;
-    private String JobEducationDate;
+JobEducationSection  *--  JobEducationTextSection : композиция
+class JobEducationTextSection {
+      private String JobEducationName;
+      private String JobEducationDate;
+      private String JobEducationText;
  }
 
-AbstractSection  <|--  JobEducationListSection : extends
-class JobEducationListSection {
-    private final List<String> JobEducationListSection
+AbstractSection  <|--  JobEducationSection : extends
+class JobEducationSection {
+    private final List<JobEducationTextSection> JobEducationSection
 }
 
 @enduml

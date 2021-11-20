@@ -31,6 +31,15 @@ public class Resume {
         return fullName;
     }
 
+    public EnumMap<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public EnumMap<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

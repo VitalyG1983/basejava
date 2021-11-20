@@ -5,4 +5,8 @@ import java.util.List;
 
 public class TextListSection extends AbstractSection {
     private final List<String> textListSection = new ArrayList<>();
+
+    public List<String> getTextListSection() {
+        return textListSection;
+    }
 }
