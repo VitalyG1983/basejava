@@ -140,21 +140,23 @@ public class ResumeTestData {
             for (String text : tls)
                 System.out.println("- " + text);
         }
-        if (sections.containsKey(SectionType.EXPERIENCE))
+        if (sections.containsKey(SectionType.EXPERIENCE)) {
             System.out.println("\n" + SectionType.EXPERIENCE.getTitle());
-        List<JobEducationTextSection> jobSection = ((JobEducationSection) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
-        for (JobEducationTextSection job : jobSection) {
-            System.out.println(job.getJobEducationName());
-            System.out.println(job.getJobEducationDate());
-            System.out.println(job.getJobEducationText());
+            List<JobEducationTextSection> jobSection = ((JobEducationSection) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
+            for (JobEducationTextSection job : jobSection) {
+                System.out.println(job.getJobEducationName());
+                System.out.println(job.getJobEducationDate());
+                System.out.println(job.getJobEducationText());
+            }
         }
-        if (sections.containsKey(SectionType.EDUCATION))
+        if (sections.containsKey(SectionType.EDUCATION)) {
             System.out.println("\n" + SectionType.EDUCATION.getTitle());
-        List<JobEducationTextSection> educationSection = ((JobEducationSection) sections.get(SectionType.EDUCATION)).getJobEducationSection();
-        for (JobEducationTextSection education : educationSection) {
-            System.out.println(education.getJobEducationName());
-            System.out.println(education.getJobEducationDate());
-            System.out.println(education.getJobEducationText());
+            List<JobEducationTextSection> educationSection = ((JobEducationSection) sections.get(SectionType.EDUCATION)).getJobEducationSection();
+            for (JobEducationTextSection education : educationSection) {
+                System.out.println(education.getJobEducationName());
+                System.out.println(education.getJobEducationDate());
+                System.out.println(education.getJobEducationText());
+            }
         }
     }
 }
