@@ -55,62 +55,62 @@ public class ResumeTestData {
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
         Organization jobSection = new Organization();
         Experience jobText0 = new Experience("Java Online Projects", YearMonth.of(2013, 10), null);
-        jobText0.setText("Автор проекта.\n" +
-                "Создание, организация и проведение Java онлайн проектов и стажировок.");
-        jobSection.getJobEducationSection().add(jobText0);
+        jobText0.setText(" Автор проекта.\n" +
+                "                   Создание, организация и проведение Java онлайн проектов и стажировок.");
+        jobSection.getOrg().add(jobText0);
         Experience jobText1 = new Experience("Wrike", YearMonth.of(2014, 10), YearMonth.of(2016, 1));
         jobText1.setText("Старший разработчик (backend)\n" +
-                "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-        jobSection.getJobEducationSection().add(jobText1);
+                "                   Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
+        jobSection.getOrg().add(jobText1);
         Experience jobText2 = new Experience("RIT Center", YearMonth.of(2012, 4), YearMonth.of(2014, 10));
         jobText2.setText("Java архитектор\n" +
-                "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
-        jobSection.getJobEducationSection().add(jobText2);
+                "                   Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
+        jobSection.getOrg().add(jobText2);
         Experience jobText3 = new Experience("Luxoft (Deutsche Bank)", YearMonth.of(2010, 12), YearMonth.of(2012, 4));
         jobText3.setText("Ведущий специалист\n" +
-                "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
-        jobSection.getJobEducationSection().add(jobText3);
+                "                   Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
+        jobSection.getOrg().add(jobText3);
         Experience jobText4 = new Experience("Yota", YearMonth.of(2008, 6), YearMonth.of(2010, 12));
         jobText4.setText("Ведущий специалист\n" +
-                "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
-        jobSection.getJobEducationSection().add(jobText4);
+                "                   Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
+        jobSection.getOrg().add(jobText4);
         Experience jobText5 = new Experience("Enkata", YearMonth.of(2007, 3), YearMonth.of(2008, 6));
         jobText5.setText("Разработчик ПО\n" +
-                "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
-        jobSection.getJobEducationSection().add(jobText5);
+                "                   Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
+        jobSection.getOrg().add(jobText5);
         Experience jobText6 = new Experience("Siemens AG", YearMonth.of(2005, 1), YearMonth.of(2007, 2));
         jobText6.setText("Разработчик ПО\n" +
-                "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
-        jobSection.getJobEducationSection().add(jobText6);
+                "                   Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
+        jobSection.getOrg().add(jobText6);
         Experience jobText7 = new Experience("Alcatel", YearMonth.of(1997, 9), YearMonth.of(2005, 1));
         jobText7.setText("Инженер по аппаратному и программному тестированию\n" +
-                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
-        jobSection.getJobEducationSection().add(jobText7);
+                "                   Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
+        jobSection.getOrg().add(jobText7);
         sections.put(SectionType.EXPERIENCE, jobSection);
 
 //////////////////////////////--------EducationSection------//////////////////////////////////////////////
         Organization educationSection = new Organization();
         Experience educationText0 = new Experience("Coursera", YearMonth.of(2013, 3), YearMonth.of(2013, 5));
         educationText0.setText("Functional Programming Principles in Scala\" by Martin Odersky");
-        educationSection.getJobEducationSection().add(educationText0);
+        educationSection.getOrg().add(educationText0);
         Experience educationText1 = new Experience("Luxoft", YearMonth.of(2011, 3), YearMonth.of(2011, 4));
         educationText1.setText("Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
-        educationSection.getJobEducationSection().add(educationText1);
+        educationSection.getOrg().add(educationText1);
         Experience educationText2 = new Experience("Siemens AG", YearMonth.of(2005, 1), YearMonth.of(2005, 4));
         educationText2.setText("3 месяца обучения мобильным IN сетям (Берлин)");
-        educationSection.getJobEducationSection().add(educationText2);
+        educationSection.getOrg().add(educationText2);
         Experience educationText3 = new Experience("Alcatel", YearMonth.of(1997, 9), YearMonth.of(1998, 3));
         educationText3.setText("6 месяцев обучения цифровым телефонным сетям (Москва)");
-        educationSection.getJobEducationSection().add(educationText3);
+        educationSection.getOrg().add(educationText3);
         Experience educationText4 = new Experience("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.of(1993, 9), YearMonth.of(1996, 7));
-        educationText4.setText("Аспирантура (программист С, С++)" + "\nИнженер (программист Fortran, C)");
-        educationSection.getJobEducationSection().add(educationText4);
-        Experience educationText5 = new Experience("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.of(1987, 9), YearMonth.of(1993, 7));
-        educationText5.setText("Аспирантура (программист С, С++)" + "\nИнженер (программист Fortran, C)");
-        educationSection.getJobEducationSection().add(educationText5);
+        educationText4.setText("Аспирантура (программист С, С++)");
+        educationSection.getOrg().add(educationText4);
+        Experience educationText5 = new Experience(null, YearMonth.of(1987, 9), YearMonth.of(1993, 7));
+        educationText5.setText("Инженер (программист Fortran, C)");
+        educationSection.getOrg().add(educationText5);
         Experience educationText6 = new Experience("Заочная физико-техническая школа при МФТИ", YearMonth.of(1984, 9), YearMonth.of(1987, 6));
         educationText6.setText("Закончил с отличием");
-        educationSection.getJobEducationSection().add(educationText6);
+        educationSection.getOrg().add(educationText6);
         sections.put(SectionType.EDUCATION, educationSection);
     }
 
@@ -125,11 +125,11 @@ public class ResumeTestData {
         for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
             System.out.println(entry);
         }
-        if (sections.containsKey(SectionType.PERSONAL)) {
+       /* if (sections.containsKey(SectionType.PERSONAL)) {
             System.out.println("\n" + SectionType.PERSONAL.getTitle());
             System.out.println(((TextSection) sections.get(SectionType.PERSONAL)).getText());
-        }
-        if (sections.containsKey(SectionType.OBJECTIVE)) {
+        }*/
+       /* if (sections.containsKey(SectionType.OBJECTIVE)) {
             System.out.println("\n" + SectionType.OBJECTIVE.getTitle());
             System.out.println(((TextSection) sections.get(SectionType.OBJECTIVE)).getText());
         }
@@ -147,7 +147,7 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.EXPERIENCE)) {
             System.out.println("\n" + SectionType.EXPERIENCE.getTitle());
-            List<Experience> jobSection = ((Organization) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
+            List<Experience> jobSection = ((Organization) sections.get(SectionType.EXPERIENCE)).getOrg();
             for (Experience job : jobSection) {
                 System.out.println(job.getName());
                 System.out.println(job.getStartDate());
@@ -156,11 +156,34 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.EDUCATION)) {
             System.out.println("\n" + SectionType.EDUCATION.getTitle());
-            List<Experience> educationSection = ((Organization) sections.get(SectionType.EDUCATION)).getJobEducationSection();
+            List<Experience> educationSection = ((Organization) sections.get(SectionType.EDUCATION)).getOrg();
             for (Experience education : educationSection) {
                 System.out.println(education.getName());
                 System.out.println(education.getStartDate());
                 System.out.println(education.getText());
+            }
+        }*/
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            System.out.println("\n" + entry.getKey().getTitle());
+            TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
+            TextListSection textListSection = entry.getValue() instanceof TextListSection ? ((TextListSection) entry.getValue()) : null;
+            Organization organizations = entry.getValue() instanceof Organization ? ((Organization) entry.getValue()) : null;
+            if (textSection != null)
+                System.out.println(textSection.getText());
+            else if (textListSection != null) {
+                for (String text : textListSection.getListSection())
+                    System.out.println("- " + text);
+            } else if (organizations != null) {
+                for (Experience organization : organizations.getOrg()) {
+                    if (organization.getName() != null) {
+                        System.out.println(organization.getName());
+                    }
+                    System.out.print(organization.getStartDate());
+                    if (organization.getEndDate() != null)
+                        System.out.print(" - " + organization.getEndDate());
+                    else System.out.print(" - Сейчас");
+                    System.out.println("  " + organization.getText());
+                }
             }
         }
     }

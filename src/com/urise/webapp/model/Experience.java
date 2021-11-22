@@ -22,6 +22,10 @@ public class Experience {
         return startDate;
     }
 
+    public YearMonth getEndDate() {
+        return endDate;
+    }
+
     public void setText(String text) {
         this.text = text;
     }
