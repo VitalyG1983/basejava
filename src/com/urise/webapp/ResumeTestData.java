@@ -1,9 +1,10 @@
-package com.urise.webapp.storage;
+package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResumeTestData {
 
@@ -52,59 +53,59 @@ public class ResumeTestData {
 
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
         JobEducationSection jobSection = new JobEducationSection();
-        JobEducationTextSection jobText0 = new JobEducationTextSection("Java Online Projects", "10/2013 - Сейчас");
-        jobText0.setJobEducationText("Автор проекта.\n" +
+        Experience jobText0 = new Experience("Java Online Projects", "10/2013 - Сейчас");
+        jobText0.setText("Автор проекта.\n" +
                 "Создание, организация и проведение Java онлайн проектов и стажировок.");
         jobSection.getJobEducationSection().add(jobText0);
-        JobEducationTextSection jobText1 = new JobEducationTextSection("Wrike", "10/2014 - 01/2016");
-        jobText1.setJobEducationText("Старший разработчик (backend)\n" +
+        Experience jobText1 = new Experience("Wrike", "10/2014 - 01/2016");
+        jobText1.setText("Старший разработчик (backend)\n" +
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
         jobSection.getJobEducationSection().add(jobText1);
-        JobEducationTextSection jobText2 = new JobEducationTextSection("RIT Center", "04/2012 - 10/2014");
-        jobText2.setJobEducationText("Java архитектор\n" +
+        Experience jobText2 = new Experience("RIT Center", "04/2012 - 10/2014");
+        jobText2.setText("Java архитектор\n" +
                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
         jobSection.getJobEducationSection().add(jobText2);
-        JobEducationTextSection jobText3 = new JobEducationTextSection("Luxoft (Deutsche Bank)", "12/2010 - 04/2012");
-        jobText3.setJobEducationText("Ведущий специалист\n" +
+        Experience jobText3 = new Experience("Luxoft (Deutsche Bank)", "12/2010 - 04/2012");
+        jobText3.setText("Ведущий специалист\n" +
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
         jobSection.getJobEducationSection().add(jobText3);
-        JobEducationTextSection jobText4 = new JobEducationTextSection("Yota", "06/2008 - 12/2010");
-        jobText4.setJobEducationText("Ведущий специалист\n" +
+        Experience jobText4 = new Experience("Yota", "06/2008 - 12/2010");
+        jobText4.setText("Ведущий специалист\n" +
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
         jobSection.getJobEducationSection().add(jobText4);
-        JobEducationTextSection jobText5 = new JobEducationTextSection("Enkata", "03/2007 - 06/2008");
-        jobText5.setJobEducationText("Разработчик ПО\n" +
+        Experience jobText5 = new Experience("Enkata", "03/2007 - 06/2008");
+        jobText5.setText("Разработчик ПО\n" +
                 "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
         jobSection.getJobEducationSection().add(jobText5);
-        JobEducationTextSection jobText6 = new JobEducationTextSection("Siemens AG", "01/2005 - 02/2007");
-        jobText6.setJobEducationText("Разработчик ПО\n" +
+        Experience jobText6 = new Experience("Siemens AG", "01/2005 - 02/2007");
+        jobText6.setText("Разработчик ПО\n" +
                 "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
         jobSection.getJobEducationSection().add(jobText6);
-        JobEducationTextSection jobText7 = new JobEducationTextSection("Alcatel", "09/1997 - 01/2005");
-        jobText7.setJobEducationText("Инженер по аппаратному и программному тестированию\n" +
+        Experience jobText7 = new Experience("Alcatel", "09/1997 - 01/2005");
+        jobText7.setText("Инженер по аппаратному и программному тестированию\n" +
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
         jobSection.getJobEducationSection().add(jobText7);
         sections.put(SectionType.EXPERIENCE, jobSection);
 
 //////////////////////////////--------EducationSection------//////////////////////////////////////////////
         JobEducationSection educationSection = new JobEducationSection();
-        JobEducationTextSection educationText0 = new JobEducationTextSection("Coursera", "03/2013 - 05/2013");
-        educationText0.setJobEducationText("Functional Programming Principles in Scala\" by Martin Odersky");
+        Experience educationText0 = new Experience("Coursera", "03/2013 - 05/2013");
+        educationText0.setText("Functional Programming Principles in Scala\" by Martin Odersky");
         educationSection.getJobEducationSection().add(educationText0);
-        JobEducationTextSection educationText1 = new JobEducationTextSection("Luxoft", "03/2011 - 04/2011");
-        educationText1.setJobEducationText("Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
+        Experience educationText1 = new Experience("Luxoft", "03/2011 - 04/2011");
+        educationText1.setText("Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
         educationSection.getJobEducationSection().add(educationText1);
-        JobEducationTextSection educationText2 = new JobEducationTextSection("Siemens AG", "01/2005 - 04/2005");
-        educationText2.setJobEducationText("3 месяца обучения мобильным IN сетям (Берлин)");
+        Experience educationText2 = new Experience("Siemens AG", "01/2005 - 04/2005");
+        educationText2.setText("3 месяца обучения мобильным IN сетям (Берлин)");
         educationSection.getJobEducationSection().add(educationText2);
-        JobEducationTextSection educationText3 = new JobEducationTextSection("Alcatel", "09/1997 - 03/1998");
-        educationText3.setJobEducationText("6 месяцев обучения цифровым телефонным сетям (Москва)");
+        Experience educationText3 = new Experience("Alcatel", "09/1997 - 03/1998");
+        educationText3.setText("6 месяцев обучения цифровым телефонным сетям (Москва)");
         educationSection.getJobEducationSection().add(educationText3);
-        JobEducationTextSection educationText4 = new JobEducationTextSection("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "09/1993 - 07/1996\t" + "\n09/1987 - 07/1993");
-        educationText4.setJobEducationText("Аспирантура (программист С, С++)" + "\nИнженер (программист Fortran, C)");
+        Experience educationText4 = new Experience("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "09/1993 - 07/1996\t" + "\n09/1987 - 07/1993");
+        educationText4.setText("Аспирантура (программист С, С++)" + "\nИнженер (программист Fortran, C)");
         educationSection.getJobEducationSection().add(educationText4);
-        JobEducationTextSection educationText5 = new JobEducationTextSection("Заочная физико-техническая школа при МФТИ", "09/1984 - 06/1987");
-        educationText5.setJobEducationText("Закончил с отличием");
+        Experience educationText5 = new Experience("Заочная физико-техническая школа при МФТИ", "09/1984 - 06/1987");
+        educationText5.setText("Закончил с отличием");
         educationSection.getJobEducationSection().add(educationText5);
         sections.put(SectionType.EDUCATION, educationSection);
     }
@@ -112,10 +113,10 @@ public class ResumeTestData {
     public static void main(String[] args) {
         ResumeTestData test = new ResumeTestData();
         Resume res = new Resume("Григорий Кислин");
-        EnumMap<ContactType, String> contacts = res.getContacts();
-        EnumMap<SectionType, AbstractSection> sections = res.getSections();
-        test.fillContacts(contacts);
-        test.fillSections(sections);
+        Map<ContactType, String> contacts = res.getContacts();
+        Map<SectionType, AbstractSection> sections = res.getSections();
+        test.fillContacts((EnumMap<ContactType, String>) contacts);
+        test.fillSections((EnumMap<SectionType, AbstractSection>) sections);
         System.out.println(res.getFullName() + "\n");
         for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
             System.out.println(entry);
@@ -142,20 +143,20 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.EXPERIENCE)) {
             System.out.println("\n" + SectionType.EXPERIENCE.getTitle());
-            List<JobEducationTextSection> jobSection = ((JobEducationSection) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
-            for (JobEducationTextSection job : jobSection) {
-                System.out.println(job.getJobEducationName());
-                System.out.println(job.getJobEducationDate());
-                System.out.println(job.getJobEducationText());
+            List<Experience> jobSection = ((JobEducationSection) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
+            for (Experience job : jobSection) {
+                System.out.println(job.getName());
+                System.out.println(job.getStartDate());
+                System.out.println(job.getText());
             }
         }
         if (sections.containsKey(SectionType.EDUCATION)) {
             System.out.println("\n" + SectionType.EDUCATION.getTitle());
-            List<JobEducationTextSection> educationSection = ((JobEducationSection) sections.get(SectionType.EDUCATION)).getJobEducationSection();
-            for (JobEducationTextSection education : educationSection) {
-                System.out.println(education.getJobEducationName());
-                System.out.println(education.getJobEducationDate());
-                System.out.println(education.getJobEducationText());
+            List<Experience> educationSection = ((JobEducationSection) sections.get(SectionType.EDUCATION)).getJobEducationSection();
+            for (Experience education : educationSection) {
+                System.out.println(education.getName());
+                System.out.println(education.getStartDate());
+                System.out.println(education.getText());
             }
         }
     }
