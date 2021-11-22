@@ -1,17 +1,17 @@
 package com.urise.webapp.model;
 
 public class TextSection extends AbstractSection {
-    private String textSection;
+    private String text;
 
-    public TextSection(String textSection) {
-        this.textSection = textSection;
+    public TextSection(String text) {
+        this.text = text;
     }
 
-    public String getTextSection() {
-        return textSection;
+    public String getText() {
+        return text;
     }
 
-    public void setTextSection(String textSection) {
-        this.textSection = textSection;
+    public void setText(String text) {
+        this.text = text;
     }
 }

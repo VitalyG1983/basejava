@@ -2,7 +2,6 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.EnumMap;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ResumeTestData {
         sections.put(SectionType.OBJECTIVE, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
         TextListSection tls = new TextListSection();
-        List<String> achievSection = tls.getTextListSection();
+        List<String> achievSection = tls.getListSection();
         achievSection.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
         achievSection.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
         achievSection.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
@@ -35,7 +34,7 @@ public class ResumeTestData {
         sections.put(SectionType.ACHIEVEMENT, tls);
 
         TextListSection tlsQ = new TextListSection();
-        List<String> qualSection = tlsQ.getTextListSection();
+        List<String> qualSection = tlsQ.getListSection();
         qualSection.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualSection.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
         qualSection.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle,");
@@ -128,21 +127,21 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.PERSONAL)) {
             System.out.println("\n" + SectionType.PERSONAL.getTitle());
-            System.out.println(((TextSection) sections.get(SectionType.PERSONAL)).getTextSection());
+            System.out.println(((TextSection) sections.get(SectionType.PERSONAL)).getText());
         }
         if (sections.containsKey(SectionType.OBJECTIVE)) {
             System.out.println("\n" + SectionType.OBJECTIVE.getTitle());
-            System.out.println(((TextSection) sections.get(SectionType.OBJECTIVE)).getTextSection());
+            System.out.println(((TextSection) sections.get(SectionType.OBJECTIVE)).getText());
         }
         if (sections.containsKey(SectionType.ACHIEVEMENT)) {
             System.out.println("\n" + SectionType.ACHIEVEMENT.getTitle());
-            List<String> tls = ((TextListSection) sections.get(SectionType.ACHIEVEMENT)).getTextListSection();
+            List<String> tls = ((TextListSection) sections.get(SectionType.ACHIEVEMENT)).getListSection();
             for (String text : tls)
                 System.out.println("- " + text);
         }
         if (sections.containsKey(SectionType.QUALIFICATIONS)) {
             System.out.println("\n" + SectionType.QUALIFICATIONS.getTitle());
-            List<String> tls = ((TextListSection) sections.get(SectionType.QUALIFICATIONS)).getTextListSection();
+            List<String> tls = ((TextListSection) sections.get(SectionType.QUALIFICATIONS)).getListSection();
             for (String text : tls)
                 System.out.println("- " + text);
         }
