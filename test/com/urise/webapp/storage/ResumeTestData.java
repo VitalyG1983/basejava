@@ -66,7 +66,7 @@ public class ResumeTestData {
         jobSection.getJobEducationSection().add(jobText2);
         JobEducationTextSection jobText3 = new JobEducationTextSection("Luxoft (Deutsche Bank)", "12/2010 - 04/2012");
         jobText3.setJobEducationText("Ведущий специалист\n" +
-                "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
+                "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
         jobSection.getJobEducationSection().add(jobText3);
         JobEducationTextSection jobText4 = new JobEducationTextSection("Yota", "06/2008 - 12/2010");
         jobText4.setJobEducationText("Ведущий специалист\n" +
