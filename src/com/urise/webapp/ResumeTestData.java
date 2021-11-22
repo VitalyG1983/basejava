@@ -52,7 +52,7 @@ public class ResumeTestData {
         sections.put(SectionType.QUALIFICATIONS, tlsQ);
 
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
-        JobEducationSection jobSection = new JobEducationSection();
+        Organization jobSection = new Organization();
         Experience jobText0 = new Experience("Java Online Projects", "10/2013 - Сейчас");
         jobText0.setText("Автор проекта.\n" +
                 "Создание, организация и проведение Java онлайн проектов и стажировок.");
@@ -88,7 +88,7 @@ public class ResumeTestData {
         sections.put(SectionType.EXPERIENCE, jobSection);
 
 //////////////////////////////--------EducationSection------//////////////////////////////////////////////
-        JobEducationSection educationSection = new JobEducationSection();
+        Organization educationSection = new Organization();
         Experience educationText0 = new Experience("Coursera", "03/2013 - 05/2013");
         educationText0.setText("Functional Programming Principles in Scala\" by Martin Odersky");
         educationSection.getJobEducationSection().add(educationText0);
@@ -143,7 +143,7 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.EXPERIENCE)) {
             System.out.println("\n" + SectionType.EXPERIENCE.getTitle());
-            List<Experience> jobSection = ((JobEducationSection) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
+            List<Experience> jobSection = ((Organization) sections.get(SectionType.EXPERIENCE)).getJobEducationSection();
             for (Experience job : jobSection) {
                 System.out.println(job.getName());
                 System.out.println(job.getStartDate());
@@ -152,7 +152,7 @@ public class ResumeTestData {
         }
         if (sections.containsKey(SectionType.EDUCATION)) {
             System.out.println("\n" + SectionType.EDUCATION.getTitle());
-            List<Experience> educationSection = ((JobEducationSection) sections.get(SectionType.EDUCATION)).getJobEducationSection();
+            List<Experience> educationSection = ((Organization) sections.get(SectionType.EDUCATION)).getJobEducationSection();
             for (Experience education : educationSection) {
                 System.out.println(education.getName());
                 System.out.println(education.getStartDate());
