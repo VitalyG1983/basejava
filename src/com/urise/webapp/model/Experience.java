@@ -1,21 +1,24 @@
 package com.urise.webapp.model;
 
+import java.time.YearMonth;
+
 public class Experience {
     private String name;
-    private String startDate;
-    private String endDate;
+    private YearMonth startDate;
+    private YearMonth endDate;
     private String text;
 
-    public Experience(String name, String startDate) {
+    public Experience(String name, YearMonth startDate, YearMonth endDate) {
         this.name = name;
         this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getStartDate() {
+    public YearMonth getStartDate() {
         return startDate;
     }
 
