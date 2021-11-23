@@ -16,6 +16,8 @@ public class Resume {
     }
 
     public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(uuid, "uuid required non null" );
+        Objects.requireNonNull(fullName, "fullName required non null" );
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -36,31 +38,16 @@ public class Resume {
         return sections;
     }
 
-   /* @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Resume resume = (Resume) o;
-        return uuid.equals(resume.uuid);
-    }*/
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Resume resume = (Resume) o;
-
         if (uuid != null ? !uuid.equals(resume.uuid) : resume.uuid != null) return false;
         if (fullName != null ? !fullName.equals(resume.fullName) : resume.fullName != null) return false;
         if (!contacts.equals(resume.contacts)) return false;
         return sections.equals(resume.sections);
     }
-
- /*   @Override
-    public int hashCode() {
-        return uuid.hashCode();
-    }*/
 
     @Override
     public int hashCode() {

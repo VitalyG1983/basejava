@@ -125,44 +125,6 @@ public class ResumeTestData {
         for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
             System.out.println(entry);
         }
-       /* if (sections.containsKey(SectionType.PERSONAL)) {
-            System.out.println("\n" + SectionType.PERSONAL.getTitle());
-            System.out.println(((TextSection) sections.get(SectionType.PERSONAL)).getText());
-        }*/
-       /* if (sections.containsKey(SectionType.OBJECTIVE)) {
-            System.out.println("\n" + SectionType.OBJECTIVE.getTitle());
-            System.out.println(((TextSection) sections.get(SectionType.OBJECTIVE)).getText());
-        }
-        if (sections.containsKey(SectionType.ACHIEVEMENT)) {
-            System.out.println("\n" + SectionType.ACHIEVEMENT.getTitle());
-            List<String> tls = ((TextListSection) sections.get(SectionType.ACHIEVEMENT)).getListSection();
-            for (String text : tls)
-                System.out.println("- " + text);
-        }
-        if (sections.containsKey(SectionType.QUALIFICATIONS)) {
-            System.out.println("\n" + SectionType.QUALIFICATIONS.getTitle());
-            List<String> tls = ((TextListSection) sections.get(SectionType.QUALIFICATIONS)).getListSection();
-            for (String text : tls)
-                System.out.println("- " + text);
-        }
-        if (sections.containsKey(SectionType.EXPERIENCE)) {
-            System.out.println("\n" + SectionType.EXPERIENCE.getTitle());
-            List<Experience> jobSection = ((Organization) sections.get(SectionType.EXPERIENCE)).getOrg();
-            for (Experience job : jobSection) {
-                System.out.println(job.getName());
-                System.out.println(job.getStartDate());
-                System.out.println(job.getText());
-            }
-        }
-        if (sections.containsKey(SectionType.EDUCATION)) {
-            System.out.println("\n" + SectionType.EDUCATION.getTitle());
-            List<Experience> educationSection = ((Organization) sections.get(SectionType.EDUCATION)).getOrg();
-            for (Experience education : educationSection) {
-                System.out.println(education.getName());
-                System.out.println(education.getStartDate());
-                System.out.println(education.getText());
-            }
-        }*/
         for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
             System.out.println("\n" + entry.getKey().getTitle());
             TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
