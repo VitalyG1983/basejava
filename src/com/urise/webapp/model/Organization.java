@@ -24,7 +24,7 @@ public class Organization extends AbstractSection {
         return Objects.hash(organizations);
     }
 
-    public List<Experience> getOrganizations() {
+    public List<Experience> getExperience() {
         return organizations;
     }
 }
