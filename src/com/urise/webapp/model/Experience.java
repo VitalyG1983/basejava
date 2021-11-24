@@ -1,24 +1,34 @@
 package com.urise.webapp.model;
 
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Objects;
 
 public class Experience {
     private String title;
-    private YearMonth startDate;
+    private List<YearMonth> startDate;
     private YearMonth endDate;
     private String description;
     private final Link homePage;
 
-    public Experience(String title, YearMonth startDate, YearMonth endDate, String name, String url, String description) {
+    public Experience(List<Experience> organizations, String title, YearMonth startDate, YearMonth endDate, String name, String url, String description) {
         Objects.requireNonNull(startDate, "startDate required non null");
         Objects.requireNonNull(endDate, "endDate required non null");
         Objects.requireNonNull(title, "title required non null");
-        this.title = title;
+        if (IsExist(organizations, title, name, url))
+            this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.homePage = new Link(name, url);
         this.description = description;
+    }
+
+    public boolean IsExist(List<Experience> organizations, String title, String name, String url) {
+        for (Experience org : organizations) {
+            if (org.getTitle().equals(title) && org.homePage.getName().equals(name) && org.homePage.getUrl().equals(url))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -53,6 +63,7 @@ public class Experience {
         result = 31 * result + homePage.hashCode();
         return result;
     }
+
 
     public String getTitle() {
         return title;

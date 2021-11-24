@@ -106,7 +106,7 @@ public class ResumeTestData {
         Experience educationText4 = new Experience("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.of(1993, 9), YearMonth.of(1996, 7));
         educationText4.setDescription("Аспирантура (программист С, С++)");
         educationSection.getOrganizations().add(educationText4);
-        Experience educationText5 = new Experience(null, YearMonth.of(1987, 9), YearMonth.of(1993, 7));
+        Experience educationText5 = new Experience("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.of(1987, 9), YearMonth.of(1993, 7));
         educationText5.setDescription("Инженер (программист Fortran, C)");
         educationSection.getOrganizations().add(educationText5);
         Experience educationText6 = new Experience("Заочная физико-техническая школа при МФТИ", YearMonth.of(1984, 9), YearMonth.of(1987, 6));
@@ -138,9 +138,7 @@ public class ResumeTestData {
                     System.out.println("- " + text);
             } else if (organizations != null) {
                 for (Experience organization : organizations.getOrganizations()) {
-                    if (organization.getTitle() != null) {
                         System.out.println(organization.getTitle());
-                    }
                     System.out.print(organization.getStartDate());
                     if (organization.getEndDate() != null)
                         System.out.print(" - " + organization.getEndDate());
