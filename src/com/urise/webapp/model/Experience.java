@@ -1,21 +1,61 @@
 package com.urise.webapp.model;
 
 import java.time.YearMonth;
+import java.util.Objects;
 
 public class Experience {
-    private String name;
+    private String title;
     private YearMonth startDate;
     private YearMonth endDate;
-    private String text;
+    private String description;
+    private final Link homePage;
 
-    public Experience(String name, YearMonth startDate, YearMonth endDate) {
-        this.name = name;
+    public Experience(String title, YearMonth startDate, YearMonth endDate, String name, String url, String description) {
+        Objects.requireNonNull(startDate, "startDate required non null");
+        Objects.requireNonNull(endDate, "endDate required non null");
+        Objects.requireNonNull(title, "title required non null");
+        this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.homePage = new Link(name, url);
+        this.description = description;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String toString() {
+        return "Experience{" +
+                "title='" + title + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", description='" + description + '\'' +
+                ", homePage=" + homePage +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Experience that = (Experience) o;
+        if (!title.equals(that.title)) return false;
+        if (!startDate.equals(that.startDate)) return false;
+        if (!endDate.equals(that.endDate)) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        return homePage.equals(that.homePage);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title.hashCode();
+        result = 31 * result + startDate.hashCode();
+        result = 31 * result + endDate.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + homePage.hashCode();
+        return result;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public YearMonth getStartDate() {
@@ -26,11 +66,11 @@ public class Experience {
         return endDate;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getText() {
-        return text;
+    public String getDescription() {
+        return description;
     }
 }
