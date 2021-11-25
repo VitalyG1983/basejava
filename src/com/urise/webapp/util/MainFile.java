@@ -1,11 +1,36 @@
 package com.urise.webapp.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 public class MainFile {
-    public static void main(String[] args) {
+    public static void HW_8_2_outputFiles() throws IOException {
+        String filePath = ".\\.";
+        File file = new File(filePath);
+        List<File> listDirectories = new ArrayList<>();
+        System.out.println("The directory:");
+        System.out.println(file.getCanonicalPath());
+        System.out.println("Contains files: ");
+        File[] list = file.listFiles();
+        for (File f : list) {
+            if (f.isFile())
+                System.out.println(f);
+            else listDirectories.add(f);
+        }
+
+       // File file = new File("path");
+        File[] subdirs = file.listFiles(f -> f.isFile());
+
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        MainFile.HW_8_2_outputFiles();
         String filePath = ".\\.gitignore";
         File file = new File(filePath);
         try {
