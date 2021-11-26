@@ -1,36 +1,12 @@
 package com.urise.webapp.util;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MainFile {
-    public static void HW_8_2_outputFiles() throws IOException {
-        String filePath = ".\\.";
-        File file = new File(filePath);
-        List<File> listDirectories = new ArrayList<>();
-        System.out.println("The directory:");
-        System.out.println(file.getCanonicalPath());
-        System.out.println("Contains files: ");
-        File[] list = file.listFiles();
-        for (File f : list) {
-            if (f.isFile())
-                System.out.println(f);
-            else listDirectories.add(f);
-        }
-
-       // File file = new File("path");
-        File[] subdirs = file.listFiles(f -> f.isFile());
-
-
-    }
 
     public static void main(String[] args) throws IOException {
-        MainFile.HW_8_2_outputFiles();
         String filePath = ".\\.gitignore";
         File file = new File(filePath);
         try {
@@ -51,5 +27,34 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+}
+
+
+class HW_8_2 {
+
+    public static void print(File[] list, String s) {
+        s = s + "  ";
+        for (File f : list) {
+            if (f.isFile())
+                System.out.println(s + f.getName());
+        }
+        for (File f : list) {
+            if (f.isDirectory()) {
+                System.out.println(s + f.getName());
+                File[] list0 = f.listFiles();
+                print(list0, s);
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        String filePath = ".\\.";
+        File file = new File(filePath);
+        System.out.println("The directory: "+file.getCanonicalPath());
+        System.out.println("Contains files: ");
+        File[] list = file.listFiles();
+        String s = " ";
+        HW_8_2.print(list, s);
     }
 }
