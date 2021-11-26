@@ -51,7 +51,7 @@ class HW_8_2 {
     public static void main(String[] args) throws IOException {
         String filePath = ".\\.";
         File file = new File(filePath);
-        System.out.println("The directory: "+file.getCanonicalPath());
+        System.out.println("The directory: " + file.getCanonicalPath());
         System.out.println("Contains files: ");
         File[] list = file.listFiles();
         String s = " ";
