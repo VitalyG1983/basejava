@@ -10,7 +10,16 @@ import java.util.Map;
 
 public class ResumeTestData {
 
-    void fillContacts(EnumMap<ContactType, String> contacts) {
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        Map<ContactType, String> contacts = resume.getContacts();
+        Map<SectionType, AbstractSection> sections = resume.getSections();
+        fillContacts((EnumMap<ContactType, String>) contacts);
+        fillSections((EnumMap<SectionType, AbstractSection>) sections);
+        return resume;
+    }
+
+    static void  fillContacts(EnumMap<ContactType, String> contacts) {
         contacts.put(ContactType.TEL, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
         contacts.put(ContactType.MAIL, "gkislin@yandex.ru");
@@ -19,7 +28,7 @@ public class ResumeTestData {
         contacts.put(ContactType.STACKOVERFLOW, "Профиль Stackoverflow");
     }
 
-    void fillSections(EnumMap<SectionType, AbstractSection> sections) {
+    static void fillSections(EnumMap<SectionType, AbstractSection> sections) {
         TextSection personal = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         sections.put(SectionType.PERSONAL, personal);
         sections.put(SectionType.OBJECTIVE, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));

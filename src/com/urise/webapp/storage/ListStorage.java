@@ -1,6 +1,7 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.util.ResumeTestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        return storage.indexOf(new Resume(uuid, "fullName"));
+        return storage.indexOf(ResumeTestData.createResume(uuid, "fullName"));
     }
 
     @Override

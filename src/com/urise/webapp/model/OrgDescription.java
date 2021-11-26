@@ -17,13 +17,25 @@ public class OrgDescription {
         this.description = description;
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrgDescription that = (OrgDescription) o;
         if (!startDate.equals(that.startDate)) return false;
         if (!endDate.equals(that.endDate)) return false;
+        return description.equals(that.description);
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrgDescription that = (OrgDescription) o;
+
+        if (!startDate.equals(that.startDate)) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
         return description.equals(that.description);
     }
 

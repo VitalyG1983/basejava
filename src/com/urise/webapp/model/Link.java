@@ -25,9 +25,13 @@ public class Link {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Link link = (Link) o;
-        if (!name.equals(link.name)) return false;
-        return url != null ? url.equals(link.url) : link.url == null;
+
+        if (name != null ? !name.equals(link.name) : link.name != null) return false;
+        if (url != null ? !url.equals(link.url) : link.url != null) return false;
+
+        return true;
     }
 
     @Override

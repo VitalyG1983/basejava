@@ -7,24 +7,25 @@ import com.urise.webapp.model.Resume;
 
 import static org.junit.Assert.*;
 
+import com.urise.webapp.util.ResumeTestData;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     private final Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
     private static final String UUID_4 = "4";
 
-    private final Resume resume1 = new Resume(UUID_1, "fullName");
-    private final Resume resume2 = new Resume(UUID_2, "fullName");
-    private final Resume resume3 = new Resume(UUID_3, "fullName");
-    private final Resume resume4 = new Resume(UUID_4, "fullName");
+    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "fullName"); //new Resume(UUID_1, "fullName");
+    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "fullName");//new Resume(UUID_2, "fullName");
+    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "fullName");//new Resume(UUID_3, "fullName");
+    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "fullName");//new Resume(UUID_4, "fullName");
 
-    public AbstractArrayStorageTest(Storage storage) {
+    public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -66,7 +67,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        Resume expectedResume = new Resume(UUID_1, "fullName");
+        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName");//new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
         assertSame(expectedResume, storage.get(UUID_1));
     }
