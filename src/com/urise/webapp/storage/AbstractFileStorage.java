@@ -5,6 +5,7 @@ import com.urise.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +22,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     protected abstract void doWright(Resume r, File file) throws IOException;
+
+    protected abstract Resume doRead(File file) throws IOException;
 
     @Override
     protected File getSearchKey(String uuid) {
@@ -40,17 +43,28 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void updateResume(Resume resume, File file) {
-
+        deleteResume(file);
+        saveResume(resume, file);
     }
 
     @Override
     protected void deleteResume(File file) {
-
+        try {
+            file.delete();
+        } catch (Exception e) {
+            throw new StorageException("Delete file Error", file.getName(), e);
+        }
     }
 
     @Override
     protected Resume getResume(File file) {
-        return null;
+        Resume resume;
+        try {
+            resume = doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("I/O Error", file.getName(), e);
+        }
+        return resume;
     }
 
     @Override
@@ -60,16 +74,27 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getStorage() {
-        return null;
+        File[] files = directory.listFiles(File::isFile);
+        List<Resume> resumes = new ArrayList<>();
+        if (files != null) {
+            for (File file : files)
+                resumes.add(getResume(file));
+        }
+        return resumes;
     }
 
     @Override
     public void clear() {
-
+        File[] files = directory.listFiles(File::isFile);
+        if (files != null) {
+            for (File file : files)
+                deleteResume(file);
+        }
     }
 
     @Override
     public int size() {
-        return 0;
+        File[] files = directory.listFiles(File::isFile);
+        return files.length;
     }
 }

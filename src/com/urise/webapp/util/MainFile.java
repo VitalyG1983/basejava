@@ -3,6 +3,7 @@ package com.urise.webapp.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainFile {
 
@@ -43,13 +44,17 @@ class HW_8_2 {
             if (f.isDirectory()) {
                 System.out.println(s + f.getName());
                 File[] list0 = f.listFiles();
-                print(list0, s);
+                if (list0 != null)
+                    print(list0, s);
             }
         }
     }
 
     public static void main(String[] args) throws IOException {
-        String filePath = ".\\.";
+        String filePath;
+        String os = System.getProperty("os.name");
+        if (Objects.equals(os, "windows")) filePath = ".\\.";
+        else filePath = "./.";
         File file = new File(filePath);
         System.out.println("The directory: " + file.getCanonicalPath());
         System.out.println("Contains files: ");
