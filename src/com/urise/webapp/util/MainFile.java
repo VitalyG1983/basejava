@@ -3,6 +3,8 @@ package com.urise.webapp.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class MainFile {
@@ -36,11 +38,16 @@ class Recursion {
 
     public static void print(File[] list, String s) {
         s = s + "  ";
+        Arrays.sort(list, (o1, o2) -> {
+            if (o1.isFile() & o2.isDirectory())
+                return -1;
+            else if (o2.isFile() & o1.isDirectory())
+                return 1;
+            else return 0;
+        });
         for (File f : list) {
             if (f.isFile())
                 System.out.println(s + f.getName());
-        }
-        for (File f : list) {
             if (f.isDirectory()) {
                 System.out.println(s + f.getName());
                 File[] list0 = f.listFiles();
@@ -60,6 +67,7 @@ class Recursion {
         System.out.println("Contains files: ");
         File[] list = file.listFiles();
         String s = " ";
-        Recursion.print(list, s);
+        if (list != null)
+            Recursion.print(list, s);
     }
 }
