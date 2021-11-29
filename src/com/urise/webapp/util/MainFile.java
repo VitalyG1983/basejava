@@ -32,7 +32,7 @@ public class MainFile {
 }
 
 
-class HW_8_2 {
+class Recursion {
 
     public static void print(File[] list, String s) {
         s = s + "  ";
@@ -60,6 +60,6 @@ class HW_8_2 {
         System.out.println("Contains files: ");
         File[] list = file.listFiles();
         String s = " ";
-        HW_8_2.print(list, s);
+        Recursion.print(list, s);
     }
 }

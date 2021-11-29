@@ -1,7 +1,5 @@
 package com.urise.webapp.model;
 
-import java.util.Objects;
-
 public class Link {
 
     private final String name;

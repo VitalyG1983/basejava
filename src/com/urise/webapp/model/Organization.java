@@ -3,12 +3,28 @@ package com.urise.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization extends AbstractSection {
-    private final List<Experience> organizations;
+public class Organization {
+    private final String title;
+    private final List<Experience> experience;
+    private final Link homePage;
 
-    public Organization(List<Experience> organizations) {
-        Objects.requireNonNull(organizations, "organizations required non null");
-        this.organizations = organizations;
+    public Organization(String title, List<Experience> experience, String name, String url) {
+        Objects.requireNonNull(title, "OrganizationsSection title required non null");
+        Objects.requireNonNull(experience, "List Experience required non null");
+       // Objects.requireNonNull(name, "name required non null");
+       // Objects.requireNonNull(url, "url required non null");
+        this.title = title;
+        this.experience = experience;
+        this.homePage = new Link(name, url);
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "title='" + title + '\'' +
+                ", organizations=" + experience +
+                ", homePage=" + homePage +
+                '}';
     }
 
     @Override
@@ -16,15 +32,28 @@ public class Organization extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return organizations.equals(that.organizations);
+        if (!title.equals(that.title)) return false;
+        if (!experience.equals(that.experience)) return false;
+        return homePage.equals(that.homePage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(organizations);
+        int result = title.hashCode();
+        result = 31 * result + experience.hashCode();
+        result = 31 * result + homePage.hashCode();
+        return result;
     }
 
-    public List<Experience> getExperience() {
-        return organizations;
+    public String getTitle() {
+        return title;
+    }
+
+    public List<Experience> getOrganizations() {
+        return experience;
+    }
+
+    public Link getHomePage() {
+        return homePage;
     }
 }

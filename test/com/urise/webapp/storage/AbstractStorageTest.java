@@ -2,16 +2,16 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-
-import static org.junit.Assert.*;
-
 import com.urise.webapp.util.ResumeTestData;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
     private final Storage storage;
@@ -43,20 +43,6 @@ public abstract class AbstractStorageTest {
         Resume actualResume = storage.get(UUID_4);
         assertEquals(resume4, actualResume);
         assertEquals(4, storage.size());
-    }
-
-    @Test(expected = StorageException.class)
-    public void storageExceptionOverFlow() {
-        //If we save new resume then STORAGE_LIMIT exceeded, then StorageException will be thrown
-        try {
-            clear();
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume("Test"));
-            }
-        } catch (StorageException e) {
-            fail("StorageException catched is too early, Database not full");
-        }
-        storage.save(new Resume("Test"));
     }
 
     @Test(expected = ExistStorageException.class)

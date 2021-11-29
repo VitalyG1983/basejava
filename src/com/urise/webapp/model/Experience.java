@@ -1,59 +1,51 @@
 package com.urise.webapp.model;
 
-import java.util.List;
+import java.time.YearMonth;
 import java.util.Objects;
 
 public class Experience {
-    private String title;
-    private final List<OrgDescription> orgDescription;
-    private final Link homePage;
+    private final YearMonth startDate;
+    private final YearMonth endDate;
+    private final String description;
 
-    public Experience(String title, List<OrgDescription> orgDescription, String name, String url) {
-        Objects.requireNonNull(title, "Organization title required non null");
-        Objects.requireNonNull(orgDescription, "List OrgDescription required non null");
-       // Objects.requireNonNull(name, "name required non null");
-       // Objects.requireNonNull(url, "url required non null");
-        this.title = title;
-        this.orgDescription = orgDescription;
-        this.homePage = new Link(name, url);
-    }
-
-    @Override
-    public String toString() {
-        return "Experience{" +
-                "title='" + title + '\'' +
-                ", organizations=" + orgDescription +
-                ", homePage=" + homePage +
-                '}';
+    public Experience(YearMonth startDate, YearMonth endDate, String description) {
+        Objects.requireNonNull(startDate, "startDate required non null");
+       // Objects.requireNonNull(endDate, "endDate required non null");
+        Objects.requireNonNull(description, "description required non null");
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Experience that = (Experience) o;
-        if (!title.equals(that.title)) return false;
-        if (!orgDescription.equals(that.orgDescription)) return false;
-        return homePage.equals(that.homePage);
+
+        if (!startDate.equals(that.startDate)) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
+        return description.equals(that.description);
     }
 
     @Override
     public int hashCode() {
-        int result = title.hashCode();
-        result = 31 * result + orgDescription.hashCode();
-        result = 31 * result + homePage.hashCode();
+        int result = startDate.hashCode();
+        result = 31 * result + endDate.hashCode();
+        result = 31 * result + description.hashCode();
         return result;
     }
 
-    public String getTitle() {
-        return title;
+    public YearMonth getStartDate() {
+        return startDate;
     }
 
-    public List<OrgDescription> getOrganizations() {
-        return orgDescription;
+    public YearMonth getEndDate() {
+        return endDate;
     }
 
-    public Link getHomePage() {
-        return homePage;
+    public String getDescription() {
+        return description;
     }
 }
