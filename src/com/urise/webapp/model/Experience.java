@@ -10,8 +10,8 @@ public class Experience {
 
     public Experience(YearMonth startDate, YearMonth endDate, String description) {
         Objects.requireNonNull(startDate, "startDate required non null");
-       // Objects.requireNonNull(endDate, "endDate required non null");
-        Objects.requireNonNull(description, "description required non null");
+        // Objects.requireNonNull(endDate, "endDate required non null");
+        //Objects.requireNonNull(description, "description required non null");
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
@@ -26,7 +26,16 @@ public class Experience {
 
         if (!startDate.equals(that.startDate)) return false;
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
-        return description.equals(that.description);
+        return (description != null ? !description.equals(that.description) : that.description != null);
+    }
+
+    @Override
+    public String toString() {
+        return "Experience{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     @Override

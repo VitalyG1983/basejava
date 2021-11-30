@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class Organization {
+    private final Link homePage;
     private final String title;
     private final List<Experience> experience;
-    private final Link homePage;
 
     public Organization(String title, List<Experience> experience, String name, String url) {
-        Objects.requireNonNull(title, "OrganizationsSection title required non null");
+     //   Objects.requireNonNull(title, "OrganizationsSection title required non null");
         Objects.requireNonNull(experience, "List Experience required non null");
        // Objects.requireNonNull(name, "name required non null");
        // Objects.requireNonNull(url, "url required non null");
@@ -21,9 +21,9 @@ public class Organization {
     @Override
     public String toString() {
         return "Organization{" +
-                "title='" + title + '\'' +
-                ", organizations=" + experience +
-                ", homePage=" + homePage +
+                "homePage=" + homePage +
+                ", title='" + title + '\'' +
+                ", experience=" + experience +
                 '}';
     }
 
