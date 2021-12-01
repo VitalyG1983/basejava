@@ -25,7 +25,8 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        return storage.indexOf(ResumeTestData.createResume(uuid, "fullName"));
+        Resume resume= ResumeTestData.createResume(uuid, "fullName");
+        return storage.indexOf(resume);
     }
 
     @Override

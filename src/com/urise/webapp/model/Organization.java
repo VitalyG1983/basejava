@@ -10,7 +10,7 @@ public class Organization {
 
     public Organization(String title, List<Experience> experience, String name, String url) {
      //   Objects.requireNonNull(title, "OrganizationsSection title required non null");
-        Objects.requireNonNull(experience, "List Experience required non null");
+      //  Objects.requireNonNull(experience, "List Experience required non null");
        // Objects.requireNonNull(name, "name required non null");
        // Objects.requireNonNull(url, "url required non null");
         this.title = title;
@@ -27,7 +27,7 @@ public class Organization {
                 '}';
     }
 
-    @Override
+  /*  @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -35,6 +35,18 @@ public class Organization {
         if (!title.equals(that.title)) return false;
         if (!experience.equals(that.experience)) return false;
         return homePage.equals(that.homePage);
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Organization that = (Organization) o;
+
+        if (homePage != null ? !homePage.equals(that.homePage) : that.homePage != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        return experience != null ? experience.equals(that.experience) : that.experience == null;
     }
 
     @Override

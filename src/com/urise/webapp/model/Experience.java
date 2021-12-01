@@ -24,9 +24,9 @@ public class Experience {
 
         Experience that = (Experience) o;
 
-        if (!startDate.equals(that.startDate)) return false;
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
-        return (description != null ? !description.equals(that.description) : that.description != null);
+        return description != null ? description.equals(that.description) : that.description == null;
     }
 
     @Override

@@ -11,12 +11,22 @@ public class OrganizationsSection extends AbstractSection {
         this.organizations = organizations;
     }
 
-    @Override
+ /*   @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrganizationsSection that = (OrganizationsSection) o;
         return organizations.equals(that.organizations);
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrganizationsSection that = (OrganizationsSection) o;
+
+        return organizations != null ? organizations.equals(that.organizations) : that.organizations == null;
     }
 
     @Override

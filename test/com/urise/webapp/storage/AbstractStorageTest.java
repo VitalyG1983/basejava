@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
-    private final Storage storage;
+    protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
     private static final String UUID_3 = "3";
@@ -27,6 +27,10 @@ public abstract class AbstractStorageTest {
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
+    }
+
+    public Storage getStorage() {
+        return storage;
     }
 
     @Before

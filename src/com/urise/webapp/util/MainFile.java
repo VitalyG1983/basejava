@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 public class MainFile {
@@ -36,26 +37,28 @@ public class MainFile {
 
 class Recursion {
 
-    public static void print(File[] list, String s) {
+    public static void print(File file, String s) {
         s = s + "  ";
-        Arrays.sort(list, (o1, o2) -> {
-            if (o1.isFile() & o2.isDirectory())
-                return -1;
-            else if (o2.isFile() & o1.isDirectory())
-                return 1;
-            else return 0;
-        });
-        for (File f : list) {
-            if (f.isFile())
-                System.out.println(s + f.getName());
-            if (f.isDirectory()) {
-                System.out.println(s + f.getName());
-                File[] list0 = f.listFiles();
-                if (list0 != null)
-                    print(list0, s);
+        File[] list = file.listFiles();
+        if (list != null) {
+            Arrays.sort(list, (o1, o2) -> {
+                if (o1.isFile() & o2.isDirectory())
+                    return -1;
+                else if (o2.isFile() & o1.isDirectory())
+                    return 1;
+                else return 0;
+            });
+            for (File f : list) {
+                if (f.isFile())
+                    System.out.println(s + f.getName());
+                else if (f.isDirectory()) {
+                    System.out.println(s + f.getName());
+                    print(f, s);
+                }
             }
         }
     }
+
 
     public static void main(String[] args) throws IOException {
         String filePath;
@@ -65,9 +68,7 @@ class Recursion {
         File file = new File(filePath);
         System.out.println("The directory: " + file.getCanonicalPath());
         System.out.println("Contains files: ");
-        File[] list = file.listFiles();
         String s = " ";
-        if (list != null)
-            Recursion.print(list, s);
+        Recursion.print(file, s);
     }
 }
