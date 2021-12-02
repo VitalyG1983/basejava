@@ -2,6 +2,7 @@ package com.urise.webapp.util;
 
 import com.urise.webapp.model.*;
 
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -64,107 +65,123 @@ public class ResumeTestData {
 
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
         OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
-        List<Experience> jobDescList1 = new ArrayList<>();
-        jobDescList1.add(new Experience(YearMonth.of(2013, 10), null, "                 Создание, организация и проведение Java онлайн проектов и стажировок."));
-        Organization jobText1 = new Organization("   Автор проекта", jobDescList1, "Java Online Projects", null);
+        List<Organization.Experience> jobDescList1 = new ArrayList<>();
+        jobDescList1.add(new Organization.Experience(2013, Month.OCTOBER, "  Автор проекта",
+                "                       Создание, организация и проведение Java онлайн проектов и стажировок."));
+        Organization jobText1 = new Organization(jobDescList1, "Java Online Projects", null);
         jobSection.getExperience().add(jobText1);
 
-        List<Experience> jobDescList2 = new ArrayList<>();
-        jobDescList2.add(new Experience(YearMonth.of(2014, 10), YearMonth.of(2016, 1),
-                "                 Проектирование и разработка онлайн платформы управления проектами Wrike " +
+        List<Organization.Experience> jobDescList2 = new ArrayList<>();
+        jobDescList2.add(new Organization.Experience(2014, Month.OCTOBER, 2016, Month.JANUARY,
+                "  Старший разработчик (backend)",
+                "                       Проектирование и разработка онлайн платформы управления проектами Wrike " +
                         "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная " +
                         "аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
-        Organization jobText2 = new Organization("  Старший разработчик (backend)", jobDescList2, "Wrike", null);
+        Organization jobText2 = new Organization(jobDescList2, "Wrike", null);
         jobSection.getExperience().add(jobText2);
 
-        List<Experience> jobDescList3 = new ArrayList<>();
-        jobDescList3.add(new Experience(YearMonth.of(2012, 4), YearMonth.of(2014, 10),
-                "                 Организация процесса разработки системы ERP для разных окружений: релизная " +
-                        "политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway)," +
-                        " конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части " +
-                        "системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего " +
-                        "назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование " +
-                        "из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
-                        " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting " +
-                        "via ssh tunnels, PL/Python"));
-        Organization jobText3 = new Organization("  Java архитектор", jobDescList3, "RIT Center", null);
+        List<Organization.Experience> jobDescList3 = new ArrayList<>();
+        jobDescList3.add(new Organization.Experience(2012, Month.APRIL, 2014, Month.OCTOBER,
+                "  Java архитектор", "                       Организация процесса разработки системы " +
+                "ERP для разных окружений: релизная " +
+                "политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway)," +
+                " конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части " +
+                "системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего " +
+                "назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование " +
+                "из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
+                " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting " +
+                "via ssh tunnels, PL/Python"));
+        Organization jobText3 = new Organization(jobDescList3, "RIT Center", null);
         jobSection.getExperience().add(jobText3);
 
-        List<Experience> jobDescList4 = new ArrayList<>();
-        jobDescList4.add(new Experience(YearMonth.of(2010, 12), YearMonth.of(2012, 4),
-                "                 Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
+        List<Organization.Experience> jobDescList4 = new ArrayList<>();
+        jobDescList4.add(new Organization.Experience(2010, Month.DECEMBER, 2012, Month.APRIL,
+                "  Ведущий специалист",
+                "                       Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
                         " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                         "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                         "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
-        Organization jobText4 = new Organization("  Ведущий специалист", jobDescList4, "Luxoft (Deutsche Bank)", null);
+        Organization jobText4 = new Organization(jobDescList4, "Luxoft (Deutsche Bank)", null);
         jobSection.getExperience().add(jobText4);
 
-        List<Experience> jobDescList5 = new ArrayList<>();
-        jobDescList5.add(new Experience(YearMonth.of(2008, 6), YearMonth.of(2010, 12),
-                "                 Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
+        List<Organization.Experience> jobDescList5 = new ArrayList<>();
+        jobDescList5.add(new Organization.Experience(2008, Month.JUNE, 2010, Month.DECEMBER,
+                "  Ведущий специалист",
+                "                       Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
                         "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                         "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента " +
                         "(Python/ Jython, Django, ExtJS)"));
-        Organization jobText5 = new Organization("  Ведущий специалист", jobDescList5, "Yota", null);
+        Organization jobText5 = new Organization(jobDescList5, "Yota", null);
         jobSection.getExperience().add(jobText5);
 
-        List<Experience> jobDescList6 = new ArrayList<>();
-        jobDescList6.add(new Experience(YearMonth.of(2007, 3), YearMonth.of(2008, 6),
-                "                 Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."));
-        Organization jobText6 = new Organization("  Разработчик ПО", jobDescList6, "Enkata", null);
+        List<Organization.Experience> jobDescList6 = new ArrayList<>();
+        jobDescList6.add(new Organization.Experience(2007, Month.MARCH, 2008, Month.JUNE, "  Разработчик ПО",
+                "                       Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) " +
+                        "частей кластерного J2EE приложения (OLAP, Data mining)."));
+        Organization jobText6 = new Organization(jobDescList6, "Enkata", null);
         jobSection.getExperience().add(jobText6);
 
-        List<Experience> jobDescList7 = new ArrayList<>();
-        jobDescList7.add(new Experience(YearMonth.of(2005, 1), YearMonth.of(2007, 2),
-                "                 Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."));
-        Organization jobText7 = new Organization("  Разработчик ПО", jobDescList7, "Siemens AG", null);
+        List<Organization.Experience> jobDescList7 = new ArrayList<>();
+        jobDescList7.add(new Organization.Experience(2005, Month.JANUARY, 2007, Month.FEBRUARY,
+                "  Разработчик ПО",
+                "                       Разработка информационной модели, проектирование интерфейсов, реализация и " +
+                        "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."));
+        Organization jobText7 = new Organization(jobDescList7, "Siemens AG", null);
         jobSection.getExperience().add(jobText7);
 
-        List<Experience> jobDescList8 = new ArrayList<>();
-        jobDescList8.add(new Experience(YearMonth.of(1997, 9), YearMonth.of(2005, 1),
-                "                 Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."));
-        Organization jobText8 = new Organization("  Инженер по аппаратному и программному тестированию", jobDescList8, "Alcatel", null);
+        List<Organization.Experience> jobDescList8 = new ArrayList<>();
+        jobDescList8.add(new Organization.Experience(1997, Month.SEPTEMBER, 2005, Month.JANUARY,
+                "  Инженер по аппаратному и программному тестированию",
+                "                       Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel " +
+                        "1000 S12 (CHILL, ASM)."));
+        Organization jobText8 = new Organization(jobDescList8, "Alcatel", null);
         jobSection.getExperience().add(jobText8);
 
         sections.put(SectionType.EXPERIENCE, jobSection);
 
 //////////////////////////////--------EducationSection------//////////////////////////////////////////////
         OrganizationsSection eduSection = new OrganizationsSection(new ArrayList<>());
-        List<Experience> eduDescList1 = new ArrayList<>();
-        eduDescList1.add(new Experience(YearMonth.of(2013, 3), YearMonth.of(2013, 5), null));
-        Organization eduText1 = new Organization("  Functional Programming Principles in Scala\" by Martin Odersky", eduDescList1, "Coursera", null);
+        List<Organization.Experience> eduDescList1 = new ArrayList<>();
+        eduDescList1.add(new Organization.Experience(2013, Month.MARCH, 2013, Month.MAY, null,
+                "  Functional Programming Principles in Scala\" by Martin Odersky"));
+        Organization eduText1 = new Organization(eduDescList1, "Coursera", null);
         eduSection.getExperience().add(eduText1);
 
-        List<Experience> eduDescList2 = new ArrayList<>();
-        eduDescList2.add(new Experience(YearMonth.of(2011, 3), YearMonth.of(2011, 4), null));
-        Organization eduText2 = new Organization("  Курс \"Объектно-ориентированный анализ ИС. Концептуальное " +
-                "моделирование на UML.", eduDescList2, "Luxoft", null);
+        List<Organization.Experience> eduDescList2 = new ArrayList<>();
+        eduDescList2.add(new Organization.Experience(2011, Month.MARCH, 2011, Month.APRIL, null,
+                "  Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+        Organization eduText2 = new Organization(eduDescList2, "Luxoft", null);
         eduSection.getExperience().add(eduText2);
 
-        List<Experience> eduDescList3 = new ArrayList<>();
-        eduDescList3.add(new Experience(YearMonth.of(2005, 1), YearMonth.of(2005, 4), null));
-        Organization eduText3 = new Organization("  3 месяца обучения мобильным IN сетям (Берлин)", eduDescList3, "Siemens AG", null);
+        List<Organization.Experience> eduDescList3 = new ArrayList<>();
+        eduDescList3.add(new Organization.Experience(2005, Month.JANUARY, 2005, Month.APRIL, null,
+                "  3 месяца обучения мобильным IN сетям (Берлин)"));
+        Organization eduText3 = new Organization(eduDescList3, "Siemens AG", null);
         eduSection.getExperience().add(eduText3);
 
-        List<Experience> eduDescList4 = new ArrayList<>();
-        eduDescList4.add(new Experience(YearMonth.of(1997, 9), YearMonth.of(1998, 3), null));
-        Organization eduText4 = new Organization("  6 месяцев обучения цифровым телефонным сетям (Москва)", eduDescList4, "Alcatel", null);
+        List<Organization.Experience> eduDescList4 = new ArrayList<>();
+        eduDescList4.add(new Organization.Experience(1997, Month.SEPTEMBER, 1998, Month.MARCH, null,
+                "  6 месяцев обучения цифровым телефонным сетям (Москва)"));
+        Organization eduText4 = new Organization(eduDescList4, "Alcatel", null);
         eduSection.getExperience().add(eduText4);
 
-        List<Experience> eduDescList5 = new ArrayList<>();
-        eduDescList5.add(new Experience(YearMonth.of(1993, 9), YearMonth.of(1996, 7), null));
-        Organization eduText5 = new Organization("  Аспирантура (программист С, С++)", eduDescList5, "Санкт-Петербургский национальный исследовательский " +
+        List<Organization.Experience> eduDescList5 = new ArrayList<>();
+        eduDescList5.add(new Organization.Experience(1993, Month.SEPTEMBER, 1996, Month.JULY, null,
+                "  Аспирантура (программист С, С++)"));
+        Organization eduText5 = new Organization(eduDescList5, "Санкт-Петербургский национальный исследовательский " +
                 "университет информационных технологий, механики и оптики", null);
         eduSection.getExperience().add(eduText5);
 
-        List<Experience> eduDescList6 = new ArrayList<>();
-        eduDescList6.add(new Experience(YearMonth.of(1987, 9), YearMonth.of(1993, 7), null));
-        Organization eduText6 = new Organization("  Инженер (программист Fortran, C)", eduDescList6, null, null);
+        List<Organization.Experience> eduDescList6 = new ArrayList<>();
+        eduDescList6.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, null,
+                "  Инженер (программист Fortran, C)"));
+        Organization eduText6 = new Organization(eduDescList6, null, null);
         eduSection.getExperience().add(eduText6);
 
-        List<Experience> eduDescList7 = new ArrayList<>();
-        eduDescList7.add(new Experience(YearMonth.of(1984, 9), YearMonth.of(1987, 6), null));
-        Organization eduText7 = new Organization("Закончил с отличием", eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
+        List<Organization.Experience> eduDescList7 = new ArrayList<>();
+        eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, null,
+                "Закончил с отличием"));
+        Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getExperience().add(eduText7);
 
         sections.put(SectionType.EDUCATION, eduSection);
@@ -194,12 +211,13 @@ public class ResumeTestData {
                 for (Organization organization : organizations.getExperience()) {
                     if (organization.getHomePage().getName() == null) {
                     } else System.out.println(organization.getHomePage().getName());
-                    for (Experience org : organization.getOrganizations()) {
+                    for (Organization.Experience org : organization.getOrganizations()) {
                         System.out.print(org.getStartDate());
                         if (org.getEndDate() != null)
                             System.out.print(" - " + org.getEndDate());
                         else System.out.print(" - Сейчас");
-                        System.out.println(organization.getTitle());
+                        if (org.getTitle() == null) {
+                        } else System.out.println(org.getTitle());
                         if (org.getDescription() == null) {
                         } else System.out.println("  " + org.getDescription());
                     }

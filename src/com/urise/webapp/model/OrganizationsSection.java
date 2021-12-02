@@ -1,23 +1,20 @@
 package com.urise.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class OrganizationsSection extends AbstractSection {
     private final List<Organization> organizations;
 
+    public OrganizationsSection(Organization... organizations) {
+        this(Arrays.asList(organizations));
+    }
+
     public OrganizationsSection(List<Organization> organizations) {
         Objects.requireNonNull(organizations, "organizations required non null");
         this.organizations = organizations;
     }
-
- /*   @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrganizationsSection that = (OrganizationsSection) o;
-        return organizations.equals(that.organizations);
-    }*/
 
     @Override
     public boolean equals(Object o) {
