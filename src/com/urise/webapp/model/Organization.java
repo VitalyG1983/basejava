@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Objects;
 import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.DateUtil.of;
 
-public class Organization {
+public class Organization implements Serializable {
     private final Link homePage;
     private final List<Experience> experience;
 
@@ -51,7 +52,7 @@ public class Organization {
         return homePage;
     }
 
-    public static class Experience {
+    public static class Experience implements Serializable{
         private final String title;
         private final LocalDate startDate;
         private final LocalDate endDate;

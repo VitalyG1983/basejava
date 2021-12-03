@@ -1,6 +1,8 @@
 package com.urise.webapp.model;
 
-public class Link {
+import java.io.Serializable;
+
+public class Link implements Serializable {
 
     private final String name;
     private final String url;

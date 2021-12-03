@@ -1,10 +1,11 @@
 package com.urise.webapp.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class TextListSection extends AbstractSection {
+public class TextListSection extends AbstractSection implements Serializable {
     private final List<String> ListSection;
 
     public TextListSection(String... lines) {
