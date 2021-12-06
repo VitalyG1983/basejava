@@ -21,25 +21,25 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     }
 
     @Override
-    protected void saveResume(Resume r, Resume searchKey) {
+    protected void doSave(Resume r, Resume searchKey) {
         storage.put(r.getUuid(), r);
         System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
-    protected void updateResume(Resume resume, Resume searchKey) {
+    protected void doUpdate(Resume resume, Resume searchKey) {
         Resume res = searchKey;
         storage.replace(res.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(Resume searchKey) {
+    protected void doDelete(Resume searchKey) {
         Resume res = searchKey;
         storage.remove(res.getUuid(), res);
     }
 
     @Override
-    protected Resume getResume(Resume searchKey) {
+    protected Resume doGet(Resume searchKey) {
         return searchKey;
     }
 

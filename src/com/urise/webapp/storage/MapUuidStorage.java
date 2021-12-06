@@ -17,23 +17,23 @@ public class MapUuidStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected void saveResume(Resume r, String searchKey) {
+    protected void doSave(Resume r, String searchKey) {
         storage.put(r.getUuid(), r);
         System.out.println("Resume with Key= " + r.getUuid() + " is mapped");
     }
 
     @Override
-    protected void updateResume(Resume resume, String searchKey) {
+    protected void doUpdate(Resume resume, String searchKey) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(String key) {
+    protected void doDelete(String key) {
         storage.remove(key);
     }
 
     @Override
-    protected Resume getResume(String key) {
+    protected Resume doGet(String key) {
         return storage.get(key);
     }
 

@@ -30,7 +30,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void saveResume(Resume r, File file) {
+    protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
             doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
@@ -41,20 +41,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void updateResume(Resume resume, File file) {
-        deleteResume(file);
-        saveResume(resume, file);
+    protected void doUpdate(Resume resume, File file) {
+        //doDelete(file);
+        doSave(resume, file);
     }
 
     @Override
-    protected void deleteResume(File file) {
+    protected void doDelete(File file) {
         if (!file.delete()) {
             throw new StorageException("File delete error", file.getName());
         }
     }
 
     @Override
-    protected Resume getResume(File file) {
+    protected Resume doGet(File file) {
         try {
             return doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
@@ -75,7 +75,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         List<Resume> resumes = new ArrayList<>(files.length);
         for (File file : files)
-            resumes.add(getResume(file));
+            resumes.add(doGet(file));
         return resumes;
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         File[] files = directory.listFiles(File::isFile);
         if (files != null) {
             for (File file : files)
-                deleteResume(file);
+                doDelete(file);
         }
     }
 

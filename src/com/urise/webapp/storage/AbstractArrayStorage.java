@@ -32,7 +32,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void saveResume(Resume r, Integer index) {
+    protected void doSave(Resume r, Integer index) {
         if (size >= AbstractArrayStorage.STORAGE_LIMIT) {
             throw new StorageException("Not enough space in Database for save new resume ", r.getUuid());
         }
@@ -41,7 +41,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         size++;
     }
 
-    protected void deleteResume(Integer index) {
+    protected void doDelete(Integer index) {
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
     }
@@ -52,12 +52,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void updateResume(Resume r, Integer index) {
+    protected void doUpdate(Resume r, Integer index) {
         storage[index] = r;
     }
 
     @Override
-    public Resume getResume(Integer index) {
+    public Resume doGet(Integer index) {
         return storage[index];
     }
 }

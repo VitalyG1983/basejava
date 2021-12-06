@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File(".\\src\\com\\urise\\webapp\\storage\\Saved files");//"/Users/vitalygavrilov/Documents/Java/basejava");
+    protected static File STORAGE_DIR; //= new File(".\\src\\com\\urise\\webapp\\storage\\Saved files");//"/Users/vitalygavrilov/Documents/Java/basejava");
+
     protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
@@ -59,9 +59,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName");//new Resume(UUID_1, "fullName");
+        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName1");//new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
-        assertSame(expectedResume, storage.get(UUID_1));
+        assertEquals(expectedResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)

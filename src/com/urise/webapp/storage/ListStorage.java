@@ -30,16 +30,16 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void saveResume(Resume r, Integer index) {
+    protected void doSave(Resume r, Integer index) {
         storage.add(r);
         System.out.println("element(" + (storage.size() - 1) + ").uuid= " + r.getUuid());
     }
 
-    protected void updateResume(Resume r, Integer index) {
+    protected void doUpdate(Resume r, Integer index) {
         storage.set(index, r);
     }
 
-    protected void deleteResume(Integer index) {
+    protected void doDelete(Integer index) {
         storage.remove((int) index);
     }
 
@@ -48,7 +48,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public Resume getResume(Integer index) {
+    public Resume doGet(Integer index) {
         return storage.get(index);
     }
 }
