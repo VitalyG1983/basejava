@@ -6,10 +6,10 @@ import com.urise.webapp.model.Resume;
 import java.io.*;
 import java.nio.file.Path;
 
-public class ObjectStreamPathStorage extends AbstractPathStorage {
-    protected ObjectStreamPathStorage(Path directory) {
-        super(directory.toString());
-    }
+public class ObjectStreamPathStorage implements Serialization {
+//    protected ObjectStreamPathStorage(Path directory) {
+//        super(directory.toString());
+//    }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {

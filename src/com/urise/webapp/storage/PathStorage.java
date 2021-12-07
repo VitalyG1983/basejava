@@ -12,15 +12,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> implements Serialization {
-    private Path directory;
+public class PathStorage extends AbstractStorage<Path> {
+    private final Path directory;
+    private final Serialization serialization;
 
-    protected AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, Serialization ser) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory required non null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(directory + "is not directory or is not writable");
         }
+        this.serialization = ser;
     }
 
     @Override
@@ -32,7 +34,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
     protected void doSave(Resume r, Path path) {
         try {
             Path file = Files.createFile(path);
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            serialization.doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
         } catch (IOException e) {
             throw new StorageException("I/O doSave Error", path.getFileName().toString(), e);
         }
@@ -41,7 +43,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
     @Override
     protected void doUpdate(Resume resume, Path file) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            serialization.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toFile())));
         } catch (IOException e) {
             throw new StorageException("Path doUpdate error", resume.getUuid(), e);
         }
@@ -59,7 +61,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
     @Override
     protected Resume doGet(Path file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+            return serialization.doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
         } catch (IOException e) {
             throw new StorageException("Path doGet Error", file.getFileName().toString(), e);
         }

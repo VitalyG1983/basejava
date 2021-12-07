@@ -8,16 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> implements Serialization {
-    private File directory;
+public class FileStorage extends AbstractStorage<File> {
+    private final File directory;
+    private final Serialization serialization;
 
-    protected AbstractFileStorage(File directory) {
+    protected FileStorage(File directory, Serialization ser) {
         Objects.requireNonNull(directory, "directory required non null");
         if (!directory.isDirectory())
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
         if (!directory.canRead() || !directory.canWrite())
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
         this.directory = directory;
+        this.serialization = ser;
+
     }
 
     @Override
@@ -29,7 +32,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+            serialization.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("I/O Error", file.getName(), e);
         }
@@ -51,7 +54,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serialization.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read Error", file.getName(), e);
         }
