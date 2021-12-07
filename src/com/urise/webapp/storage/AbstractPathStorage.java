@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public abstract class AbstractPathStorage extends AbstractStorage<Path> implements Serialization {
     private Path directory;
 
     protected AbstractPathStorage(String dir) {
@@ -22,9 +22,9 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         }
     }
 
-    protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
+   // protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
 
-    protected abstract Resume doRead(InputStream file) throws IOException;
+   // protected abstract Resume doRead(InputStream file) throws IOException;
 
     @Override
     protected Path getSearchKey(String uuid) {
