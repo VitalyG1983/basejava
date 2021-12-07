@@ -7,15 +7,12 @@ import com.urise.webapp.util.ResumeTestData;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static File STORAGE_DIR; //= new File(".\\src\\com\\urise\\webapp\\storage\\Saved files");//"/Users/vitalygavrilov/Documents/Java/basejava");
-
     protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";

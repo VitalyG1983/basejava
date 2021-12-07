@@ -20,8 +20,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
         this.directory = directory;
     }
 
-
-
     @Override
     protected File getSearchKey(String uuid) {
         return new File(directory, uuid);
@@ -35,7 +33,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
         } catch (IOException e) {
             throw new StorageException("I/O Error", file.getName(), e);
         }
-
     }
 
     @Override
