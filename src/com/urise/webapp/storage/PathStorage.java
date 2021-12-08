@@ -2,10 +2,10 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serializer.Serialization;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -78,33 +82,22 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getStorage() {
-        List<Resume> resumes = new ArrayList<>();
-        try {
-            Files.list(directory).//forEach(path -> resumes.add(doGet(path)));
-            return resumes;
-        } catch (IOException e) {
-            throw new StorageException("Path getStorage() Error", e.toString(), e);
-        }
+        return listOfDirectory().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(new Consumer<Path>() {
-                @Override
-                public void accept(Path path) {
-                    doDelete(path);
-                }
-            });
-        } catch (IOException e) {
-            throw new StorageException("Path delete Error", null);
-        }
+        listOfDirectory().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
+        return (int) listOfDirectory().filter(path -> Files.isRegularFile(Path.of(path.toString(), ""))).count();
+    }
+
+    public Stream<Path> listOfDirectory() {
         try {
-            return (int) Files.list(directory).filter(path -> Files.isRegularFile(Path.of(path.toString(), ""))).count();
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Directory read error", e.toString());
         }
