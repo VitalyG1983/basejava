@@ -32,16 +32,19 @@ public class FileStorage extends AbstractStorage<File> {
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            serialization.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("I/O Error", file.getName(), e);
+            throw new StorageException("I/O createNewFile() Error", file.getName(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
     protected void doUpdate(Resume resume, File file) {
-        //doDelete(file);
-        doSave(resume, file);
+        try {
+            serialization.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("I/O doWrite Error", file.getName(), e);
+        }
     }
 
     @Override
@@ -67,10 +70,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getStorage() {
-        File[] files = directory.listFiles(File::isFile);
-        if (files == null) {
-            throw new StorageException("Directory read error", null);
-        }
+        File[] files = directoryListFiles();
         List<Resume> resumes = new ArrayList<>(files.length);
         for (File file : files)
             resumes.add(doGet(file));
@@ -79,19 +79,22 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles(File::isFile);
-        if (files != null) {
-            for (File file : files)
-                doDelete(file);
-        }
+        File[] files = directoryListFiles();
+        for (File file : files)
+            doDelete(file);
     }
 
     @Override
     public int size() {
+        File[] files = directoryListFiles();
+        return files.length;
+    }
+
+    public File[] directoryListFiles() {
         File[] files = directory.listFiles(File::isFile);
         if (files == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read listFiles() error", null);
         }
-        return files.length;
+        return files;
     }
 }

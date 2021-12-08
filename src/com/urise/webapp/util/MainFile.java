@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
 
 public class MainFile {
@@ -58,7 +56,6 @@ class Recursion {
             }
         }
     }
-
 
     public static void main(String[] args) throws IOException {
         String filePath;

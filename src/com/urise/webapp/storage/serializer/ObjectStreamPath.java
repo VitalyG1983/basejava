@@ -1,15 +1,13 @@
-package com.urise.webapp.storage;
+package com.urise.webapp.storage.serializer;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.Serialization;
 
 import java.io.*;
 import java.nio.file.Path;
 
-public class ObjectStreamPathStorage implements Serialization {
-//    protected ObjectStreamPathStorage(Path directory) {
-//        super(directory.toString());
-//    }
+public class ObjectStreamPath implements Serialization {
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {

@@ -7,12 +7,21 @@ import com.urise.webapp.util.ResumeTestData;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
+    protected static File STORAGE_DIR;
+    static {
+        String os = System.getProperty("os.name");
+        if (Objects.equals(os, "windows")) STORAGE_DIR = new File(".\\storage");
+        else STORAGE_DIR = new File("./storage");
+    }
     protected Storage storage;
     private static final String UUID_1 = "1";
     private static final String UUID_2 = "2";
@@ -28,9 +37,9 @@ public abstract class AbstractStorageTest {
         this.storage = storage;
     }
 
-    public Storage getStorage() {
-        return storage;
-    }
+   // public Storage getStorage() {
+//        return storage;
+//    }
 
     @Before
     public void setUp() {

@@ -3,7 +3,10 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,18 +35,19 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doSave(Resume r, Path path) {
+        Path file;
         try {
-            Path file = Files.createFile(path);
-            serialization.doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            file = Files.createFile(path);
         } catch (IOException e) {
             throw new StorageException("I/O doSave Error", path.getFileName().toString(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
     protected void doUpdate(Resume resume, Path file) {
         try {
-            serialization.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            serialization.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Path doUpdate error", resume.getUuid(), e);
         }
@@ -61,7 +65,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path file) {
         try {
-            return serialization.doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+            return serialization.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Path doGet Error", file.getFileName().toString(), e);
         }
@@ -76,7 +80,7 @@ public class PathStorage extends AbstractStorage<Path> {
     protected List<Resume> getStorage() {
         List<Resume> resumes = new ArrayList<>();
         try {
-            Files.list(directory).forEach(path -> resumes.add(doGet(path)));
+            Files.list(directory).//forEach(path -> resumes.add(doGet(path)));
             return resumes;
         } catch (IOException e) {
             throw new StorageException("Path getStorage() Error", e.toString(), e);
