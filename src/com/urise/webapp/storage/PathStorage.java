@@ -39,13 +39,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void doSave(Resume r, Path path) {
-        Path file;
         try {
-            file = Files.createFile(path);
+            Files.createFile(path);
         } catch (IOException e) {
             throw new StorageException("I/O doSave Error", path.getFileName().toString(), e);
         }
-        doUpdate(r, file);
+        doUpdate(r, path);
     }
 
     @Override
