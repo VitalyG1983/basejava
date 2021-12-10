@@ -91,7 +91,7 @@ public class FileStorage extends AbstractStorage<File> {
     public File[] directoryListFiles() {
         File[] files = directory.listFiles(File::isFile);
         if (files == null) {
-            throw new StorageException("Directory read listFiles() error", null);
+            throw new StorageException("Directory read listFiles() error");
         }
         return files;
     }
