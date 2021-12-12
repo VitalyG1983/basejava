@@ -1,8 +1,11 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -15,8 +18,8 @@ import static com.urise.webapp.util.DateUtil.of;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class Organization implements Serializable {
-    private  Link homePage;
-    private  List<Experience> experience;
+    private Link homePage;
+    private List<Experience> experience;
 
     public Organization() {
     }
@@ -60,11 +63,17 @@ public class Organization implements Serializable {
         return homePage;
     }
 
-    public static class Experience implements Serializable{
-        private final String title;
-        private final LocalDate startDate;
-        private final LocalDate endDate;
-        private final String description;
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Experience implements Serializable {
+        private String title;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endDate;
+        private String description;
+
+        public Experience() {
+        }
 
         public Experience(int startYear, Month startMonth, String title, String description) {
             this(of(startYear, startMonth), NOW, title, description);
