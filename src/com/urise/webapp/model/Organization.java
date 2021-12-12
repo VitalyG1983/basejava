@@ -1,5 +1,8 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -9,9 +12,14 @@ import java.util.Objects;
 import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 public class Organization implements Serializable {
-    private final Link homePage;
-    private final List<Experience> experience;
+    private  Link homePage;
+    private  List<Experience> experience;
+
+    public Organization() {
+    }
 
     public Organization(List<Experience> experience, String name, String url) {
         //   Objects.requireNonNull(title, "OrganizationsSection title required non null");

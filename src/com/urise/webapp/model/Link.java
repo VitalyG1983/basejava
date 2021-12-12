@@ -4,8 +4,11 @@ import java.io.Serializable;
 
 public class Link implements Serializable {
 
-    private final String name;
-    private final String url;
+    private  String name;
+    private  String url;
+
+    public Link() {
+    }
 
     public Link(String name, String url) {
      //   Objects.requireNonNull(name, "name required non null" );

@@ -6,6 +6,9 @@ import java.util.Objects;
 public class TextSection extends AbstractSection implements Serializable {
     private String text;
 
+    public TextSection() {
+    }
+
     public TextSection(String text) {
         Objects.requireNonNull(text, "text required non null");
         this.text = text;

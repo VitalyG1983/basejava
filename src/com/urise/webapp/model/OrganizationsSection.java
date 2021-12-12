@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class OrganizationsSection extends AbstractSection implements Serializable {
-    private final List<Organization> organizations;
+    private  List<Organization> organizations;
+
+    public OrganizationsSection() {
+    }
 
     public OrganizationsSection(Organization... organizations) {
         this(Arrays.asList(organizations));

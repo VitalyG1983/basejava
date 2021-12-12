@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class TextListSection extends AbstractSection implements Serializable {
-    private final List<String> ListSection;
+    private  List<String> ListSection;
+
+    public TextListSection() {
+    }
 
     public TextListSection(String... lines) {
         this(Arrays.asList(lines));
