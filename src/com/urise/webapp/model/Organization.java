@@ -15,6 +15,7 @@ import java.util.Objects;
 import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.DateUtil.of;
 
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class Organization implements Serializable {
@@ -67,9 +68,9 @@ public class Organization implements Serializable {
     public static class Experience implements Serializable {
         private String title;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private LocalDate startDate;
+        public LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private LocalDate endDate;
+        public LocalDate endDate;
         private String description;
 
         public Experience() {

@@ -10,6 +10,8 @@ import java.io.Writer;
 public class JsonParser {
     private static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(AbstractSection.class, new JsonSectionAdapter())
+           // .registerTypeAdapter( new TypeToken<LocalTime>(){}.getType(), new LocalDateConverter())
+         //   .registerTypeAdapter(GsonLocalDateAdapter.class, new GsonLocalDateAdapter())
             .create();
 
     public static <T> T read(Reader reader, Class<T> clazz) {
@@ -19,5 +21,4 @@ public class JsonParser {
     public static <T> void write(T object, Writer writer) {
         GSON.toJson(object, writer);
     }
-
 }
