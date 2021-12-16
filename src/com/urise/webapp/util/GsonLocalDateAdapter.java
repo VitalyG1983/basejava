@@ -7,15 +7,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class GsonLocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");//.ISO_LOCAL_DATE;
 
     @Override
-    public LocalDate deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        String ldtString = jsonElement.getAsString();
-        return LocalDate.parse(ldtString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(FORMATTER.format(src));
     }
 
     @Override
-    public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext jsonSerializationContext) {
-        return new JsonPrimitive(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return FORMATTER.parse(json.getAsString(), LocalDate::from);
     }
 }
