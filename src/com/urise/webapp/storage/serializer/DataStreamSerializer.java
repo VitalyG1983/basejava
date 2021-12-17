@@ -1,10 +1,12 @@
 package com.urise.webapp.storage.serializer;
 
-import com.urise.webapp.model.ContactType;
-import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.*;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
+import static com.urise.webapp.util.DateUtil.NOW;
 
 public class DataStreamSerializer implements Serialization {
 
@@ -19,6 +21,41 @@ public class DataStreamSerializer implements Serialization {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
+            Map<SectionType, AbstractSection> sections = r.getSections();
+            dos.writeInt(sections.size());
+            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+                dos.writeUTF(entry.getKey().getTitle());
+                TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
+                TextListSection textListSection = entry.getValue() instanceof TextListSection ? ((TextListSection) entry.getValue()) : null;
+                OrganizationsSection organizations = entry.getValue() instanceof OrganizationsSection ? ((OrganizationsSection) entry.getValue()) : null;
+                if (textSection != null)
+                    dos.writeUTF(textSection.getText());
+                else if (textListSection != null) {
+                    dos.writeInt(textListSection.getListSection().size());
+                    for (String text : textListSection.getListSection())
+                        dos.writeUTF(text);
+                } else if (organizations != null) {
+                    dos.writeInt(organizations.getListOrganizations().size());
+                    for (Organization organization : organizations.getListOrganizations()) {
+                        if (organization.getHomePage().getName() == null) {
+                        } else dos.writeUTF(organization.getHomePage().getName());
+                        dos.writeInt(organization.getListExperience().size());
+                        for (Organization.Experience org : organization.getListExperience()) {
+                            dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(org.getStartDate()));
+                            if (org.getEndDate() != null)
+                                dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(org.getEndDate()));
+                            else dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(NOW));
+                            if (org.getTitle() == null) {
+                            } else dos.writeUTF(org.getTitle());
+                            if (org.getDescription() == null) {
+                            } else dos.writeUTF(org.getDescription());
+                        }
+                    }
+                }
+
+
+            }
+
         }
 
     }

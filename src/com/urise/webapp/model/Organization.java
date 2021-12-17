@@ -56,7 +56,7 @@ public class Organization implements Serializable {
                 '}';
     }
 
-    public List<Experience> getOrganizations() {
+    public List<Experience> getListExperience() {
         return experience;
     }
 

@@ -3,7 +3,6 @@ package com.urise.webapp.util;
 import com.urise.webapp.model.*;
 
 import java.time.Month;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -69,7 +68,7 @@ public class ResumeTestData {
         jobDescList1.add(new Organization.Experience(2013, Month.OCTOBER, "  Автор проекта",
                 "                       Создание, организация и проведение Java онлайн проектов и стажировок."));
         Organization jobText1 = new Organization(jobDescList1, "Java Online Projects", null);
-        jobSection.getExperience().add(jobText1);
+        jobSection.getListOrganizations().add(jobText1);
 
         List<Organization.Experience> jobDescList2 = new ArrayList<>();
         jobDescList2.add(new Organization.Experience(2014, Month.OCTOBER, 2016, Month.JANUARY,
@@ -78,7 +77,7 @@ public class ResumeTestData {
                         "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная " +
                         "аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
         Organization jobText2 = new Organization(jobDescList2, "Wrike", null);
-        jobSection.getExperience().add(jobText2);
+        jobSection.getListOrganizations().add(jobText2);
 
         List<Organization.Experience> jobDescList3 = new ArrayList<>();
         jobDescList3.add(new Organization.Experience(2012, Month.APRIL, 2014, Month.OCTOBER,
@@ -92,7 +91,7 @@ public class ResumeTestData {
                 " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting " +
                 "via ssh tunnels, PL/Python"));
         Organization jobText3 = new Organization(jobDescList3, "RIT Center", null);
-        jobSection.getExperience().add(jobText3);
+        jobSection.getListOrganizations().add(jobText3);
 
         List<Organization.Experience> jobDescList4 = new ArrayList<>();
         jobDescList4.add(new Organization.Experience(2010, Month.DECEMBER, 2012, Month.APRIL,
@@ -102,7 +101,7 @@ public class ResumeTestData {
                         "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                         "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
         Organization jobText4 = new Organization(jobDescList4, "Luxoft (Deutsche Bank)", null);
-        jobSection.getExperience().add(jobText4);
+        jobSection.getListOrganizations().add(jobText4);
 
         List<Organization.Experience> jobDescList5 = new ArrayList<>();
         jobDescList5.add(new Organization.Experience(2008, Month.JUNE, 2010, Month.DECEMBER,
@@ -112,14 +111,14 @@ public class ResumeTestData {
                         "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента " +
                         "(Python/ Jython, Django, ExtJS)"));
         Organization jobText5 = new Organization(jobDescList5, "Yota", null);
-        jobSection.getExperience().add(jobText5);
+        jobSection.getListOrganizations().add(jobText5);
 
         List<Organization.Experience> jobDescList6 = new ArrayList<>();
         jobDescList6.add(new Organization.Experience(2007, Month.MARCH, 2008, Month.JUNE, "  Разработчик ПО",
                 "                       Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) " +
                         "частей кластерного J2EE приложения (OLAP, Data mining)."));
         Organization jobText6 = new Organization(jobDescList6, "Enkata", null);
-        jobSection.getExperience().add(jobText6);
+        jobSection.getListOrganizations().add(jobText6);
 
         List<Organization.Experience> jobDescList7 = new ArrayList<>();
         jobDescList7.add(new Organization.Experience(2005, Month.JANUARY, 2007, Month.FEBRUARY,
@@ -127,7 +126,7 @@ public class ResumeTestData {
                 "                       Разработка информационной модели, проектирование интерфейсов, реализация и " +
                         "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."));
         Organization jobText7 = new Organization(jobDescList7, "Siemens AG", null);
-        jobSection.getExperience().add(jobText7);
+        jobSection.getListOrganizations().add(jobText7);
 
         List<Organization.Experience> jobDescList8 = new ArrayList<>();
         jobDescList8.add(new Organization.Experience(1997, Month.SEPTEMBER, 2005, Month.JANUARY,
@@ -135,7 +134,7 @@ public class ResumeTestData {
                 "                       Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel " +
                         "1000 S12 (CHILL, ASM)."));
         Organization jobText8 = new Organization(jobDescList8, "Alcatel", null);
-        jobSection.getExperience().add(jobText8);
+        jobSection.getListOrganizations().add(jobText8);
 
         sections.put(SectionType.EXPERIENCE, jobSection);
 
@@ -145,44 +144,44 @@ public class ResumeTestData {
         eduDescList1.add(new Organization.Experience(2013, Month.MARCH, 2013, Month.MAY, null,
                 "  Functional Programming Principles in Scala\" by Martin Odersky"));
         Organization eduText1 = new Organization(eduDescList1, "Coursera", null);
-        eduSection.getExperience().add(eduText1);
+        eduSection.getListOrganizations().add(eduText1);
 
         List<Organization.Experience> eduDescList2 = new ArrayList<>();
         eduDescList2.add(new Organization.Experience(2011, Month.MARCH, 2011, Month.APRIL, null,
                 "  Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
         Organization eduText2 = new Organization(eduDescList2, "Luxoft", null);
-        eduSection.getExperience().add(eduText2);
+        eduSection.getListOrganizations().add(eduText2);
 
         List<Organization.Experience> eduDescList3 = new ArrayList<>();
         eduDescList3.add(new Organization.Experience(2005, Month.JANUARY, 2005, Month.APRIL, null,
                 "  3 месяца обучения мобильным IN сетям (Берлин)"));
         Organization eduText3 = new Organization(eduDescList3, "Siemens AG", null);
-        eduSection.getExperience().add(eduText3);
+        eduSection.getListOrganizations().add(eduText3);
 
         List<Organization.Experience> eduDescList4 = new ArrayList<>();
         eduDescList4.add(new Organization.Experience(1997, Month.SEPTEMBER, 1998, Month.MARCH, null,
                 "  6 месяцев обучения цифровым телефонным сетям (Москва)"));
         Organization eduText4 = new Organization(eduDescList4, "Alcatel", null);
-        eduSection.getExperience().add(eduText4);
+        eduSection.getListOrganizations().add(eduText4);
 
         List<Organization.Experience> eduDescList5 = new ArrayList<>();
         eduDescList5.add(new Organization.Experience(1993, Month.SEPTEMBER, 1996, Month.JULY, null,
                 "  Аспирантура (программист С, С++)"));
         Organization eduText5 = new Organization(eduDescList5, "Санкт-Петербургский национальный исследовательский " +
                 "университет информационных технологий, механики и оптики", null);
-        eduSection.getExperience().add(eduText5);
+        eduSection.getListOrganizations().add(eduText5);
 
         List<Organization.Experience> eduDescList6 = new ArrayList<>();
         eduDescList6.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, null,
                 "  Инженер (программист Fortran, C)"));
         Organization eduText6 = new Organization(eduDescList6, null, null);
-        eduSection.getExperience().add(eduText6);
+        eduSection.getListOrganizations().add(eduText6);
 
         List<Organization.Experience> eduDescList7 = new ArrayList<>();
         eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, null,
                 "Закончил с отличием"));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
-        eduSection.getExperience().add(eduText7);
+        eduSection.getListOrganizations().add(eduText7);
 
         sections.put(SectionType.EDUCATION, eduSection);
     }
@@ -208,10 +207,10 @@ public class ResumeTestData {
                 for (String text : textListSection.getListSection())
                     System.out.println("- " + text);
             } else if (organizations != null) {
-                for (Organization organization : organizations.getExperience()) {
+                for (Organization organization : organizations.getListOrganizations()) {
                     if (organization.getHomePage().getName() == null) {
                     } else System.out.println(organization.getHomePage().getName());
-                    for (Organization.Experience org : organization.getOrganizations()) {
+                    for (Organization.Experience org : organization.getListExperience()) {
                         System.out.print(org.getStartDate());
                         if (org.getEndDate() != null)
                             System.out.print(" - " + org.getEndDate());
