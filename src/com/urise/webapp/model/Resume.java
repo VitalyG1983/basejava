@@ -51,6 +51,14 @@ public class Resume implements Serializable {
         return sections;
     }
 
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, OrganizationsSection section) {
+        sections.put(type, section);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
