@@ -3,10 +3,13 @@ package com.urise.webapp.storage.serializer;
 import com.urise.webapp.model.*;
 
 import java.io.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.urise.webapp.util.DateUtil.NOW;
+import static com.urise.webapp.util.GsonLocalDateAdapter.FORMATTER;
 
 public class DataStreamSerializer implements Serialization {
 
@@ -23,6 +26,7 @@ public class DataStreamSerializer implements Serialization {
             }
             Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
+            //////////////         ////////////////////////////////
             for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
                 dos.writeUTF(entry.getKey().getTitle());
                 TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
@@ -41,10 +45,10 @@ public class DataStreamSerializer implements Serialization {
                         } else dos.writeUTF(organization.getHomePage().getName());
                         dos.writeInt(organization.getListExperience().size());
                         for (Organization.Experience org : organization.getListExperience()) {
-                            dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(org.getStartDate()));
+                            dos.writeUTF(FORMATTER.format(org.getStartDate()));
                             if (org.getEndDate() != null)
-                                dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(org.getEndDate()));
-                            else dos.writeUTF(DateTimeFormatter.ofPattern("dd-MM-yyyy").format(NOW));
+                                dos.writeUTF(FORMATTER.format(org.getEndDate()));
+                            else dos.writeUTF(FORMATTER.format(NOW));
                             if (org.getTitle() == null) {
                             } else dos.writeUTF(org.getTitle());
                             if (org.getDescription() == null) {
@@ -66,11 +70,56 @@ public class DataStreamSerializer implements Serialization {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
+            Map<SectionType, AbstractSection> sections = resume.getSections();
             int size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 String value = dis.readUTF();
                 resume.addContact(ContactType.valueOf(dis.readUTF()), value);
             }
+            int sizeSections = dis.readInt();
+            for (int i = 0; i < sizeSections; i++) {
+                String sectionTittle = dis.readUTF();
+                if (sectionTittle.equals("Личные качества")) {
+                    sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
+                }
+                if (sectionTittle.equals("Позиция")) {
+                    sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+                }
+                if (sectionTittle.equals("Достижения")) {
+                    size = dis.readInt();
+                    TextListSection tls = new TextListSection(new ArrayList<>());
+                    List<String> achievSection = tls.getListSection();
+                    for (i = 0; i < size; i++) {
+                        achievSection.add(dis.readUTF());
+                    }
+                    sections.put(SectionType.ACHIEVEMENT, tls);
+                }
+                if (sectionTittle.equals("Квалификация")) {
+                    size = dis.readInt();
+                    TextListSection tlsQ = new TextListSection(new ArrayList<>());
+                    List<String> qualSection = tlsQ.getListSection();
+                    for (i = 0; i < size; i++) {
+                        qualSection.add(dis.readUTF());
+                    }
+                    sections.put(SectionType.QUALIFICATIONS, tlsQ);
+                }
+                if (sectionTittle.equals("Опыт работы")) {
+                    size = dis.readInt();
+                    OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
+                    for (i = 0; i < size; i++) {
+                        String organizationName = dis.readUTF();
+                        List<Organization.Experience> jobDescList1 = new ArrayList<>();
+                        int sizeListExperience = dis.readInt();
+                        for (i = 0; i < sizeListExperience; i++) {
+                            jobDescList1.add(new Organization.Experience(LocalDate.parse(dis.readUTF(), FORMATTER), LocalDate.parse(dis.readUTF(), FORMATTER), dis.readUTF(), dis.readUTF()));
+                        }
+                        Organization jobText1 = new Organization(jobDescList1, organizationName, null);
+                        jobSection.getListOrganizations().add(jobText1);
+                    }
+                    sections.put(SectionType.EXPERIENCE, jobSection);
+                }
+            }
+
             return resume;
         }
 
