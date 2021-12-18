@@ -141,44 +141,46 @@ public class ResumeTestData {
 //////////////////////////////--------EducationSection------//////////////////////////////////////////////
         OrganizationsSection eduSection = new OrganizationsSection(new ArrayList<>());
         List<Organization.Experience> eduDescList1 = new ArrayList<>();
-        eduDescList1.add(new Organization.Experience(2013, Month.MARCH, 2013, Month.MAY, null,
+        eduDescList1.add(new Organization.Experience(2013, Month.MARCH, 2013, Month.MAY, "",
                 "  Functional Programming Principles in Scala\" by Martin Odersky"));
         Organization eduText1 = new Organization(eduDescList1, "Coursera", null);
         eduSection.getListOrganizations().add(eduText1);
 
         List<Organization.Experience> eduDescList2 = new ArrayList<>();
-        eduDescList2.add(new Organization.Experience(2011, Month.MARCH, 2011, Month.APRIL, null,
+        eduDescList2.add(new Organization.Experience(2011, Month.MARCH, 2011, Month.APRIL, "",
                 "  Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
         Organization eduText2 = new Organization(eduDescList2, "Luxoft", null);
         eduSection.getListOrganizations().add(eduText2);
 
         List<Organization.Experience> eduDescList3 = new ArrayList<>();
-        eduDescList3.add(new Organization.Experience(2005, Month.JANUARY, 2005, Month.APRIL, null,
+        eduDescList3.add(new Organization.Experience(2005, Month.JANUARY, 2005, Month.APRIL, "",
                 "  3 месяца обучения мобильным IN сетям (Берлин)"));
         Organization eduText3 = new Organization(eduDescList3, "Siemens AG", null);
         eduSection.getListOrganizations().add(eduText3);
 
         List<Organization.Experience> eduDescList4 = new ArrayList<>();
-        eduDescList4.add(new Organization.Experience(1997, Month.SEPTEMBER, 1998, Month.MARCH, null,
+        eduDescList4.add(new Organization.Experience(1997, Month.SEPTEMBER, 1998, Month.MARCH, "",
                 "  6 месяцев обучения цифровым телефонным сетям (Москва)"));
         Organization eduText4 = new Organization(eduDescList4, "Alcatel", null);
         eduSection.getListOrganizations().add(eduText4);
 
         List<Organization.Experience> eduDescList5 = new ArrayList<>();
-        eduDescList5.add(new Organization.Experience(1993, Month.SEPTEMBER, 1996, Month.JULY, null,
+        eduDescList5.add(new Organization.Experience(1993, Month.SEPTEMBER, 1996, Month.JULY, "",
                 "  Аспирантура (программист С, С++)"));
+        eduDescList5.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, "",
+                "  Инженер (программист Fortran, C)"));
         Organization eduText5 = new Organization(eduDescList5, "Санкт-Петербургский национальный исследовательский " +
                 "университет информационных технологий, механики и оптики", null);
         eduSection.getListOrganizations().add(eduText5);
 
-        List<Organization.Experience> eduDescList6 = new ArrayList<>();
+ /*       List<Organization.Experience> eduDescList6 = new ArrayList<>();
         eduDescList6.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, null,
                 "  Инженер (программист Fortran, C)"));
         Organization eduText6 = new Organization(eduDescList6, null, null);
-        eduSection.getListOrganizations().add(eduText6);
+        eduSection.getListOrganizations().add(eduText6);*/
 
         List<Organization.Experience> eduDescList7 = new ArrayList<>();
-        eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, null,
+        eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, "",
                 "Закончил с отличием"));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getListOrganizations().add(eduText7);
