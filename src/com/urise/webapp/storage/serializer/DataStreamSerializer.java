@@ -49,12 +49,8 @@ public class DataStreamSerializer implements Serialization {
                             if (org.getEndDate() != null)
                                 dos.writeUTF(FORMATTER.format(org.getEndDate()));
                             else dos.writeUTF(FORMATTER.format(NOW));
-                            if (org.getTitle() == null) {
-                                dos.writeUTF("");
-                            } else dos.writeUTF(org.getTitle());
-                            if (org.getDescription() == null) {
-                                dos.writeUTF("");
-                            } else dos.writeUTF(org.getDescription());
+                            dos.writeUTF(org.getTitle());
+                            dos.writeUTF(org.getDescription());
                         }
                     }
                 }
