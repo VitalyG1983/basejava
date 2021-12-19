@@ -31,16 +31,28 @@ public class ResumeTestData {
     static void fillSections(EnumMap<SectionType, AbstractSection> sections) {
         TextSection personal = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         sections.put(SectionType.PERSONAL, personal);
-        sections.put(SectionType.OBJECTIVE, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        sections.put(SectionType.OBJECTIVE, new TextSection("Аналитический склад ума, сильная логика, креативность, " +
+                "инициативность. Пурист кода и архитектуры."));
 
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> achievSection = tls.getListSection();
-        achievSection.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-        achievSection.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
-        achievSection.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
-        achievSection.add("Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.");
-        achievSection.add("Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов (SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и мониторинга системы по JMX (Jython/ Django).");
-        achievSection.add("Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
+        achievSection.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
+                "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное " +
+                "взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
+        achievSection.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
+                "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
+        achievSection.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция " +
+                "с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
+                "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция " +
+                "CIFS/SMB java сервера.");
+        achievSection.add("Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring," +
+                " Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.");
+        achievSection.add("Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов " +
+                "(SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии " +
+                "через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и мониторинга " +
+                "системы по JMX (Jython/ Django).");
+        achievSection.add("Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat," +
+                " Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
         sections.put(SectionType.ACHIEVEMENT, tls);
 
         TextListSection tlsQ = new TextListSection(new ArrayList<>());
@@ -51,14 +63,20 @@ public class ResumeTestData {
         qualSection.add("MySQL, SQLite, MS SQL, HSQLDB");
         qualSection.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy,");
         qualSection.add("XML/XSD/XSLT, SQL, C/C++, Unix shell scripts,");
-        qualSection.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit, Selenium (htmlelements).");
+        qualSection.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, " +
+                "Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, " +
+                "Jasperreports, Apache Commons, Eclipse SWT, JUnit, Selenium (htmlelements).");
         qualSection.add("Python: Django.");
         qualSection.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
         qualSection.add("Scala: SBT, Play2, Specs2, Anorm, Spray, Akka");
-        qualSection.add("Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, StAX, SAX, DOM, XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, BPMN2, LDAP, OAuth1, OAuth2, JWT.");
+        qualSection.add("Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, StAX, SAX, DOM," +
+                " XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, BPMN2, LDAP, OAuth1, " +
+                "OAuth2, JWT.");
         qualSection.add("Инструменты: Maven + plugin development, Gradle, настройка Ngnix,");
-        qualSection.add("администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, iReport, OpenCmis, Bonita, pgBouncer.");
-        qualSection.add("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования");
+        qualSection.add("администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, " +
+                "iReport, OpenCmis, Bonita, pgBouncer.");
+        qualSection.add("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных " +
+                "шаблонов, UML, функционального программирования");
         qualSection.add("Родной русский, английский \"upper intermediate\"");
         sections.put(SectionType.QUALIFICATIONS, tlsQ);
 
@@ -67,7 +85,7 @@ public class ResumeTestData {
         List<Organization.Experience> jobDescList1 = new ArrayList<>();
         jobDescList1.add(new Organization.Experience(2013, Month.OCTOBER, "  Автор проекта",
                 "                       Создание, организация и проведение Java онлайн проектов и стажировок."));
-        Organization jobText1 = new Organization(jobDescList1, "Java Online Projects", null);
+        Organization jobText1 = new Organization(jobDescList1, "Java Online Projects", "https://java_online_projects.ru");
         jobSection.getListOrganizations().add(jobText1);
 
         List<Organization.Experience> jobDescList2 = new ArrayList<>();
@@ -76,7 +94,7 @@ public class ResumeTestData {
                 "                       Проектирование и разработка онлайн платформы управления проектами Wrike " +
                         "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная " +
                         "аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
-        Organization jobText2 = new Organization(jobDescList2, "Wrike", null);
+        Organization jobText2 = new Organization(jobDescList2, "Wrike", "https://wrike.ru");
         jobSection.getListOrganizations().add(jobText2);
 
         List<Organization.Experience> jobDescList3 = new ArrayList<>();
@@ -90,17 +108,17 @@ public class ResumeTestData {
                 "из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
                 " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting " +
                 "via ssh tunnels, PL/Python"));
-        Organization jobText3 = new Organization(jobDescList3, "RIT Center", null);
+        Organization jobText3 = new Organization(jobDescList3, "RIT Center", "https://ritcenter.ru");
         jobSection.getListOrganizations().add(jobText3);
 
         List<Organization.Experience> jobDescList4 = new ArrayList<>();
         jobDescList4.add(new Organization.Experience(2010, Month.DECEMBER, 2012, Month.APRIL,
                 "  Ведущий специалист",
-                "                       Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
-                        " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
+                "                       Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring," +
+                        " Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                         "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                         "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
-        Organization jobText4 = new Organization(jobDescList4, "Luxoft (Deutsche Bank)", null);
+        Organization jobText4 = new Organization(jobDescList4, "Luxoft (Deutsche Bank)", "https://luxoft.ru");
         jobSection.getListOrganizations().add(jobText4);
 
         List<Organization.Experience> jobDescList5 = new ArrayList<>();
@@ -110,14 +128,15 @@ public class ResumeTestData {
                         "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                         "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента " +
                         "(Python/ Jython, Django, ExtJS)"));
-        Organization jobText5 = new Organization(jobDescList5, "Yota", null);
+        Organization jobText5 = new Organization(jobDescList5, "Yota", "https://yota.ru");
         jobSection.getListOrganizations().add(jobText5);
 
         List<Organization.Experience> jobDescList6 = new ArrayList<>();
-        jobDescList6.add(new Organization.Experience(2007, Month.MARCH, 2008, Month.JUNE, "  Разработчик ПО",
-                "                       Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) " +
-                        "частей кластерного J2EE приложения (OLAP, Data mining)."));
-        Organization jobText6 = new Organization(jobDescList6, "Enkata", null);
+        jobDescList6.add(new Organization.Experience(2007, Month.MARCH, 2008, Month.JUNE,
+                "  Разработчик ПО",
+                "                       Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, " +
+                        "Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."));
+        Organization jobText6 = new Organization(jobDescList6, "Enkata", "https://enkata.ru");
         jobSection.getListOrganizations().add(jobText6);
 
         List<Organization.Experience> jobDescList7 = new ArrayList<>();
@@ -143,25 +162,25 @@ public class ResumeTestData {
         List<Organization.Experience> eduDescList1 = new ArrayList<>();
         eduDescList1.add(new Organization.Experience(2013, Month.MARCH, 2013, Month.MAY, "",
                 "  Functional Programming Principles in Scala\" by Martin Odersky"));
-        Organization eduText1 = new Organization(eduDescList1, "Coursera", null);
+        Organization eduText1 = new Organization(eduDescList1, "Coursera", "https://coursera.ru");
         eduSection.getListOrganizations().add(eduText1);
 
         List<Organization.Experience> eduDescList2 = new ArrayList<>();
         eduDescList2.add(new Organization.Experience(2011, Month.MARCH, 2011, Month.APRIL, "",
                 "  Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
-        Organization eduText2 = new Organization(eduDescList2, "Luxoft", null);
+        Organization eduText2 = new Organization(eduDescList2, "Luxoft", "https://luxoft.ru");
         eduSection.getListOrganizations().add(eduText2);
 
         List<Organization.Experience> eduDescList3 = new ArrayList<>();
         eduDescList3.add(new Organization.Experience(2005, Month.JANUARY, 2005, Month.APRIL, "",
                 "  3 месяца обучения мобильным IN сетям (Берлин)"));
-        Organization eduText3 = new Organization(eduDescList3, "Siemens AG", null);
+        Organization eduText3 = new Organization(eduDescList3, "Siemens AG", "https://siemens.ru");
         eduSection.getListOrganizations().add(eduText3);
 
         List<Organization.Experience> eduDescList4 = new ArrayList<>();
         eduDescList4.add(new Organization.Experience(1997, Month.SEPTEMBER, 1998, Month.MARCH, "",
                 "  6 месяцев обучения цифровым телефонным сетям (Москва)"));
-        Organization eduText4 = new Organization(eduDescList4, "Alcatel", null);
+        Organization eduText4 = new Organization(eduDescList4, "Alcatel", "https://alcatel.ru");
         eduSection.getListOrganizations().add(eduText4);
 
         List<Organization.Experience> eduDescList5 = new ArrayList<>();
@@ -173,18 +192,11 @@ public class ResumeTestData {
                 "университет информационных технологий, механики и оптики", null);
         eduSection.getListOrganizations().add(eduText5);
 
- /*       List<Organization.Experience> eduDescList6 = new ArrayList<>();
-        eduDescList6.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, null,
-                "  Инженер (программист Fortran, C)"));
-        Organization eduText6 = new Organization(eduDescList6, null, null);
-        eduSection.getListOrganizations().add(eduText6);*/
-
         List<Organization.Experience> eduDescList7 = new ArrayList<>();
         eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, "",
-                "Закончил с отличием"));
+                null));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getListOrganizations().add(eduText7);
-
         sections.put(SectionType.EDUCATION, eduSection);
     }
 
@@ -201,8 +213,10 @@ public class ResumeTestData {
         for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
             System.out.println("\n" + entry.getKey().getTitle());
             TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
-            TextListSection textListSection = entry.getValue() instanceof TextListSection ? ((TextListSection) entry.getValue()) : null;
-            OrganizationsSection organizations = entry.getValue() instanceof OrganizationsSection ? ((OrganizationsSection) entry.getValue()) : null;
+            TextListSection textListSection = entry.getValue() instanceof TextListSection ?
+                    ((TextListSection) entry.getValue()) : null;
+            OrganizationsSection organizations = entry.getValue() instanceof OrganizationsSection ?
+                    ((OrganizationsSection) entry.getValue()) : null;
             if (textSection != null)
                 System.out.println(textSection.getText());
             else if (textListSection != null) {

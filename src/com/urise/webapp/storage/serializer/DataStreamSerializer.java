@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.GsonLocalDateAdapter.FORMATTER;
 
 public class DataStreamSerializer implements Serialization {
@@ -30,8 +29,10 @@ public class DataStreamSerializer implements Serialization {
             for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
                 dos.writeUTF(entry.getKey().getTitle());
                 TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
-                TextListSection textListSection = entry.getValue() instanceof TextListSection ? ((TextListSection) entry.getValue()) : null;
-                OrganizationsSection organizations = entry.getValue() instanceof OrganizationsSection ? ((OrganizationsSection) entry.getValue()) : null;
+                TextListSection textListSection = entry.getValue() instanceof TextListSection ?
+                        ((TextListSection) entry.getValue()) : null;
+                OrganizationsSection organizations = entry.getValue() instanceof OrganizationsSection ?
+                        ((OrganizationsSection) entry.getValue()) : null;
                 if (textSection != null)
                     dos.writeUTF(textSection.getText());
                 else if (textListSection != null) {
@@ -41,16 +42,19 @@ public class DataStreamSerializer implements Serialization {
                 } else if (organizations != null) {
                     dos.writeInt(organizations.getListOrganizations().size());
                     for (Organization organization : organizations.getListOrganizations()) {
-                        if (organization.getHomePage().getName() == null) {
-                        } else dos.writeUTF(organization.getHomePage().getName());
+                        dos.writeUTF(organization.getHomePage().getName());
+                        if (organization.getHomePage().getUrl() == null) {
+                            dos.writeUTF("null");
+                        } else dos.writeUTF(organization.getHomePage().getUrl());
                         dos.writeInt(organization.getListExperience().size());
-                        for (Organization.Experience org : organization.getListExperience()) {
-                            dos.writeUTF(FORMATTER.format(org.getStartDate()));
-                            if (org.getEndDate() != null)
-                                dos.writeUTF(FORMATTER.format(org.getEndDate()));
-                            else dos.writeUTF(FORMATTER.format(NOW));
-                            dos.writeUTF(org.getTitle());
-                            dos.writeUTF(org.getDescription());
+                        for (Organization.Experience exp : organization.getListExperience()) {
+                            writeDate(dos, exp.getStartDate(), exp.getEndDate());
+                            if (exp.getTitle() == null)
+                                dos.writeUTF("null");
+                            else dos.writeUTF(exp.getTitle());
+                            if (exp.getDescription() == null)
+                                dos.writeUTF("null");
+                            else dos.writeUTF(exp.getDescription());
                         }
                     }
                 }
@@ -73,62 +77,81 @@ public class DataStreamSerializer implements Serialization {
             int sizeSections = dis.readInt();
             for (int i = 0; i < sizeSections; i++) {
                 String sectionTittle = dis.readUTF();
-                if (sectionTittle.equals("Личные качества")) {
-                    sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
-                }
-                if (sectionTittle.equals("Позиция")) {
-                    sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-                }
-                if (sectionTittle.equals("Достижения")) {
-                    size = dis.readInt();
-                    TextListSection tls = new TextListSection(new ArrayList<>());
-                    List<String> achievSection = tls.getListSection();
-                    for (int z = 0; z < size; z++) {
-                        achievSection.add(dis.readUTF());
-                    }
-                    sections.put(SectionType.ACHIEVEMENT, tls);
-                }
-                if (sectionTittle.equals("Квалификация")) {
-                    size = dis.readInt();
-                    TextListSection tlsQ = new TextListSection(new ArrayList<>());
-                    List<String> qualSection = tlsQ.getListSection();
-                    for (int z = 0; z < size; z++) {
-                        qualSection.add(dis.readUTF());
-                    }
-                    sections.put(SectionType.QUALIFICATIONS, tlsQ);
-                }
-                if (sectionTittle.equals("Опыт работы")) {
-                    size = dis.readInt();
-                    OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
-                    for (int z = 0; z < size; z++) {
-                        String organizationName = dis.readUTF();
-                        List<Organization.Experience> jobDescList1 = new ArrayList<>();
-                        int sizeListExperience = dis.readInt();
-                        for (int q = 0; q < sizeListExperience; q++) {
-                            jobDescList1.add(new Organization.Experience(LocalDate.parse(dis.readUTF(), FORMATTER), LocalDate.parse(dis.readUTF(), FORMATTER), dis.readUTF(), dis.readUTF()));
+                switch (sectionTittle) {
+                    case "Личные качества" -> sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
+                    case "Позиция" -> sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+                    case "Достижения" -> {
+                        size = dis.readInt();
+                        TextListSection tls = new TextListSection(new ArrayList<>());
+                        List<String> achievSection = tls.getListSection();
+                        for (int z = 0; z < size; z++) {
+                            achievSection.add(dis.readUTF());
                         }
-                        Organization jobText1 = new Organization(jobDescList1, organizationName, null);
-                        jobSection.getListOrganizations().add(jobText1);
+                        sections.put(SectionType.ACHIEVEMENT, tls);
                     }
-                    sections.put(SectionType.EXPERIENCE, jobSection);
-                }
-                if (sectionTittle.equals("Образование")) {
-                    size = dis.readInt();
-                    OrganizationsSection eduSection = new OrganizationsSection(new ArrayList<>());
-                    for (int z = 0; z < size; z++) {
-                        String educationName = dis.readUTF();
-                        List<Organization.Experience> eduDescList1 = new ArrayList<>();
-                        int sizeListExperience = dis.readInt();
-                        for (int q = 0; q < sizeListExperience; q++) {
-                            eduDescList1.add(new Organization.Experience(LocalDate.parse(dis.readUTF(), FORMATTER), LocalDate.parse(dis.readUTF(), FORMATTER), dis.readUTF(), dis.readUTF()));
+                    case "Квалификация" -> {
+                        size = dis.readInt();
+                        TextListSection tlsQ = new TextListSection(new ArrayList<>());
+                        List<String> qualSection = tlsQ.getListSection();
+                        for (int z = 0; z < size; z++) {
+                            qualSection.add(dis.readUTF());
                         }
-                        Organization eduText1 = new Organization(eduDescList1, educationName, null);
-                        eduSection.getListOrganizations().add(eduText1);
+                        sections.put(SectionType.QUALIFICATIONS, tlsQ);
                     }
-                    sections.put(SectionType.EDUCATION, eduSection);
+                    case "Опыт работы" -> {
+                        size = dis.readInt();
+                        OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
+                        for (int z = 0; z < size; z++) {
+                            String organizationName = dis.readUTF();
+                            String organizationUrl = dis.readUTF();
+                            List<Organization.Experience> jobDescList1 = new ArrayList<>();
+                            int sizeListExperience = dis.readInt();
+                            for (int q = 0; q < sizeListExperience; q++) {
+
+                                jobDescList1.add(new Organization.Experience(readDate(dis),
+                                        readDate(dis), dis.readUTF(), dis.readUTF()));
+                            }
+                            Organization jobText1 = new Organization(jobDescList1, organizationName,
+                                    organizationUrl.equals("null") ? null : organizationUrl);
+                            jobSection.getListOrganizations().add(jobText1);
+                        }
+                        sections.put(SectionType.EXPERIENCE, jobSection);
+                    }
+                    case "Образование" -> {
+                        size = dis.readInt();
+                        OrganizationsSection eduSection = new OrganizationsSection(new ArrayList<>());
+                        for (int z = 0; z < size; z++) {
+                            String educationName = dis.readUTF();
+                            String educationUrl = dis.readUTF();
+                            List<Organization.Experience> eduDescList1 = new ArrayList<>();
+                            int sizeListExperience = dis.readInt();
+                            for (int q = 0; q < sizeListExperience; q++) {
+                                LocalDate startDate = readDate(dis);
+                                LocalDate endDate = readDate(dis);
+                                String title = dis.readUTF();
+                                String description = dis.readUTF();
+                                eduDescList1.add(new Organization.Experience(startDate, endDate,
+                                        title.equals("null") ? null : title,
+                                        description.equals("null") ? null : description));
+                            }
+                            Organization eduText1 = new Organization(eduDescList1, educationName,
+                                    educationUrl.equals("null") ? null : educationUrl);
+                            eduSection.getListOrganizations().add(eduText1);
+                        }
+                        sections.put(SectionType.EDUCATION, eduSection);
+                    }
                 }
             }
             return resume;
         }
+    }
+
+    private void writeDate(DataOutputStream dos, LocalDate start, LocalDate end) throws IOException {
+        dos.writeUTF(FORMATTER.format(start));
+        dos.writeUTF(FORMATTER.format(end));
+    }
+
+    private LocalDate readDate(DataInputStream dis) throws IOException {
+        return LocalDate.parse(dis.readUTF(), FORMATTER);
     }
 }
