@@ -186,14 +186,14 @@ public class ResumeTestData {
         List<Organization.Experience> eduDescList5 = new ArrayList<>();
         eduDescList5.add(new Organization.Experience(1993, Month.SEPTEMBER, 1996, Month.JULY, "",
                 "  Аспирантура (программист С, С++)"));
-        eduDescList5.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, "",
+        eduDescList5.add(new Organization.Experience(1987, Month.SEPTEMBER, 1993, Month.JULY, null,
                 "  Инженер (программист Fortran, C)"));
         Organization eduText5 = new Organization(eduDescList5, "Санкт-Петербургский национальный исследовательский " +
                 "университет информационных технологий, механики и оптики", null);
         eduSection.getListOrganizations().add(eduText5);
 
         List<Organization.Experience> eduDescList7 = new ArrayList<>();
-        eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, "",
+        eduDescList7.add(new Organization.Experience(1984, Month.SEPTEMBER, 1987, Month.JUNE, null,
                 null));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getListOrganizations().add(eduText7);
