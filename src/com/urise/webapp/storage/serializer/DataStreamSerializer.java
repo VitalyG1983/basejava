@@ -27,32 +27,32 @@ public class DataStreamSerializer implements Serialization {
             dos.writeInt(sections.size());
             //////////////////        SectionType        ////////////////////////////////
             for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().getTitle());
-                switch (entry.getKey().getTitle()) {
-                    case "Личные качества", "Позиция" -> dos.writeUTF(((TextSection) entry.getValue()).getText());
-                    case "Достижения", "Квалификация" -> {
-                        dos.writeInt(((TextListSection) entry.getValue()).getListSection().size());
-                        for (String text : ((TextListSection) entry.getValue()).getListSection())
+                String keyName = entry.getKey().name();
+                dos.writeUTF(keyName);
+                Object entryValue = entry.getValue();
+                switch (keyName) {
+                    case "PERSONAL", "OBJECTIVE" -> dos.writeUTF(((TextSection) entryValue).getText());
+                    case "ACHIEVEMENT", "QUALIFICATIONS" -> {
+                        List<String> listSection = ((TextListSection) entryValue).getListSection();
+                        dos.writeInt(listSection.size());
+                        for (String text : listSection)
                             dos.writeUTF(text);
                     }
-                    case "Опыт работы", "Образование" -> {
-                        List<Organization> organizations = ((OrganizationsSection) entry.
-                                getValue()).getListOrganizations();
+                    case "EXPERIENCE", "EDUCATION" -> {
+                        List<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
                         dos.writeInt(organizations.size());
                         for (Organization org : organizations) {
-                            dos.writeUTF(org.getHomePage().getName());
-                            if (org.getHomePage().getUrl() == null) {
-                                dos.writeUTF("null");
-                            } else dos.writeUTF(org.getHomePage().getUrl());
-                            dos.writeInt(org.getListExperience().size());
-                            for (Organization.Experience exp : org.getListExperience()) {
+                            Link homePage = org.getHomePage();
+                            String url = homePage.getUrl();
+                            dos.writeUTF(homePage.getName());
+                            dos.writeUTF(url == null ? "null" : url);
+                            List<Organization.Experience> listExperience = org.getListExperience();
+                            dos.writeInt(listExperience.size());
+                            for (Organization.Experience exp : listExperience) {
                                 writeDate(dos, exp.getStartDate(), exp.getEndDate());
-                                if (exp.getTitle() == null)
-                                    dos.writeUTF("null");
-                                else dos.writeUTF(exp.getTitle());
-                                if (exp.getDescription() == null)
-                                    dos.writeUTF("null");
-                                else dos.writeUTF(exp.getDescription());
+                                String title = exp.getTitle();
+                                dos.writeUTF(title == null ? "null" : title);
+                                dos.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
                             }
                         }
                     }
@@ -60,7 +60,6 @@ public class DataStreamSerializer implements Serialization {
             }
         }
     }
-
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
@@ -78,12 +77,16 @@ public class DataStreamSerializer implements Serialization {
             for (int i = 0; i < sizeSections; i++) {
                 String sectionTittle = dis.readUTF();
                 switch (sectionTittle) {
-                    case "Личные качества" -> sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
-                    case "Позиция" -> sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-                    case "Достижения" -> readTextListSection(dis, sections, SectionType.ACHIEVEMENT);
-                    case "Квалификация" -> readTextListSection(dis, sections, SectionType.QUALIFICATIONS);
-                    case "Опыт работы" -> readOrgSection(dis, sections, SectionType.EXPERIENCE);
-                    case "Образование" -> readOrgSection(dis, sections, SectionType.EDUCATION);
+                    case (x = String
+                        "PERSONAL", "OBJECTIVE") ->{
+                        sections.put(x == "PERSONAL" ? SectionType.PERSONAL : SectionType.PERSONAL, new TextSection(dis.readUTF()));
+                    }
+                    // case "PERSONAL" -> sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
+                    // case "OBJECTIVE" -> sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+                    case "ACHIEVEMENT" -> readTextListSection(dis, sections, SectionType.ACHIEVEMENT);
+                    case "QUALIFICATIONS" -> readTextListSection(dis, sections, SectionType.QUALIFICATIONS);
+                    case "EXPERIENCE" -> readOrgSection(dis, sections, SectionType.EXPERIENCE);
+                    case "EDUCATION" -> readOrgSection(dis, sections, SectionType.EDUCATION);
                 }
             }
             return resume;
