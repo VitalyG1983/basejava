@@ -4,9 +4,8 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 import static com.urise.webapp.util.GsonLocalDateAdapter.FORMATTER;
 
@@ -19,7 +18,17 @@ public class DataStreamSerializer implements Serialization {
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
+            Consumer<Map.Entry<ContactType, String>> greetings = entry -> {
+                try {
+                    dos.writeUTF(entry.getKey().name());
+                    dos.writeUTF(entry.getValue());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            };//System.out.println("Hello " + x + " !!!");
+            writeWithException(contacts.entrySet(),dos,new FunctionalInterface());
+            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
@@ -77,20 +86,33 @@ public class DataStreamSerializer implements Serialization {
             for (int i = 0; i < sizeSections; i++) {
                 String sectionTittle = dis.readUTF();
                 switch (sectionTittle) {
-                    case (x = String
-                        "PERSONAL", "OBJECTIVE") ->{
-                        sections.put(x == "PERSONAL" ? SectionType.PERSONAL : SectionType.PERSONAL, new TextSection(dis.readUTF()));
-                    }
-                    // case "PERSONAL" -> sections.put(SectionType.PERSONAL, new TextSection(dis.readUTF()));
-                    // case "OBJECTIVE" -> sections.put(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-                    case "ACHIEVEMENT" -> readTextListSection(dis, sections, SectionType.ACHIEVEMENT);
-                    case "QUALIFICATIONS" -> readTextListSection(dis, sections, SectionType.QUALIFICATIONS);
-                    case "EXPERIENCE" -> readOrgSection(dis, sections, SectionType.EXPERIENCE);
-                    case "EDUCATION" -> readOrgSection(dis, sections, SectionType.EDUCATION);
+                    case "PERSONAL", "OBJECTIVE" -> sections.put(sectionTittle.equals("PERSONAL") ? SectionType.PERSONAL :
+                            SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+                    case "ACHIEVEMENT", "QUALIFICATIONS" -> readTextListSection(dis, sections, sectionTittle.equals("ACHIEVEMENT") ?
+                            SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
+                    case "EXPERIENCE", "EDUCATION"-> readOrgSection(dis, sections,  sectionTittle.equals("EXPERIENCE") ?
+                            SectionType.EXPERIENCE : SectionType.EDUCATION);
                 }
             }
             return resume;
         }
+    }
+
+    @FunctionalInterface
+    public interface forEachCustom<T> {
+        void accept(T t);
+    }
+
+    @FunctionalInterface
+    private void forEachCustom(Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        for (T t : this) {
+            action.accept(t);
+        }
+    }
+
+    private void writeWithException(Collection c,DataOutputStream dos, FunctionalInterface f){
+
     }
 
     private void writeDate(DataOutputStream dos, LocalDate start, LocalDate end) throws IOException {
