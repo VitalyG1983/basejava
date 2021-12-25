@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 /**
- * Interactive test for com.urise.webapp.storage.ArrayStorage implementation
+ * Interactive writeToDos for com.urise.webapp.storage.ArrayStorage implementation
  * (just run, no need to understand)
  */
 public class MainArray {

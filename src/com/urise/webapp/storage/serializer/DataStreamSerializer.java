@@ -1,11 +1,14 @@
 package com.urise.webapp.storage.serializer;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static com.urise.webapp.util.GsonLocalDateAdapter.FORMATTER;
 
@@ -18,20 +21,20 @@ public class DataStreamSerializer implements Serialization {
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
-            Consumer<Map.Entry<ContactType, String>> greetings = entry -> {
+            WriteEntry<DataOutputStream, Map.Entry<ContactType, String>> writeEntry = (doStream, entry) -> {
                 try {
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeUTF(entry.getValue());
+                    doStream.writeUTF(entry.getKey().name());
+                    doStream.writeUTF(entry.getValue());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new StorageException("Error doWrite resume in DataStreamSerializer", null, e);
                 }
+            };
+            writeWithException(contacts.entrySet(), dos, writeEntry);
 
-            };//System.out.println("Hello " + x + " !!!");
-            writeWithException(contacts.entrySet(),dos,new FunctionalInterface());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+          /*  for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            }*/
             Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
             //////////////////        SectionType        ////////////////////////////////
@@ -90,7 +93,7 @@ public class DataStreamSerializer implements Serialization {
                             SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
                     case "ACHIEVEMENT", "QUALIFICATIONS" -> readTextListSection(dis, sections, sectionTittle.equals("ACHIEVEMENT") ?
                             SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-                    case "EXPERIENCE", "EDUCATION"-> readOrgSection(dis, sections,  sectionTittle.equals("EXPERIENCE") ?
+                    case "EXPERIENCE", "EDUCATION" -> readOrgSection(dis, sections, sectionTittle.equals("EXPERIENCE") ?
                             SectionType.EXPERIENCE : SectionType.EDUCATION);
                 }
             }
@@ -99,20 +102,16 @@ public class DataStreamSerializer implements Serialization {
     }
 
     @FunctionalInterface
-    public interface forEachCustom<T> {
-        void accept(T t);
+    public interface WriteEntry<T, V> {
+
+        void writeToDos(T t, V v);
+
     }
 
-    @FunctionalInterface
-    private void forEachCustom(Consumer<? super T> action) {
-        Objects.requireNonNull(action);
-        for (T t : this) {
-            action.accept(t);
+    private void writeWithException(Collection entrySet, DataOutputStream dos, WriteEntry writeEntry) {
+        for (Object entry : entrySet) {
+            writeEntry.writeToDos(dos, entry);
         }
-    }
-
-    private void writeWithException(Collection c,DataOutputStream dos, FunctionalInterface f){
-
     }
 
     private void writeDate(DataOutputStream dos, LocalDate start, LocalDate end) throws IOException {
@@ -124,7 +123,8 @@ public class DataStreamSerializer implements Serialization {
         return LocalDate.parse(dis.readUTF(), FORMATTER);
     }
 
-    private void readTextListSection(DataInputStream dis, Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
+    private void readTextListSection(DataInputStream
+                                             dis, Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
         int size = dis.readInt();
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
@@ -134,7 +134,8 @@ public class DataStreamSerializer implements Serialization {
         sections.put(secType, tls);
     }
 
-    private void readOrgSection(DataInputStream dis, Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
+    private void readOrgSection(DataInputStream dis, Map<SectionType, AbstractSection> sections, SectionType
+            secType) throws IOException {
         int size = dis.readInt();
         OrganizationsSection section = new OrganizationsSection(new ArrayList<>());
         for (int z = 0; z < size; z++) {
