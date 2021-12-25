@@ -104,11 +104,12 @@ public class DataStreamSerializer implements Serialization {
     @FunctionalInterface
     public interface WriteEntry<T, V> {
 
-        void writeToDos(T t, V v);
+        void writeToDos(T t, V v) throws IOException;
 
     }
 
-    private void writeWithException(Collection entrySet, DataOutputStream dos, WriteEntry writeEntry) {
+    private void writeWithException(Collection entrySet, DataOutputStream dos, WriteEntry writeEntry) throws IOException {
+
         for (Object entry : entrySet) {
             writeEntry.writeToDos(dos, entry);
         }
