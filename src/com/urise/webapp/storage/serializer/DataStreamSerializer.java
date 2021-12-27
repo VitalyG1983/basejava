@@ -19,17 +19,17 @@ public class DataStreamSerializer implements Serialization {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
-            Map<ContactType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
+            Collection<Map.Entry<ContactType, String>> collection = new ArrayList<>(r.getContacts().entrySet());
+            dos.writeInt(collection.size());
             WriteEntry<DataOutputStream, Map.Entry<ContactType, String>> writeEntry = (doStream, entry) -> {
                 try {
                     doStream.writeUTF(entry.getKey().name());
                     doStream.writeUTF(entry.getValue());
                 } catch (IOException e) {
-                    throw new StorageException("Error doWrite resume in DataStreamSerializer", null, e);
+                    throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
                 }
             };
-            writeWithException(contacts.entrySet(), dos, writeEntry);
+            writeWithException(collection, dos, writeEntry);
 
           /*  for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
@@ -124,8 +124,8 @@ public class DataStreamSerializer implements Serialization {
         return LocalDate.parse(dis.readUTF(), FORMATTER);
     }
 
-    private void readTextListSection(DataInputStream
-                                             dis, Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
+    private void readTextListSection(DataInputStream dis,
+                                     Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
         int size = dis.readInt();
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
