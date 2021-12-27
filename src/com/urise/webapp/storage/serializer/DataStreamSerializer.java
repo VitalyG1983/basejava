@@ -19,8 +19,8 @@ public class DataStreamSerializer implements Serialization {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
-            Collection<Map.Entry<ContactType, String>> collection = new ArrayList<>(r.getContacts().entrySet());
-            dos.writeInt(collection.size());
+            Collection<Map.Entry<ContactType, String>> contCollection = new ArrayList<>(r.getContacts().entrySet());
+            dos.writeInt(contCollection.size());
             WriteEntry<DataOutputStream, Map.Entry<ContactType, String>> writeEntry = (doStream, entry) -> {
                 try {
                     doStream.writeUTF(entry.getKey().name());
@@ -29,28 +29,66 @@ public class DataStreamSerializer implements Serialization {
                     throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
                 }
             };
-            writeWithException(collection, dos, writeEntry);
+            writeWithException(contCollection, dos, writeEntry);
 
           /*  for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }*/
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
+            Collection<Map.Entry<SectionType, AbstractSection>> sectionCollection = new ArrayList<>(r.getSections().entrySet());
+            // Map<SectionType, AbstractSection> sections = r.getSections();
+            dos.writeInt(sectionCollection.size());
             //////////////////        SectionType        ////////////////////////////////
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                String keyName = entry.getKey().name();
-                dos.writeUTF(keyName);
+            WriteEntry<DataOutputStream, Map.Entry<SectionType, AbstractSection>> writeSectionEntry = (doStream, entry) -> {
+                try {
+                    SectionType keyName = entry.getKey();
+                    doStream.writeUTF(keyName.toString());
+                    Object entryValue = entry.getValue();
+                    switch (keyName) {
+                        case PERSONAL, OBJECTIVE -> doStream.writeUTF(((TextSection) entryValue).getText());
+                        case ACHIEVEMENT, QUALIFICATIONS -> {
+                            List<String> listSection = ((TextListSection) entryValue).getListSection();
+                            doStream.writeInt(listSection.size());
+                            for (String text : listSection)
+                                doStream.writeUTF(text);
+                        }
+                        case EXPERIENCE, EDUCATION -> {
+                            List<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
+                            doStream.writeInt(organizations.size());
+                            for (Organization org : organizations) {
+                                Link homePage = org.getHomePage();
+                                String url = homePage.getUrl();
+                                doStream.writeUTF(homePage.getName());
+                                doStream.writeUTF(url == null ? "null" : url);
+                                List<Organization.Experience> listExperience = org.getListExperience();
+                                doStream.writeInt(listExperience.size());
+                                for (Organization.Experience exp : listExperience) {
+                                    writeDate(doStream, exp.getStartDate(), exp.getEndDate());
+                                    String title = exp.getTitle();
+                                    doStream.writeUTF(title == null ? "null" : title);
+                                    doStream.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
+                }
+            };
+            writeWithException(sectionCollection, dos, writeSectionEntry);
+          /*  for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+                SectionType keyName = entry.getKey();
+                dos.writeUTF(keyName.toString());
                 Object entryValue = entry.getValue();
                 switch (keyName) {
-                    case "PERSONAL", "OBJECTIVE" -> dos.writeUTF(((TextSection) entryValue).getText());
-                    case "ACHIEVEMENT", "QUALIFICATIONS" -> {
+                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entryValue).getText());
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
                         List<String> listSection = ((TextListSection) entryValue).getListSection();
                         dos.writeInt(listSection.size());
                         for (String text : listSection)
                             dos.writeUTF(text);
                     }
-                    case "EXPERIENCE", "EDUCATION" -> {
+                    case EXPERIENCE, EDUCATION -> {
                         List<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
                         dos.writeInt(organizations.size());
                         for (Organization org : organizations) {
@@ -69,7 +107,7 @@ public class DataStreamSerializer implements Serialization {
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 
