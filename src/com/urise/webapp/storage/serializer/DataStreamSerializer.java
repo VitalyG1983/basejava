@@ -47,28 +47,47 @@ public class DataStreamSerializer implements Serialization {
                     switch (keyName) {
                         case PERSONAL, OBJECTIVE -> doStream.writeUTF(((TextSection) entryValue).getText());
                         case ACHIEVEMENT, QUALIFICATIONS -> {
-                            List<String> listSection = ((TextListSection) entryValue).getListSection();
+                            Collection<String> listSection = ((TextListSection) entryValue).getListSection();
                             doStream.writeInt(listSection.size());
-                            for (String text : listSection)
-                                doStream.writeUTF(text);
+                            WriteEntry<DataOutputStream, String> writeTextListSection = (doSt, string) -> {
+                                try {
+                                    doSt.writeUTF(string);
+                                } catch (IOException e) {
+                                    throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
+                                }
+                            };
+
+                            writeWithException(listSection, dos, writeTextListSection);
+                          /*  for (String text : listSection)
+                                doStream.writeUTF(text);*/
                         }
                         case EXPERIENCE, EDUCATION -> {
-                            List<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
+                            Collection<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
                             doStream.writeInt(organizations.size());
-                            for (Organization org : organizations) {
-                                Link homePage = org.getHomePage();
-                                String url = homePage.getUrl();
-                                doStream.writeUTF(homePage.getName());
-                                doStream.writeUTF(url == null ? "null" : url);
-                                List<Organization.Experience> listExperience = org.getListExperience();
-                                doStream.writeInt(listExperience.size());
-                                for (Organization.Experience exp : listExperience) {
-                                    writeDate(doStream, exp.getStartDate(), exp.getEndDate());
-                                    String title = exp.getTitle();
-                                    doStream.writeUTF(title == null ? "null" : title);
-                                    doStream.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
+                            WriteEntry<DataOutputStream, Organization> writeOrgSection = (doStr, org) -> {
+                                try {
+                                    Link homePage = org.getHomePage();
+                                    String url = homePage.getUrl();
+                                    doStr.writeUTF(homePage.getName());
+                                    doStr.writeUTF(url == null ? "null" : url);
+                                    Collection<Organization.Experience> listExperience = org.getListExperience();
+                                    doStr.writeInt(listExperience.size());
+                                    WriteEntry<DataOutputStream, Organization.Experience> writeExpSection = (dataOs, exp) -> {
+                                        try {
+                                            writeDate(dataOs, exp.getStartDate(), exp.getEndDate());
+                                            String title = exp.getTitle();
+                                            dataOs.writeUTF(title == null ? "null" : title);
+                                            dataOs.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
+                                        } catch (IOException e) {
+                                            throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
+                                        }
+                                    };
+                                    writeWithException(listExperience, dos, writeExpSection);
+                                } catch (IOException e) {
+                                    throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                 }
-                            }
+                            };
+                            writeWithException(organizations, dos, writeOrgSection);
                         }
                     }
                 } catch (IOException e) {
