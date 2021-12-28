@@ -5,10 +5,7 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.urise.webapp.util.GsonLocalDateAdapter.FORMATTER;
 
@@ -21,15 +18,15 @@ public class DataStreamSerializer implements Serialization {
             dos.writeUTF(r.getFullName());
             Collection<Map.Entry<ContactType, String>> contCollection = new ArrayList<>(r.getContacts().entrySet());
             dos.writeInt(contCollection.size());
-            WriteEntry<DataOutputStream, Map.Entry<ContactType, String>> writeEntry = (doStream, entry) -> {
+            CustomConsumer<Map.Entry<ContactType, String>> customConsumer = (entry) -> {
                 try {
-                    doStream.writeUTF(entry.getKey().name());
-                    doStream.writeUTF(entry.getValue());
+                    dos.writeUTF(entry.getKey().name());
+                    dos.writeUTF(entry.getValue());
                 } catch (IOException e) {
                     throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
                 }
             };
-            writeWithException(contCollection, dos, writeEntry);
+            writeWithException(contCollection, dos, customConsumer);
 
           /*  for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
@@ -39,19 +36,19 @@ public class DataStreamSerializer implements Serialization {
             // Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sectionCollection.size());
             //////////////////        SectionType        ////////////////////////////////
-            WriteEntry<DataOutputStream, Map.Entry<SectionType, AbstractSection>> writeSectionEntry = (doStream, entry) -> {
+            CustomConsumer<Map.Entry<SectionType, AbstractSection>> writeSectionEntry = (entry) -> {
                 try {
                     SectionType keyName = entry.getKey();
-                    doStream.writeUTF(keyName.toString());
+                    dos.writeUTF(keyName.toString());
                     Object entryValue = entry.getValue();
                     switch (keyName) {
-                        case PERSONAL, OBJECTIVE -> doStream.writeUTF(((TextSection) entryValue).getText());
+                        case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entryValue).getText());
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             Collection<String> listSection = ((TextListSection) entryValue).getListSection();
-                            doStream.writeInt(listSection.size());
-                            WriteEntry<DataOutputStream, String> writeTextListSection = (doSt, string) -> {
+                            dos.writeInt(listSection.size());
+                            CustomConsumer<String> writeTextListSection = (string) -> {
                                 try {
-                                    doSt.writeUTF(string);
+                                    dos.writeUTF(string);
                                 } catch (IOException e) {
                                     throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                 }
@@ -63,21 +60,21 @@ public class DataStreamSerializer implements Serialization {
                         }
                         case EXPERIENCE, EDUCATION -> {
                             Collection<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
-                            doStream.writeInt(organizations.size());
-                            WriteEntry<DataOutputStream, Organization> writeOrgSection = (doStr, org) -> {
+                            dos.writeInt(organizations.size());
+                            CustomConsumer<Organization> writeOrgSection = (org) -> {
                                 try {
                                     Link homePage = org.getHomePage();
                                     String url = homePage.getUrl();
-                                    doStr.writeUTF(homePage.getName());
-                                    doStr.writeUTF(url == null ? "null" : url);
+                                    dos.writeUTF(homePage.getName());
+                                    dos.writeUTF(url == null ? "null" : url);
                                     Collection<Organization.Experience> listExperience = org.getListExperience();
-                                    doStr.writeInt(listExperience.size());
-                                    WriteEntry<DataOutputStream, Organization.Experience> writeExpSection = (dataOs, exp) -> {
+                                    dos.writeInt(listExperience.size());
+                                    CustomConsumer<Organization.Experience> writeExpSection = (exp) -> {
                                         try {
-                                            writeDate(dataOs, exp.getStartDate(), exp.getEndDate());
+                                            writeDate(dos, exp.getStartDate(), exp.getEndDate());
                                             String title = exp.getTitle();
-                                            dataOs.writeUTF(title == null ? "null" : title);
-                                            dataOs.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
+                                            dos.writeUTF(title == null ? "null" : title);
+                                            dos.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
                                         } catch (IOException e) {
                                             throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                         }
@@ -91,7 +88,7 @@ public class DataStreamSerializer implements Serialization {
                         }
                     }
                 } catch (IOException e) {
-                    throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
+                    throw new StorageException("Error doWrite SectionType of resume in DataStreamSerializer", null, e);
                 }
             };
             writeWithException(sectionCollection, dos, writeSectionEntry);
@@ -159,16 +156,16 @@ public class DataStreamSerializer implements Serialization {
     }
 
     @FunctionalInterface
-    public interface WriteEntry<T, V> {
+    public interface CustomConsumer<T> {
 
-        void writeToDos(T t, V v) throws IOException;
-
+        void writeToDos(T t) throws IOException;
     }
 
-    private void writeWithException(Collection entrySet, DataOutputStream dos, WriteEntry writeEntry) throws IOException {
-
+    private void writeWithException(Collection entrySet, DataOutputStream dos,
+                                    CustomConsumer customConsumer) throws IOException {
+        Objects.requireNonNull(customConsumer);
         for (Object entry : entrySet) {
-            writeEntry.writeToDos(dos, entry);
+            customConsumer.writeToDos(entry);
         }
     }
 
