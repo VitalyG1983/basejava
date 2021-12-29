@@ -17,7 +17,6 @@ public class DataStreamSerializer implements Serialization {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
             Collection<Map.Entry<ContactType, String>> contCollection = new ArrayList<>(r.getContacts().entrySet());
-            dos.writeInt(contCollection.size());
             CustomConsumer<Map.Entry<ContactType, String>> customConsumer = (entry) -> {
                 try {
                     dos.writeUTF(entry.getKey().name());
@@ -27,15 +26,8 @@ public class DataStreamSerializer implements Serialization {
                 }
             };
             writeWithException(contCollection, dos, customConsumer);
-
-          /*  for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }*/
             Collection<Map.Entry<SectionType, AbstractSection>> sectionCollection = new ArrayList<>(r.getSections().entrySet());
-            // Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sectionCollection.size());
-            //////////////////        SectionType        ////////////////////////////////
+            /////////////////////////        SectionType        ////////////////////////////////
             CustomConsumer<Map.Entry<SectionType, AbstractSection>> writeSectionEntry = (entry) -> {
                 try {
                     SectionType keyName = entry.getKey();
@@ -45,7 +37,6 @@ public class DataStreamSerializer implements Serialization {
                         case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entryValue).getText());
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             Collection<String> listSection = ((TextListSection) entryValue).getListSection();
-                            dos.writeInt(listSection.size());
                             CustomConsumer<String> writeTextListSection = (string) -> {
                                 try {
                                     dos.writeUTF(string);
@@ -55,12 +46,9 @@ public class DataStreamSerializer implements Serialization {
                             };
 
                             writeWithException(listSection, dos, writeTextListSection);
-                          /*  for (String text : listSection)
-                                doStream.writeUTF(text);*/
                         }
                         case EXPERIENCE, EDUCATION -> {
                             Collection<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
-                            dos.writeInt(organizations.size());
                             CustomConsumer<Organization> writeOrgSection = (org) -> {
                                 try {
                                     Link homePage = org.getHomePage();
@@ -68,7 +56,6 @@ public class DataStreamSerializer implements Serialization {
                                     dos.writeUTF(homePage.getName());
                                     dos.writeUTF(url == null ? "null" : url);
                                     Collection<Organization.Experience> listExperience = org.getListExperience();
-                                    dos.writeInt(listExperience.size());
                                     CustomConsumer<Organization.Experience> writeExpSection = (exp) -> {
                                         try {
                                             writeDate(dos, exp.getStartDate(), exp.getEndDate());
@@ -161,10 +148,11 @@ public class DataStreamSerializer implements Serialization {
         void writeToDos(T t) throws IOException;
     }
 
-    private void writeWithException(Collection entrySet, DataOutputStream dos,
-                                    CustomConsumer customConsumer) throws IOException {
+    private <T> void writeWithException(Collection<T> entrySet, DataOutputStream dos,
+                                        CustomConsumer<T> customConsumer) throws IOException {
         Objects.requireNonNull(customConsumer);
-        for (Object entry : entrySet) {
+        dos.writeInt(entrySet.size());
+        for (T entry : entrySet) {
             customConsumer.writeToDos(entry);
         }
     }
