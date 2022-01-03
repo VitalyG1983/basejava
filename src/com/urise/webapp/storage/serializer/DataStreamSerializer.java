@@ -17,46 +17,45 @@ public class DataStreamSerializer implements Serialization {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
             Collection<Map.Entry<ContactType, String>> contCollection = new ArrayList<>(r.getContacts().entrySet());
-            CustomConsumer<Map.Entry<ContactType, String>> customConsumer = (entry) -> {
-                try {
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeUTF(entry.getValue());
-                } catch (IOException e) {
-                    throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
-                }
-            };
-            writeWithException(contCollection, dos, customConsumer);
+            writeWithException(contCollection, dos,
+                    (entry) -> {
+                        try {
+                            dos.writeUTF(entry.getKey().name());
+                            dos.writeUTF(entry.getValue());
+                        } catch (IOException e) {
+                            throw new StorageException("Error doWrite \"Contacts\" of resume in DataStreamSerializer", null, e);
+                        }
+                    });
             Collection<Map.Entry<SectionType, AbstractSection>> sectionCollection = new ArrayList<>(r.getSections().entrySet());
             /////////////////////////        SectionType        ////////////////////////////////
-            CustomConsumer<Map.Entry<SectionType, AbstractSection>> writeSectionEntry = (entry) -> {
+            writeWithException(sectionCollection, dos, (entry) -> {
                 try {
                     SectionType keyName = entry.getKey();
-                    dos.writeUTF(keyName.toString());
+                    dos.writeUTF(keyName.name());
                     Object entryValue = entry.getValue();
                     switch (keyName) {
                         case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entryValue).getText());
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             Collection<String> listSection = ((TextListSection) entryValue).getListSection();
-                            CustomConsumer<String> writeTextListSection = (string) -> {
+                            writeWithException(listSection, dos, (string) -> {
                                 try {
                                     dos.writeUTF(string);
                                 } catch (IOException e) {
                                     throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                 }
-                            };
+                            });
 
-                            writeWithException(listSection, dos, writeTextListSection);
                         }
                         case EXPERIENCE, EDUCATION -> {
                             Collection<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
-                            CustomConsumer<Organization> writeOrgSection = (org) -> {
+                            writeWithException(organizations, dos, (org) -> {
                                 try {
                                     Link homePage = org.getHomePage();
                                     String url = homePage.getUrl();
                                     dos.writeUTF(homePage.getName());
                                     dos.writeUTF(url == null ? "null" : url);
                                     Collection<Organization.Experience> listExperience = org.getListExperience();
-                                    CustomConsumer<Organization.Experience> writeExpSection = (exp) -> {
+                                    writeWithException(listExperience, dos, (exp) -> {
                                         try {
                                             writeDate(dos, exp.getStartDate(), exp.getEndDate());
                                             String title = exp.getTitle();
@@ -65,52 +64,17 @@ public class DataStreamSerializer implements Serialization {
                                         } catch (IOException e) {
                                             throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                         }
-                                    };
-                                    writeWithException(listExperience, dos, writeExpSection);
+                                    });
                                 } catch (IOException e) {
                                     throw new StorageException("Error doWrite " + keyName + " of resume in DataStreamSerializer", null, e);
                                 }
-                            };
-                            writeWithException(organizations, dos, writeOrgSection);
+                            });
                         }
                     }
                 } catch (IOException e) {
                     throw new StorageException("Error doWrite SectionType of resume in DataStreamSerializer", null, e);
                 }
-            };
-            writeWithException(sectionCollection, dos, writeSectionEntry);
-          /*  for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                SectionType keyName = entry.getKey();
-                dos.writeUTF(keyName.toString());
-                Object entryValue = entry.getValue();
-                switch (keyName) {
-                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entryValue).getText());
-                    case ACHIEVEMENT, QUALIFICATIONS -> {
-                        List<String> listSection = ((TextListSection) entryValue).getListSection();
-                        dos.writeInt(listSection.size());
-                        for (String text : listSection)
-                            dos.writeUTF(text);
-                    }
-                    case EXPERIENCE, EDUCATION -> {
-                        List<Organization> organizations = ((OrganizationsSection) entryValue).getListOrganizations();
-                        dos.writeInt(organizations.size());
-                        for (Organization org : organizations) {
-                            Link homePage = org.getHomePage();
-                            String url = homePage.getUrl();
-                            dos.writeUTF(homePage.getName());
-                            dos.writeUTF(url == null ? "null" : url);
-                            List<Organization.Experience> listExperience = org.getListExperience();
-                            dos.writeInt(listExperience.size());
-                            for (Organization.Experience exp : listExperience) {
-                                writeDate(dos, exp.getStartDate(), exp.getEndDate());
-                                String title = exp.getTitle();
-                                dos.writeUTF(title == null ? "null" : title);
-                                dos.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
-                            }
-                        }
-                    }
-                }
-            }*/
+            });
         }
     }
 
@@ -128,13 +92,13 @@ public class DataStreamSerializer implements Serialization {
             }
             int sizeSections = dis.readInt();
             for (int i = 0; i < sizeSections; i++) {
-                String sectionTittle = dis.readUTF();
-                switch (sectionTittle) {
-                    case "PERSONAL", "OBJECTIVE" -> sections.put(sectionTittle.equals("PERSONAL") ? SectionType.PERSONAL :
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
                             SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-                    case "ACHIEVEMENT", "QUALIFICATIONS" -> readTextListSection(dis, sections, sectionTittle.equals("ACHIEVEMENT") ?
+                    case ACHIEVEMENT, QUALIFICATIONS -> readTextListSection(dis, sections, sectionType.equals(SectionType.ACHIEVEMENT) ?
                             SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-                    case "EXPERIENCE", "EDUCATION" -> readOrgSection(dis, sections, sectionTittle.equals("EXPERIENCE") ?
+                    case EXPERIENCE, EDUCATION -> readOrgSection(dis, sections, sectionType.equals(SectionType.EXPERIENCE) ?
                             SectionType.EXPERIENCE : SectionType.EDUCATION);
                 }
             }
