@@ -42,7 +42,8 @@ public class DataStreamSerializer implements Serialization {
                             dos.writeUTF(url == null ? "null" : url);
                             Collection<Organization.Experience> listExperience = org.getListExperience();
                             writeWithException(listExperience, dos, (exp) -> {
-                                writeDate(dos, exp.getStartDate(), exp.getEndDate());
+                                writeDate(dos, exp.getStartDate());
+                                writeDate(dos, exp.getEndDate());
                                 String title = exp.getTitle();
                                 dos.writeUTF(title == null ? "null" : title);
                                 dos.writeUTF(exp.getDescription() == null ? "null" : exp.getDescription());
@@ -66,11 +67,6 @@ public class DataStreamSerializer implements Serialization {
                         String value = dis.readUTF();
                         resume.addContact(ContactType.valueOf(value), dis.readUTF());
                     });
-           /* int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                String value = dis.readUTF();
-                resume.addContact(ContactType.valueOf(value), dis.readUTF());
-            }*/
             readWithException(dis,
                     () -> {
                         SectionType sectionType = SectionType.valueOf(dis.readUTF());
@@ -83,18 +79,6 @@ public class DataStreamSerializer implements Serialization {
                                     SectionType.EXPERIENCE : SectionType.EDUCATION);
                         }
                     });
-          /*  int sizeSections = dis.readInt();
-            for (int i = 0; i < sizeSections; i++) {
-                SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
-                            SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-                    case ACHIEVEMENT, QUALIFICATIONS -> readTextListSection(dis, sections, sectionType.equals(SectionType.ACHIEVEMENT) ?
-                            SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-                    case EXPERIENCE, EDUCATION -> readOrgSection(dis, sections, sectionType.equals(SectionType.EXPERIENCE) ?
-                            SectionType.EXPERIENCE : SectionType.EDUCATION);
-                }
-            }*/
             return resume;
         }
     }
@@ -126,10 +110,8 @@ public class DataStreamSerializer implements Serialization {
         }
     }
 
-
-    private void writeDate(DataOutputStream dos, LocalDate start, LocalDate end) throws IOException {
-        dos.writeUTF(FORMATTER.format(start));
-        dos.writeUTF(FORMATTER.format(end));
+    private void writeDate(DataOutputStream dos, LocalDate date) throws IOException {
+        dos.writeUTF(FORMATTER.format(date));
     }
 
     private LocalDate readDate(DataInputStream dis) throws IOException {
@@ -138,37 +120,30 @@ public class DataStreamSerializer implements Serialization {
 
     private void readTextListSection(DataInputStream dis,
                                      Map<SectionType, AbstractSection> sections, SectionType secType) throws IOException {
-        int size = dis.readInt();
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
-        for (int z = 0; z < size; z++) {
-            listString.add(dis.readUTF());
-        }
+        readWithException(dis, () -> listString.add(dis.readUTF()));
         sections.put(secType, tls);
     }
 
     private void readOrgSection(DataInputStream dis, Map<SectionType, AbstractSection> sections, SectionType
             secType) throws IOException {
-        int size = dis.readInt();
         OrganizationsSection section = new OrganizationsSection(new ArrayList<>());
-        for (int z = 0; z < size; z++) {
+        readWithException(dis, () -> {
             String orgName = dis.readUTF();
             String orgUrl = dis.readUTF();
             List<Organization.Experience> expList = new ArrayList<>();
-            int sizeListExperience = dis.readInt();
-            for (int q = 0; q < sizeListExperience; q++) {
+            readWithException(dis, () -> {
                 LocalDate startDate = readDate(dis);
                 LocalDate endDate = readDate(dis);
                 String title = dis.readUTF();
                 String description = dis.readUTF();
                 expList.add(new Organization.Experience(startDate, endDate,
-                        title.equals("null") ? null : title,
-                        description.equals("null") ? null : description));
-            }
-            Organization org = new Organization(expList, orgName,
-                    orgUrl.equals("null") ? null : orgUrl);
+                        title.equals("null") ? null : title, description.equals("null") ? null : description));
+            });
+            Organization org = new Organization(expList, orgName, orgUrl.equals("null") ? null : orgUrl);
             section.getListOrganizations().add(org);
-        }
+        });
         sections.put(secType, section);
     }
 }
