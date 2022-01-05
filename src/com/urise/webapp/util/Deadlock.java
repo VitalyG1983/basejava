@@ -1,40 +1,31 @@
 package com.urise.webapp.util;
 
 public class Deadlock {
-    // Два объекта-ресурса
+
     public final static Object one = new Object(), two = new Object();
+    static boolean oneLocked, twoLocked;
 
-    public static void main(String s[]) {
+    public static void runThread(Object one, Object two) {
 
-        // Создаем два потока, которые будут
-        // конкурировать за доступ к объектам
-        // one и two
-        Thread t1 = new Thread() {
-            public void run() {
-                // Блокировка первого объекта
-                synchronized (one) {
-                    Thread.yield();
-                    // Блокировка второго объекта
-                    synchronized (two) {
-                        System.out.println("Success!");
-                    }
-                }
+        // Блокировка первого объекта
+        synchronized (one) {
+            if (one == Deadlock.one) oneLocked = true;
+            else twoLocked = true;
+            while (!(oneLocked & twoLocked)) {
             }
-        };
-        Thread t2 = new Thread() {
-            public void run() {
-                // Блокировка второго объекта
-                synchronized (two) {
-                    Thread.yield();
-                    // Блокировка первого объекта
-                    synchronized (one) {
-                        System.out.println("Success!");
-                    }
-                }
+            // Блокировка второго объекта
+            synchronized (two) {
+                twoLocked = true;
+                System.out.println("Success!");
             }
-        };
+        }
+    }
 
-        // Запускаем потоки
+    public static void main(String[] s) {
+
+        Thread t1 = new Thread(() -> runThread(one, two));
+        Thread t2 = new Thread(() -> runThread(two, one));
+
         t1.start();
         t2.start();
     }
