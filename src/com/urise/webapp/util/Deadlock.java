@@ -1,7 +1,6 @@
 package com.urise.webapp.util;
 
 public class Deadlock {
-
     public final static Object one = new Object(), two = new Object();
     static boolean oneLocked, twoLocked;
 
@@ -11,7 +10,7 @@ public class Deadlock {
         synchronized (one) {
             if (one == Deadlock.one) oneLocked = true;
             else twoLocked = true;
-            while (!(oneLocked & twoLocked)) {
+            while (!(oneLocked && twoLocked)) {
             }
             // Блокировка второго объекта
             synchronized (two) {
