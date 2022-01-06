@@ -15,14 +15,15 @@ public class Deadlock {
     public static void createThread(Object one, Object two) {
         new Thread(() -> {
             try {
-                System.out.println(Thread.currentThread().getName() + " try to block Object" + checkOne(one));
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + " try to block Object" + checkOne(one));
                 // Блокировка первого объекта
                 synchronized (one) {
-                    System.out.println(Thread.currentThread().getName() + " blocked Object" + checkOne(one));
+                    System.out.println(threadName + " blocked Object" + checkOne(one));
                     Thread.sleep(50);
                     // Блокировка второго объекта
                     synchronized (two) {
-                        System.out.println(Thread.currentThread().getName() + " blocked Object" + checkOne(one));
+                        System.out.println(threadName + " blocked Object" + checkOne(one));
                     }
                 }
             } catch (InterruptedException e) {
