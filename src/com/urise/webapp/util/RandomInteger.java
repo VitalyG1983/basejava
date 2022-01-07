@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RandomInteger {
@@ -40,16 +41,20 @@ public class RandomInteger {
             for (int elem : list) {
                 result += elem;
             }
-            if (result % 2 == 0) {
+                if (result % 2 == 0) {
                 System.out.println("Сумма чисел четная, убираем четные числа");
-                return list.stream().filter(x -> x % 2 != 0).collect(Collectors.toList());
+                return doFilter(list, x -> x % 2 != 0);
             } else {
                 System.out.println("Сумма чисел нечетная, убираем нечетные числа");
-                return list.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());
+                return doFilter(list, x -> x % 2 == 0);
             }
         };
         finalList = sumFounder.apply(integers);
         System.out.println(finalList);
         return finalList;
+    }
+
+    static List<Integer> doFilter(List<Integer> list, Predicate<? super Integer>  predicate ){
+        return list.stream().filter(predicate).collect(Collectors.toList());
     }
 }
