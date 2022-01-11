@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RandomInteger {
@@ -35,7 +36,8 @@ public class RandomInteger {
 
     static List<Integer> oddOrEven(List<Integer> integers) {
         int sum = integers.stream().reduce(0, Integer::sum);
-        return integers.stream().filter(x -> (sum % 2 == 0) == (x % 2 != 0)).collect(Collectors.toList());
+        return (sum % 2 == 0) ? doFilter(integers, x -> x % 2 != 0) : doFilter(integers, x -> x % 2 == 0);
+
        /* List<Integer> finalList;
         Function<List<Integer>, List<Integer>> sumFounder = list -> {
             int result = 0;
@@ -53,7 +55,7 @@ public class RandomInteger {
         finalList = sumFounder.apply(integers);*/
     }
 
-    /*static List<Integer> doFilter(List<Integer> list, Predicate<? super Integer> predicate) {
+    static List<Integer> doFilter(List<Integer> list, Predicate<? super Integer> predicate) {
         return list.stream().filter(predicate).collect(Collectors.toList());
-    }*/
+    }
 }
