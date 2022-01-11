@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class RandomInteger {
 
     public static void main(String[] args) {
-        int[] values = new Random().ints(3, 1, 9).toArray();
+        int[] values = new Random().ints(9, 1, 9).toArray();
         System.out.println("Входной массив чисел для обоих заданий: " + Arrays.toString(values));
         //////////  1st homeWork  ///////////////////////
         System.out.println(minValue(values));
@@ -35,7 +35,7 @@ public class RandomInteger {
 
     static List<Integer> oddOrEven(List<Integer> integers) {
         boolean remainsZero = (integers.stream().reduce(0, Integer::sum)) % 2 == 0;
-        return integers.stream().filter(x -> remainsZero ? (x % 2) > 0 : x % 2 == 0).collect(Collectors.toList());
+        return integers.stream().filter(x -> remainsZero ? x % 2 > 0 : x % 2 == 0).collect(Collectors.toList());
 
        /* List<Integer> finalList;
         Function<List<Integer>, List<Integer>> sumFounder = list -> {
