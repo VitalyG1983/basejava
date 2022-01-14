@@ -21,7 +21,6 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
         this.directory = directory;
         this.serialization = ser;
-
     }
 
     @Override
