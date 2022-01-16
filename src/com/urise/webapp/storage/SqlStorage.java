@@ -12,7 +12,6 @@ import java.util.List;
 
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
-    SqlHelper sqlHelper = new SqlHelper();
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
@@ -20,72 +19,78 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
+        SqlHelper<Object> sqlHelper = new SqlHelper<>();
         sqlHelper.doCommonCode("DELETE FROM resumes.public.resume", PreparedStatement::execute);
     }
 
     @Override
     public Resume get(String uuid) {
-        Resume[] resume = new Resume[1];
-        sqlHelper.doCommonCode("SELECT * FROM resumes.public.resume r WHERE r.uuid =?",
+        SqlHelper<Resume> sqlHelper = new SqlHelper<>();
+        return sqlHelper.doCommonCode("SELECT * FROM resumes.public.resume r WHERE r.uuid =?",
                 ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
                     checkForExistence(!rs.next(), uuid);
-                    resume[0] = new Resume(uuid, rs.getString("full_name"));
+                    return new Resume(uuid, rs.getString("full_name"));
                 });
-        return resume[0];
     }
 
     @Override
     public void update(Resume r) {
+        SqlHelper<Object> sqlHelper = new SqlHelper<>();
         sqlHelper.doCommonCode("UPDATE resumes.public.resume SET full_name = ? WHERE uuid IN (?)",
                 ps -> {
                     ps.setString(1, r.getFullName());
                     ps.setString(2, r.getUuid());
                     checkForExistence(ps.executeUpdate() != 1, r.getUuid());
+                    return null;
                 });
     }
 
     @Override
     public void save(Resume r) {
+        SqlHelper<Object> sqlHelper = new SqlHelper<>();
         sqlHelper.doCommonCode("INSERT INTO resumes.public.resume (uuid, full_name) VALUES (?,?)",
                 ps -> {
                     ps.setString(1, r.getUuid());
                     ps.setString(2, r.getFullName());
                     ps.execute();
+                    return null;
                 });
     }
 
     @Override
     public void delete(String uuid) {
+        SqlHelper<Object> sqlHelper = new SqlHelper<>();
         sqlHelper.doCommonCode("DELETE FROM resumes.public.resume WHERE uuid=?",
                 ps -> {
                     ps.setString(1, uuid);
                     checkForExistence(ps.executeUpdate() != 1, uuid);
+                    return null;
                 });
     }
 
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumes = new ArrayList<>();
-        sqlHelper.doCommonCode("SELECT * FROM resumes.public.resume ORDER BY uuid ASC",
+        SqlHelper<List<Resume>> sqlHelper = new SqlHelper<>();
+        return sqlHelper.doCommonCode("SELECT * FROM resumes.public.resume ORDER BY uuid ASC",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next())
                         resumes.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
+                    return resumes;
                 });
-        return resumes;
     }
 
     @Override
     public int size() {
-        int[] count = new int[1];
-        sqlHelper.doCommonCode("SELECT COUNT(*) FROM resume",
+        SqlHelper<Integer> sqlHelper = new SqlHelper<>();
+        return sqlHelper.doCommonCode("SELECT COUNT(*) FROM resume",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
-                    count[0] = rs.next() ? rs.getInt("count") : 0;
+                    return rs.next() ? rs.getInt("count") : 0;
                 });
-        return count[0];
     }
 
     private void checkForExistence(Boolean notExist, String uuid) {
@@ -94,16 +99,16 @@ public class SqlStorage implements Storage {
     }
 
     @FunctionalInterface
-    public interface ABlockOfCode {
-        void execute(PreparedStatement ps) throws SQLException;
+    public interface ABlockOfCode<T> {
+        T execute(PreparedStatement ps) throws SQLException;
     }
 
-    public class SqlHelper {
+    public class SqlHelper<T> {
 
-        public void doCommonCode(String sqlRequest, ABlockOfCode aBlockOfCode) {
+        public T doCommonCode(String sqlRequest, ABlockOfCode<T> aBlockOfCode) {
             try (Connection conn = connectionFactory.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sqlRequest)) {
-                aBlockOfCode.execute(ps);
+                return aBlockOfCode.execute(ps);
             } catch (SQLException e) {
                 if (e.getSQLState().equals("23505"))
                     throw new ExistStorageException(e);
@@ -112,6 +117,3 @@ public class SqlStorage implements Storage {
         }
     }
 }
-
-
-
