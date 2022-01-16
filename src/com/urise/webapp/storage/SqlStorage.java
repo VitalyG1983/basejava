@@ -36,9 +36,7 @@ public class SqlStorage implements Storage {
                 ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
-                    if (!rs.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
+                    checkForExistence(!rs.next(), uuid);
                     resume[0] = new Resume(uuid, rs.getString("full_name"));
                 });
         return resume[0];
@@ -61,9 +59,7 @@ public class SqlStorage implements Storage {
                 ps -> {
                     ps.setString(1, r.getFullName());
                     ps.setString(2, r.getUuid());
-                    // ps.execute();
-                    if (ps.executeUpdate() != 1)
-                        throw new NotExistStorageException(r.getUuid());
+                    checkForExistence(ps.executeUpdate() != 1, r.getUuid());
                 });
      /*   try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("UPDATE resumes.public.resume SET full_name = ?" +
@@ -104,8 +100,7 @@ public class SqlStorage implements Storage {
         sqlHelper.doCommonCode("DELETE FROM resumes.public.resume WHERE uuid=?",
                 ps -> {
                     ps.setString(1, uuid);
-                    if (ps.executeUpdate() != 1)
-                        throw new NotExistStorageException(uuid);
+                    checkForExistence(ps.executeUpdate() != 1, uuid);
                 });
     /*    try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM resumes.public.resume WHERE uuid=?")) {
@@ -155,6 +150,11 @@ public class SqlStorage implements Storage {
         } catch (SQLException e) {
             throw new StorageException(e);
         }*/
+    }
+
+    private void checkForExistence(Boolean notExist, String uuid) {
+        if (notExist)
+            throw new NotExistStorageException(uuid);
     }
 
     @FunctionalInterface
