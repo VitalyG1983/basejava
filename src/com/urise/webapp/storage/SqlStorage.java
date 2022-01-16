@@ -20,7 +20,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.commonCode("DELETE FROM resumes.public.resume", PreparedStatement::execute);
+        sqlHelper.commonCodeExecute("DELETE FROM resumes.public.resume", PreparedStatement::execute);
      /*   try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM resumes.public.resume")) {
             ps.execute();
@@ -32,7 +32,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         Resume[] resume = new Resume[1];
-        sqlHelper.commonCode("SELECT * FROM resumes.public.resume r WHERE r.uuid =?",
+        sqlHelper.commonCodeExecute("SELECT * FROM resumes.public.resume r WHERE r.uuid =?",
                 ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
@@ -57,7 +57,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        sqlHelper.commonCode("UPDATE resumes.public.resume SET full_name = ? WHERE uuid IN (?)",
+        sqlHelper.commonCodeExecute("UPDATE resumes.public.resume SET full_name = ? WHERE uuid IN (?)",
                 ps -> {
                     ps.setString(1, r.getFullName());
                     ps.setString(2, r.getUuid());
@@ -80,7 +80,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.commonCode("INSERT INTO resumes.public.resume (uuid, full_name) VALUES (?,?)",
+        sqlHelper.commonCodeExecute("INSERT INTO resumes.public.resume (uuid, full_name) VALUES (?,?)",
                 ps -> {
                     ps.setString(1, r.getUuid());
                     ps.setString(2, r.getFullName());
@@ -101,7 +101,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.commonCode("DELETE FROM resumes.public.resume WHERE uuid=?",
+        sqlHelper.commonCodeExecute("DELETE FROM resumes.public.resume WHERE uuid=?",
                 ps -> {
                     ps.setString(1, uuid);
                     if (ps.executeUpdate() != 1)
@@ -121,7 +121,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumes = new ArrayList<>();
-        sqlHelper.commonCode("SELECT * FROM resumes.public.resume ORDER BY uuid ASC",
+        sqlHelper.commonCodeExecute("SELECT * FROM resumes.public.resume ORDER BY uuid ASC",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next())
@@ -142,7 +142,7 @@ public class SqlStorage implements Storage {
     @Override
     public int size() {
         int[] count = new int[1];
-        sqlHelper.commonCode("SELECT COUNT(*) FROM resume",
+        sqlHelper.commonCodeExecute("SELECT COUNT(*) FROM resume",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
                     count[0] = rs.next() ? rs.getInt("count") : 0;
@@ -164,7 +164,7 @@ public class SqlStorage implements Storage {
 
     public class SqlHelper {
 
-        public void commonCode(String sqlRequest, ABlockOfCode aBlockOfCode) {
+        public void commonCodeExecute(String sqlRequest, ABlockOfCode aBlockOfCode) {
             try (Connection conn = connectionFactory.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sqlRequest)) {
                 aBlockOfCode.execute(ps);
