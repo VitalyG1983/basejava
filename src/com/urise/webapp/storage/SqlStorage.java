@@ -99,16 +99,16 @@ public class SqlStorage implements Storage {
     }
 
     @FunctionalInterface
-    public interface ABlockOfCode<T> {
+    public interface UniqueCode<T> {
         T execute(PreparedStatement ps) throws SQLException;
     }
 
     public class SqlHelper<T> {
 
-        public T doCommonCode(String sqlRequest, ABlockOfCode<T> aBlockOfCode) {
+        public T doCommonCode(String sqlRequest, UniqueCode<T> uniqueCode) {
             try (Connection conn = connectionFactory.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sqlRequest)) {
-                return aBlockOfCode.execute(ps);
+                return uniqueCode.execute(ps);
             } catch (SQLException e) {
                 if (e.getSQLState().equals("23505"))
                     throw new ExistStorageException(e);
