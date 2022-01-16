@@ -21,12 +21,6 @@ public class SqlStorage implements Storage {
     @Override
     public void clear() {
         sqlHelper.doCommonCode("DELETE FROM resumes.public.resume", PreparedStatement::execute);
-     /*   try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM resumes.public.resume")) {
-            ps.execute();
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -40,17 +34,6 @@ public class SqlStorage implements Storage {
                     resume[0] = new Resume(uuid, rs.getString("full_name"));
                 });
         return resume[0];
-   /*     try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM resumes.public.resume r WHERE r.uuid =?")) {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            return new Resume(uuid, rs.getString("full_name"));
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -61,17 +44,6 @@ public class SqlStorage implements Storage {
                     ps.setString(2, r.getUuid());
                     checkForExistence(ps.executeUpdate() != 1, r.getUuid());
                 });
-     /*   try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("UPDATE resumes.public.resume SET full_name = ?" +
-                     " WHERE uuid IN (?)")) {
-            ps.setString(1, r.getFullName());
-            ps.setString(2, r.getUuid());
-            // ps.execute();
-            if (ps.executeUpdate() != 1)
-                throw new NotExistStorageException(r.getUuid());
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -82,17 +54,6 @@ public class SqlStorage implements Storage {
                     ps.setString(2, r.getFullName());
                     ps.execute();
                 });
-       /* try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("INSERT INTO resumes.public.resume (uuid, full_name) VALUES (?,?)")) {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
-            ps.execute();
-        } catch (PSQLException e) {
-            if (e.getSQLState().equals("23505"))
-                throw new ExistStorageException(r.getUuid());
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -102,15 +63,6 @@ public class SqlStorage implements Storage {
                     ps.setString(1, uuid);
                     checkForExistence(ps.executeUpdate() != 1, uuid);
                 });
-    /*    try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM resumes.public.resume WHERE uuid=?")) {
-            ps.setString(1, uuid);
-            //   ps.execute();
-            if (ps.executeUpdate() != 1)
-                throw new NotExistStorageException(uuid);
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -123,15 +75,6 @@ public class SqlStorage implements Storage {
                         resumes.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
                 });
         return resumes;
-    /*    try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM resumes.public.resume ORDER BY uuid ASC")) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next())
-                resumes.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
-            return resumes;
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     @Override
@@ -143,13 +86,6 @@ public class SqlStorage implements Storage {
                     count[0] = rs.next() ? rs.getInt("count") : 0;
                 });
         return count[0];
-      /*  try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM resume")) {
-            ResultSet rs = ps.executeQuery();
-            return rs.next() ? rs.getInt("count") : 0;
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }*/
     }
 
     private void checkForExistence(Boolean notExist, String uuid) {
