@@ -4,13 +4,16 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
     public final SqlHelper sqlHelper;
+
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         sqlHelper = new SqlHelper(connectionFactory);
@@ -23,7 +26,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return (Resume) sqlHelper.doCommonCode("SELECT * FROM resume r WHERE r.uuid =?",
+        return sqlHelper.doCommonCode("SELECT * FROM resume r WHERE r.uuid =?",
                 ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
@@ -34,10 +37,10 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        String uuid = r.getUuid();
         // sqlHelper.doCommonCode("UPDATE resume SET full_name = ? WHERE uuid IN (?)",
         sqlHelper.doCommonCode("UPDATE resume SET full_name = ? WHERE uuid = ?",
                 ps -> {
+                    String uuid = r.getUuid();
                     ps.setString(1, r.getFullName());
                     ps.setString(2, uuid);
                     checkForExistence(ps.executeUpdate() != 1, uuid);
@@ -68,10 +71,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resumes = new ArrayList<>();
-        //return (List<Resume>) sqlHelper.doCommonCode("SELECT * FROM resume ORDER BY uuid ASC",
-        return (List<Resume>) sqlHelper.doCommonCode("SELECT * FROM resume ORDER BY full_name,uuid ASC",
+        return sqlHelper.doCommonCode("SELECT * FROM resume ORDER BY full_name,uuid",
                 ps -> {
+                    List<Resume> resumes = new ArrayList<>();
                     ResultSet rs = ps.executeQuery();
                     while (rs.next())
                         resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
@@ -81,7 +83,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return (int) sqlHelper.doCommonCode("SELECT COUNT(*) FROM resume",
+        return sqlHelper.doCommonCode("SELECT COUNT(*) FROM resume",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
                     return rs.next() ? rs.getInt("count") : 0;

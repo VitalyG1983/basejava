@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public record SqlHelper(ConnectionFactory connectionFactory) {
 
-    public Object doCommonCode(String sqlRequest, UniqueCode uniqueCode) {
+    public <T> T doCommonCode(String sqlRequest, UniqueCode<T> uniqueCode) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sqlRequest)) {
             return uniqueCode.execute(ps);
@@ -22,7 +22,7 @@ public record SqlHelper(ConnectionFactory connectionFactory) {
     }
 
     @FunctionalInterface
-    public interface UniqueCode {
-        Object execute(PreparedStatement ps) throws SQLException;
+    public interface UniqueCode<T> {
+        T execute(PreparedStatement ps) throws SQLException;
     }
 }

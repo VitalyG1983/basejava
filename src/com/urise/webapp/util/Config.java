@@ -14,10 +14,6 @@ public class Config {
     private final File storageDir;
     private final SqlStorage SqlStorage;
 
-    public static Config get() {
-        return INSTANCE;
-    }
-
     private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
             Properties props = new Properties();
@@ -27,6 +23,10 @@ public class Config {
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file" + PROPS.getAbsolutePath());
         }
+    }
+
+    public static Config get() {
+        return INSTANCE;
     }
 
     public File getStorageDir() {
