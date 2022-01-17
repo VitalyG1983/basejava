@@ -11,20 +11,23 @@ import org.junit.Test;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static File STORAGE_DIR = Config.get().getStorageDir();
+    static Config config = Config.get();
+    protected static File STORAGE_DIR = config.getStorageDir();
     protected Storage storage;
 
-    private static final String UUID_1 = "1";
-    private static final String UUID_2 = "2";
-    private static final String UUID_3 = "3";
-    private static final String UUID_4 = "4";
+    private static final String UUID_1 = UUID.randomUUID().toString(); //"1";
+    private static final String UUID_2 = UUID.randomUUID().toString(); //"2";
+    private static final String UUID_3 = UUID.randomUUID().toString();//"3";
+    private static final String UUID_4 = UUID.randomUUID().toString();//"4";
 
-    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "fullName"); //new Resume(UUID_1, "fullName");
-    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "fullName");//new Resume(UUID_2, "fullName");
+    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "fullName1"); //new Resume(UUID_1, "fullName");
+    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "fullName1");//new Resume(UUID_2, "fullName");
     private final Resume resume3 = ResumeTestData.createResume(UUID_3, "fullName");//new Resume(UUID_3, "fullName");
     private final Resume resume4 = ResumeTestData.createResume(UUID_4, "fullName");//new Resume(UUID_4, "fullName");
 
@@ -95,6 +98,7 @@ public abstract class AbstractStorageTest {
         expectedResumes.add(resume1);
         expectedResumes.add(resume2);
         expectedResumes.add(resume3);
+        expectedResumes.sort(RESUME_NAME_COMPARATOR);
 
         List<Resume> actualResumes = storage.getAllSorted();
         assertEquals(expectedResumes, actualResumes);
