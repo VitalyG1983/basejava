@@ -17,8 +17,9 @@ import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    static Config config = Config.get();
+    protected static Config config = Config.get();
     protected static File STORAGE_DIR = config.getStorageDir();
+    protected static SqlStorage SQL_STORAGE = config.getSqlStorage();
     protected Storage storage;
 
     private static final String UUID_1 = UUID.randomUUID().toString(); //"1";
