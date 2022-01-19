@@ -1,6 +1,6 @@
 package com.urise.webapp.util;
 
-import com.urise.webapp.storage.SqlStorage;
+import com.urise.webapp.sql.SqlStorage;
 
 import java.io.File;
 import java.io.FileInputStream;

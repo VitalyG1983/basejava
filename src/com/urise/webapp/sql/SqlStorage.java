@@ -1,8 +1,8 @@
-package com.urise.webapp.storage;
+package com.urise.webapp.sql;
 
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.sql.ConnectionFactory;
+import com.urise.webapp.storage.Storage;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
