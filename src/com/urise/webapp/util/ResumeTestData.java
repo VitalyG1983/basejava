@@ -14,7 +14,7 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> sections = resume.getSections();
-     //   fillContacts((EnumMap<ContactType, String>) contacts);
+        fillContacts((EnumMap<ContactType, String>) contacts);
      //   fillSections((EnumMap<SectionType, AbstractSection>) sections);
         return resume;
     }

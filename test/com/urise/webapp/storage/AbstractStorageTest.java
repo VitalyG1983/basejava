@@ -3,7 +3,6 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.sql.SqlStorage;
 import com.urise.webapp.util.Config;
 import com.urise.webapp.util.ResumeTestData;
 import org.junit.Before;
@@ -28,10 +27,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = UUID.randomUUID().toString();//"3";
     private static final String UUID_4 = UUID.randomUUID().toString();//"4";
 
-    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "fullName1"); //new Resume(UUID_1, "fullName");
-    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "fullName1");//new Resume(UUID_2, "fullName");
-    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "fullName");//new Resume(UUID_3, "fullName");
-    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "fullName");//new Resume(UUID_4, "fullName");
+    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "Alex"); //new Resume(UUID_1, "fullName");
+    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Vit");//new Resume(UUID_2, "fullName");
+    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John");//new Resume(UUID_3, "fullName");
+    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "Roma");//new Resume(UUID_4, "fullName");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -103,6 +102,7 @@ public abstract class AbstractStorageTest {
         expectedResumes.sort(RESUME_NAME_COMPARATOR);
 
         List<Resume> actualResumes = storage.getAllSorted();
+        actualResumes.sort(RESUME_NAME_COMPARATOR);
         assertEquals(expectedResumes, actualResumes);
     }
 

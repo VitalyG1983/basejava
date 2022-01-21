@@ -1,5 +1,7 @@
 package com.urise.webapp.sql;
 
+import com.urise.webapp.exception.StorageException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,5 +21,20 @@ public record SqlHelper(ConnectionFactory connectionFactory) {
     @FunctionalInterface
     public interface UniqueCode<T> {
         T execute(PreparedStatement ps) throws SQLException;
+    }
+
+    public <T> void transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 }
