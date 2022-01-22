@@ -27,10 +27,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = UUID.randomUUID().toString();//"3";
     private static final String UUID_4 = UUID.randomUUID().toString();//"4";
 
-    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "Alex"); //new Resume(UUID_1, "fullName");
-    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Vit");//new Resume(UUID_2, "fullName");
-    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John");//new Resume(UUID_3, "fullName");
-    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "Roma");//new Resume(UUID_4, "fullName");
+    private final Resume resume1 = ResumeTestData.createResume(UUID_1, "Alex", false); //new Resume(UUID_1, "fullName");
+    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Vit",false);//new Resume(UUID_2, "fullName");
+    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John",true);//new Resume(UUID_3, "fullName");
+    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "Roma", false);//new Resume(UUID_4, "fullName");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -60,7 +60,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName1");//new Resume(UUID_1, "fullName");
+        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName1", false);//new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
         assertEquals(expectedResume, storage.get(UUID_1));
     }
@@ -102,7 +102,6 @@ public abstract class AbstractStorageTest {
         expectedResumes.sort(RESUME_NAME_COMPARATOR);
 
         List<Resume> actualResumes = storage.getAllSorted();
-        actualResumes.sort(RESUME_NAME_COMPARATOR);
         assertEquals(expectedResumes, actualResumes);
     }
 

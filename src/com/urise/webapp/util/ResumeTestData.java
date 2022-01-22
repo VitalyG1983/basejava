@@ -10,12 +10,14 @@ import java.util.Map;
 
 public class ResumeTestData {
 
-    public static Resume createResume(String uuid, String fullName) {
+    public static Resume createResume(String uuid, String fullName, Boolean fillCont2) {
         Resume resume = new Resume(uuid, fullName);
         Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> sections = resume.getSections();
-        fillContacts((EnumMap<ContactType, String>) contacts);
-     //   fillSections((EnumMap<SectionType, AbstractSection>) sections);
+        if (fillCont2)
+            fillContacts2((EnumMap<ContactType, String>) contacts);
+        else fillContacts((EnumMap<ContactType, String>) contacts);
+        //   fillSections((EnumMap<SectionType, AbstractSection>) sections);
         return resume;
     }
 
@@ -26,6 +28,15 @@ public class ResumeTestData {
         contacts.put(ContactType.LINKEDLN, "Профиль LinkedIn");
         contacts.put(ContactType.GITHUB, "Профиль GitHub");
         contacts.put(ContactType.STACKOVERFLOW, "Профиль Stackoverflow");
+    }
+
+    static void fillContacts2(EnumMap<ContactType, String> contacts) {
+        contacts.put(ContactType.TEL, "");
+        contacts.put(ContactType.SKYPE, "");
+        contacts.put(ContactType.MAIL, "");
+        contacts.put(ContactType.LINKEDLN, "");
+        contacts.put(ContactType.GITHUB, "");
+        contacts.put(ContactType.STACKOVERFLOW, "");
     }
 
     static void fillSections(EnumMap<SectionType, AbstractSection> sections) {

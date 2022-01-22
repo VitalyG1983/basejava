@@ -4,7 +4,6 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
-import com.urise.webapp.sql.ExceptionUtil;
 import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -28,11 +27,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.doCommonCode("" + "    SELECT * FROM resume r " + " LEFT JOIN contact c " + "        ON r.uuid = c.resume_uuid " + "     WHERE r.uuid =? ", ps -> {
+        return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+                "WHERE r.uuid =? ", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             checkForException(!rs.next(), uuid);
-
             Resume r = new Resume(uuid, rs.getString("full_name"));
             do {
                 String value = rs.getString("value");
@@ -46,16 +45,16 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doSqlResume("UPDATE resumes.public.resume SET full_name = ? WHERE uuid = ?", conn, r);
-            return doSqlContact("UPDATE resumes.public.contact " + "SET  value = ? " + "WHERE resume_uuid = ? AND type = ?", conn, r);
+            doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
+            return doSqlContact("UPDATE contact SET value = ? WHERE resume_uuid = ? AND type = ?", conn, r);
         });
     }
 
     @Override
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doSqlResume("INSERT INTO resumes.public.resume (full_name, uuid) VALUES (?,?)", conn, r);
-            return doSqlContact("INSERT INTO resumes.public.contact (value,resume_uuid,type) VALUES (?,?,?)", conn, r);
+            doSqlResume("INSERT INTO resume (full_name, uuid) VALUES (?,?)", conn, r);
+            return doSqlContact("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)", conn, r);
         });
     }
 
@@ -70,23 +69,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.doCommonCode("" + "    SELECT * FROM resume r " + " LEFT JOIN contact c " + "        ON r.uuid = c.resume_uuid ", ps -> {
-            List<Resume> resumes = new ArrayList<>();
-            ResultSet rs = ps.executeQuery();
-            String uuid;
-            String uuidOld = null;
-            Resume r = new Resume();
-            while (rs.next()) {
-                uuid = rs.getString("uuid");
-                if (!uuid.equals(uuidOld)) {
-                    r = new Resume(uuid, rs.getString("full_name"));
-                    resumes.add(r);
-                }
-                r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
-                uuidOld = uuid;
-            }
-            return resumes;
-        });
+        return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+                        "ORDER BY full_name, uuid",
+                ps -> {
+                    List<Resume> resumes = new ArrayList<>();
+                    ResultSet rs = ps.executeQuery();
+                    String uuid;
+                    String uuidOld = null;
+                    Resume r = new Resume();
+                    while (rs.next()) {
+                        uuid = rs.getString("uuid");
+                        if (!uuid.equals(uuidOld)) {
+                            r = new Resume(uuid, rs.getString("full_name"));
+                            resumes.add(r);
+                        }
+                        r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                        uuidOld = uuid;
+                    }
+                    return resumes;
+                });
     }
 
     @Override
@@ -103,18 +104,16 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void doSqlResume(String sql, Connection conn, Resume r) {
+    private void doSqlResume(String sql, Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             String uuid = r.getUuid();
             ps.setString(1, r.getFullName());
             ps.setString(2, uuid);
             checkForException(ps.executeUpdate() != 1, uuid);
-        } catch (SQLException e) {
-            throw ExceptionUtil.convertException(e);
         }
     }
 
-    Object doSqlContact(String sql, Connection conn, Resume r) {
+    Object doSqlContact(String sql, Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, e.getValue());
@@ -123,8 +122,6 @@ public class SqlStorage implements Storage {
                 ps.addBatch();
             }
             ps.executeBatch();
-        } catch (SQLException e) {
-            throw ExceptionUtil.convertException(e);
         }
         return null;
     }
