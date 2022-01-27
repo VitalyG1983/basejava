@@ -22,7 +22,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.doCommonCode("DELETE FROM resume; DELETE FROM contact", PreparedStatement::execute);
+        sqlHelper.doCommonCode("DELETE FROM resume", PreparedStatement::execute);
     }
 
     @Override
