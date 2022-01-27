@@ -44,9 +44,10 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
+        doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid());
         sqlHelper.transactionalExecute(conn -> {
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
-            return doSqlContact("UPDATE contact SET value = ? WHERE resume_uuid = ? AND type = ?", conn, r);
+            return doSqlContact("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)", conn, r);
         });
     }
 
@@ -60,11 +61,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.doCommonCode("DELETE FROM resume WHERE uuid=?", ps -> {
-            ps.setString(1, uuid);
-            checkForException(ps.executeUpdate() != 1, uuid);
-            return null;
-        });
+        String sql = "DELETE FROM resume WHERE uuid=?";
+        doDelete(sql, uuid);
     }
 
     @Override
@@ -124,5 +122,13 @@ public class SqlStorage implements Storage {
             ps.executeBatch();
         }
         return null;
+    }
+
+    private void doDelete(String sql, String uuid) {
+        sqlHelper.doCommonCode(sql, ps -> {
+            ps.setString(1, uuid);
+            checkForException(ps.executeUpdate() == 0, uuid);
+            return null;
+        });
     }
 }

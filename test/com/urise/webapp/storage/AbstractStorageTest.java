@@ -29,7 +29,7 @@ public abstract class AbstractStorageTest {
 
     private final Resume resume1 = ResumeTestData.createResume(UUID_1, "Alex", false); //new Resume(UUID_1, "fullName");
     private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Vit",false);//new Resume(UUID_2, "fullName");
-    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John",true);//new Resume(UUID_3, "fullName");
+    private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John",false);//new Resume(UUID_3, "fullName");
     private final Resume resume4 = ResumeTestData.createResume(UUID_4, "Roma", false);//new Resume(UUID_4, "fullName");
 
     public AbstractStorageTest(Storage storage) {
@@ -60,7 +60,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName1", false);//new Resume(UUID_1, "fullName");
+        Resume expectedResume = ResumeTestData.createResume(UUID_1, "fullName1", true);//new Resume(UUID_1, "fullName");
         storage.update(expectedResume);
         assertEquals(expectedResume, storage.get(UUID_1));
     }

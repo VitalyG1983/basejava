@@ -32,8 +32,8 @@ public class ResumeTestData {
 
     static void fillContacts2(EnumMap<ContactType, String> contacts) {
         contacts.put(ContactType.TEL, "");
-        contacts.put(ContactType.SKYPE, "");
-        contacts.put(ContactType.MAIL, "");
+        contacts.put(ContactType.SKYPE, "new skype");
+        contacts.put(ContactType.MAIL, "new mail");
         contacts.put(ContactType.LINKEDLN, "");
         contacts.put(ContactType.GITHUB, "");
         contacts.put(ContactType.STACKOVERFLOW, "");
