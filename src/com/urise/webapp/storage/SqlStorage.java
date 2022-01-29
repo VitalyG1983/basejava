@@ -4,10 +4,12 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
+import com.urise.webapp.sql.ExceptionUtil;
 import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,10 +46,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid());
         sqlHelper.transactionalExecute(conn -> {
+            doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
-            return doSqlContact("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)", conn, r);
+            doSqlContact(conn, r);
+            return null;
         });
     }
 
@@ -55,14 +58,19 @@ public class SqlStorage implements Storage {
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
             doSqlResume("INSERT INTO resume (full_name, uuid) VALUES (?,?)", conn, r);
-            return doSqlContact("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)", conn, r);
+            doSqlContact(conn, r);
+            return null;
         });
     }
 
     @Override
     public void delete(String uuid) {
-        String sql = "DELETE FROM resume WHERE uuid=?";
-        doDelete(sql, uuid);
+        try {
+            Connection conn = connectionFactory.getConnection();
+            doDelete("DELETE FROM resume WHERE uuid=?", uuid, conn);
+        } catch (SQLException e) {
+            ExceptionUtil.convertException(e);
+        }
     }
 
     @Override
@@ -70,21 +78,18 @@ public class SqlStorage implements Storage {
         return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                         "ORDER BY full_name, uuid",
                 ps -> {
-                    List<Resume> resumes = new ArrayList<>();
-                    ResultSet rs = ps.executeQuery();
-                    String uuid;
-                    String uuidOld = null;
                     Resume r = new Resume();
+                    Map<String, Resume> resumes = new LinkedHashMap<>();
+                    ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
-                        uuid = rs.getString("uuid");
-                        if (!uuid.equals(uuidOld)) {
+                        String uuid = rs.getString("uuid");
+                        if (!resumes.containsKey(uuid)) {
                             r = new Resume(uuid, rs.getString("full_name"));
-                            resumes.add(r);
+                            resumes.put(uuid, r);
                         }
                         r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
-                        uuidOld = uuid;
                     }
-                    return resumes;
+                    return new ArrayList<>(resumes.values());
                 });
     }
 
@@ -111,8 +116,8 @@ public class SqlStorage implements Storage {
         }
     }
 
-    Object doSqlContact(String sql, Connection conn, Resume r) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+    private void doSqlContact(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, e.getValue());
                 ps.setString(2, r.getUuid());
@@ -121,14 +126,17 @@ public class SqlStorage implements Storage {
             }
             ps.executeBatch();
         }
-        return null;
     }
 
-    private void doDelete(String sql, String uuid) {
-        sqlHelper.doCommonCode(sql, ps -> {
+    private void doDelete(String sql, String uuid, Connection conn) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, uuid);
+        checkForException(ps.executeUpdate() == 0, uuid);
+
+      /*  sqlHelper.doCommonCode(sql, ps -> {
             ps.setString(1, uuid);
             checkForException(ps.executeUpdate() == 0, uuid);
             return null;
-        });
+        });*/
     }
 }
