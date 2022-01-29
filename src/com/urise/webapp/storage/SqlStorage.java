@@ -13,8 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
-
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
     public final SqlHelper sqlHelper;
@@ -35,15 +33,11 @@ public class SqlStorage implements Storage {
                 "WHERE r.uuid =? ", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
-            // boolean next = rs.next();
             checkForException(!rs.next(), uuid);
             Resume r = new Resume(uuid, rs.getString("full_name"));
-            // while (next) {
             do
                 addContact(rs, r);
             while (rs.next());
-            //   next = rs.next();
-            //  }
             return r;
         });
     }
@@ -51,16 +45,14 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            boolean isContacts = false;
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =? ")) {
                 ps.setString(1, r.getUuid());
-                if (ps.execute())
-                    isContacts = true;
+                ResultSet rs = ps.executeQuery();
+                if (rs.next())
+                    doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
             }
-            if (isContacts)
-                doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
-            doSqlContact(conn, r);
+            insertSqlContact(conn, r);
             return null;
         });
     }
@@ -69,7 +61,7 @@ public class SqlStorage implements Storage {
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
             doSqlResume("INSERT INTO resume (full_name, uuid) VALUES (?,?)", conn, r);
-            doSqlContact(conn, r);
+            insertSqlContact(conn, r);
             return null;
         });
     }
@@ -80,7 +72,7 @@ public class SqlStorage implements Storage {
             Connection conn = connectionFactory.getConnection();
             doDelete("DELETE FROM resume WHERE uuid=?", uuid, conn);
         } catch (SQLException e) {
-            ExceptionUtil.convertException(e);
+            throw ExceptionUtil.convertException(e);
         }
     }
 
@@ -100,9 +92,7 @@ public class SqlStorage implements Storage {
                         }
                         addContact(rs, r);
                     }
-                    List<Resume> list = new ArrayList<>(resumes.values());
-                    list.sort(RESUME_NAME_COMPARATOR);
-                    return list;
+                    return new ArrayList<>(resumes.values());
                 });
     }
 
@@ -129,7 +119,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void doSqlContact(Connection conn, Resume r) throws SQLException {
+    private void insertSqlContact(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, e.getValue());
@@ -154,8 +144,8 @@ public class SqlStorage implements Storage {
     }
 
     private void addContact(ResultSet rs, Resume r) throws SQLException {
-        // String value = rs.getString("value");
-        // if (!StringUtils.isBlank(value))
-        r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+        String type = rs.getString("type");
+        if (type != null)
+            r.addContact(ContactType.valueOf(type), rs.getString("value"));
     }
 }
