@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
+
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
     public final SqlHelper sqlHelper;
@@ -33,13 +35,15 @@ public class SqlStorage implements Storage {
                 "WHERE r.uuid =? ", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
+            // boolean next = rs.next();
             checkForException(!rs.next(), uuid);
             Resume r = new Resume(uuid, rs.getString("full_name"));
-            do {
-                String value = rs.getString("value");
-                ContactType type = ContactType.valueOf(rs.getString("type"));
-                r.addContact(type, value);
-            } while (rs.next());
+            // while (next) {
+            do
+                addContact(rs, r);
+            while (rs.next());
+            //   next = rs.next();
+            //  }
             return r;
         });
     }
@@ -47,7 +51,14 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
+            boolean isContacts = false;
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =? ")) {
+                ps.setString(1, r.getUuid());
+                if (ps.execute())
+                    isContacts = true;
+            }
+            if (isContacts)
+                doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
             doSqlContact(conn, r);
             return null;
@@ -87,9 +98,11 @@ public class SqlStorage implements Storage {
                             r = new Resume(uuid, rs.getString("full_name"));
                             resumes.put(uuid, r);
                         }
-                        r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                        addContact(rs, r);
                     }
-                    return new ArrayList<>(resumes.values());
+                    List<Resume> list = new ArrayList<>(resumes.values());
+                    list.sort(RESUME_NAME_COMPARATOR);
+                    return list;
                 });
     }
 
@@ -138,5 +151,11 @@ public class SqlStorage implements Storage {
             checkForException(ps.executeUpdate() == 0, uuid);
             return null;
         });*/
+    }
+
+    private void addContact(ResultSet rs, Resume r) throws SQLException {
+        // String value = rs.getString("value");
+        // if (!StringUtils.isBlank(value))
+        r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
     }
 }
