@@ -4,7 +4,6 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
-import com.urise.webapp.sql.ExceptionUtil;
 import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -45,12 +44,7 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =? ")) {
-                ps.setString(1, r.getUuid());
-                ResultSet rs = ps.executeQuery();
-                if (rs.next())
-                    doDelete("DELETE FROM contact c WHERE c.resume_uuid = ?", r.getUuid(), conn);
-            }
+            doDelete("DELETE FROM contact WHERE resume_uuid = ?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
             insertSqlContact(conn, r);
             return null;
@@ -68,12 +62,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        try {
-            Connection conn = connectionFactory.getConnection();
-            doDelete("DELETE FROM resume WHERE uuid=?", uuid, conn);
-        } catch (SQLException e) {
-            throw ExceptionUtil.convertException(e);
-        }
+        sqlHelper.doCommonCode("DELETE FROM resume WHERE uuid=?", ps -> {
+            ps.setString(1, uuid);
+            checkForException(ps.executeUpdate() == 0, uuid);
+            return null;
+        });
     }
 
     @Override
@@ -131,16 +124,12 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void doDelete(String sql, String uuid, Connection conn) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, uuid);
-        checkForException(ps.executeUpdate() == 0, uuid);
-
-      /*  sqlHelper.doCommonCode(sql, ps -> {
+    private void doDelete(String sql, String uuid, Connection conn) {
+        sqlHelper.doCommonCode("DELETE FROM contact WHERE resume_uuid=?", ps -> {
             ps.setString(1, uuid);
-            checkForException(ps.executeUpdate() == 0, uuid);
+            ps.execute();
             return null;
-        });*/
+        });
     }
 
     private void addContact(ResultSet rs, Resume r) throws SQLException {
