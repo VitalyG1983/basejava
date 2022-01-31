@@ -71,7 +71,33 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+        List<Resume> list= new ArrayList<>();
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement psResume = conn.prepareStatement("SELECT * FROM resume ORDER BY uuid");
+                 PreparedStatement psContact = conn.prepareStatement("SELECT * FROM contact ORDER BY resume_uuid")) {
+                ResultSet rsResume = psResume.executeQuery();
+                Resume r = new Resume();
+                Map<String, Resume> resumes = new LinkedHashMap<>();
+
+                while (rsResume.next()) {
+                    String uuid = rsResume.getString("uuid");
+                    if (!resumes.containsKey(uuid)) {
+                        r = new Resume(uuid, rsResume.getString("full_name"));
+                        resumes.put(uuid, r);
+                    }
+                    ResultSet rsContact = psContact.executeQuery();
+                   // String resume_uuid = rsContact.getString("resume_uuid");
+                    while (rsContact.next() && uuid.equals(rsContact.getString("resume_uuid"))) {
+                        addContact(rsContact, r);
+                    }
+
+                }
+                list.addAll(resumes.values());
+                return null ;
+               // return new ArrayList<>(resumes.values());
+            }
+        });
+   /*     return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                         "ORDER BY full_name, uuid",
                 ps -> {
                     Resume r = new Resume();
@@ -86,7 +112,8 @@ public class SqlStorage implements Storage {
                         addContact(rs, r);
                     }
                     return new ArrayList<>(resumes.values());
-                });
+                });*/
+        return list;
     }
 
     @Override
