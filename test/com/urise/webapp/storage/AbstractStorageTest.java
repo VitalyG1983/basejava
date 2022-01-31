@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
 import static org.junit.Assert.assertEquals;
@@ -22,10 +21,10 @@ public abstract class AbstractStorageTest {
     protected static SqlStorage SQL_STORAGE = config.getSqlStorage();
     protected Storage storage;
 
-    private static final String UUID_1 = UUID.randomUUID().toString(); //"1";
-    private static final String UUID_2 = UUID.randomUUID().toString(); //"2";
-    private static final String UUID_3 = UUID.randomUUID().toString();//"3";
-    private static final String UUID_4 = UUID.randomUUID().toString();//"4";
+    private static final String UUID_1 = "1";//UUID.randomUUID().toString(); //"1";
+    private static final String UUID_2 ="2";// UUID.randomUUID().toString(); //"2";
+    private static final String UUID_3 ="3";// UUID.randomUUID().toString();//"3";
+    private static final String UUID_4 ="4"; //UUID.randomUUID().toString();//"4";
 
     private final Resume resume1 = new Resume(UUID_1, "Alex");
           //  ResumeTestData.createResume(UUID_1, "fullName1", true);     //new Resume(UUID_1, "Alex");

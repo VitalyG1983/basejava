@@ -71,31 +71,31 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> list= new ArrayList<>();
+        List<Resume> list = new ArrayList<>();
         sqlHelper.transactionalExecute(conn -> {
-            try (PreparedStatement psResume = conn.prepareStatement("SELECT * FROM resume ORDER BY uuid");
-                 PreparedStatement psContact = conn.prepareStatement("SELECT * FROM contact ORDER BY resume_uuid")) {
+            try (PreparedStatement psResume = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
+                 PreparedStatement psContact = conn.prepareStatement("SELECT * FROM contact")) {
                 ResultSet rsResume = psResume.executeQuery();
                 Resume r = new Resume();
                 Map<String, Resume> resumes = new LinkedHashMap<>();
-
                 while (rsResume.next()) {
-                    String uuid = rsResume.getString("uuid");
+                    String uuid = rsResume.getString("uuid").trim();
                     if (!resumes.containsKey(uuid)) {
                         r = new Resume(uuid, rsResume.getString("full_name"));
                         resumes.put(uuid, r);
                     }
-                    ResultSet rsContact = psContact.executeQuery();
-                   // String resume_uuid = rsContact.getString("resume_uuid");
-                    while (rsContact.next() && uuid.equals(rsContact.getString("resume_uuid"))) {
-                        addContact(rsContact, r);
+                }
+                ResultSet rsContact = psContact.executeQuery();
+                // String resume_uuid = rsContact.getString("resume_uuid");
+                while (rsContact.next()) {
+                    String resume_uuid = rsContact.getString("resume_uuid").trim();
+                    if (resumes.containsKey(resume_uuid)) {
+                        addContact(rsContact, resumes.get(resume_uuid));
                     }
-
                 }
                 list.addAll(resumes.values());
-                return null ;
-               // return new ArrayList<>(resumes.values());
             }
+            return list;
         });
    /*     return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                         "ORDER BY full_name, uuid",
