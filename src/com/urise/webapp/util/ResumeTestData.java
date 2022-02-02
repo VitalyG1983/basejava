@@ -2,7 +2,6 @@ package com.urise.webapp.util;
 
 import com.urise.webapp.model.*;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -15,9 +14,9 @@ public class ResumeTestData {
         Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> sections = resume.getSections();
         if (fillCont2)
-            fillContacts2((EnumMap<ContactType, String>) contacts);
+            fillContactsEmpty((EnumMap<ContactType, String>) contacts);
         else fillContacts((EnumMap<ContactType, String>) contacts);
-        //   fillSections((EnumMap<SectionType, AbstractSection>) sections);
+           fillSections((EnumMap<SectionType, AbstractSection>) sections);
         return resume;
     }
 
@@ -30,7 +29,7 @@ public class ResumeTestData {
         contacts.put(ContactType.STACKOVERFLOW, "Профиль Stackoverflow");
     }
 
-    static void fillContacts2(EnumMap<ContactType, String> contacts) {
+    static void fillContactsEmpty(EnumMap<ContactType, String> contacts) {
         contacts.put(ContactType.TEL, "");
         contacts.put(ContactType.SKYPE, "new skype");
         contacts.put(ContactType.MAIL, "new mail");
@@ -92,7 +91,7 @@ public class ResumeTestData {
         sections.put(SectionType.QUALIFICATIONS, tlsQ);
 
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
-        OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
+        /*OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
         List<Organization.Experience> jobDescList1 = new ArrayList<>();
         jobDescList1.add(new Organization.Experience(2013, Month.OCTOBER, "  Автор проекта",
                 "                       Создание, организация и проведение Java онлайн проектов и стажировок."));
@@ -208,7 +207,7 @@ public class ResumeTestData {
                 null));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getListOrganizations().add(eduText7);
-        sections.put(SectionType.EDUCATION, eduSection);
+        sections.put(SectionType.EDUCATION, eduSection);*/
     }
 
     public static void main(String[] args) {
