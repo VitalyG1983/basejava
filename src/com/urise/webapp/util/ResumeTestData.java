@@ -9,11 +9,11 @@ import java.util.Map;
 
 public class ResumeTestData {
 
-    public static Resume createResume(String uuid, String fullName, Boolean fillCont2) {
+    public static Resume createResume(String uuid, String fullName, Boolean fillContEmpty) {
         Resume resume = new Resume(uuid, fullName);
         Map<ContactType, String> contacts = resume.getContacts();
         Map<SectionType, AbstractSection> sections = resume.getSections();
-        if (fillCont2)
+        if (fillContEmpty)
             fillContactsEmpty((EnumMap<ContactType, String>) contacts);
         else fillContacts((EnumMap<ContactType, String>) contacts);
            fillSections((EnumMap<SectionType, AbstractSection>) sections);

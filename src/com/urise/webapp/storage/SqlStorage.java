@@ -30,8 +30,10 @@ public class SqlStorage implements Storage {
             ResultSet rs = ps.executeQuery();
             checkForException(!rs.next(), uuid);
             Resume r = new Resume(uuid, rs.getString("full_name"));
-            do
-                fillResume(rs, r);
+            do {
+                fillContacts(rs, r);
+                fillSections(rs, r);
+            }
             while (rs.next());
             return r;
         });
@@ -40,9 +42,11 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doDelete("DELETE FROM contact WHERE resume_uuid = ?", r.getUuid(), conn);
+            doDelete("DELETE FROM contact WHERE resume_uuid=?", r.getUuid(), conn);
+            doDelete("DELETE FROM section WHERE section_uuid=?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
             insertSqlContact(conn, r);
+            insertSqlSection(conn, r);
             return null;
         });
     }
@@ -166,9 +170,9 @@ public class SqlStorage implements Storage {
                 if (textSection != null) {
                     ps.setString(1, textSection.getText());
                 } else if (textListSection != null) {
-                    String text = null;
+                    String text = "";
                     for (String oneLine : textListSection.getListSection()) {
-                        text = (text == null ? "" : text) + oneLine + "\n";
+                        text = text + oneLine + "\n";
                     }
                     ps.setString(1, text);
                 }
@@ -180,17 +184,11 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void doDelete(String sql, String uuid, Connection conn) {
-        sqlHelper.doCommonCode("DELETE FROM contact WHERE resume_uuid=?", ps -> {
+    private void doDelete(String sql, String uuid, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, uuid);
             ps.execute();
-            return null;
-        });
-    }
-
-    private void fillResume(ResultSet rs, Resume r) throws SQLException {
-        fillContacts(rs, r);
-        fillSections(rs, r);
+        }
     }
 
     private void fillContacts(ResultSet rs, Resume r) throws SQLException {
