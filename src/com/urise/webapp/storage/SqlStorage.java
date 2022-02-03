@@ -4,13 +4,19 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.sql.ConnectionFactory;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.Config;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
     public final SqlHelper sqlHelper;
+
+    public static Config config = Config.get();
+    public static File STORAGE_DIR = config.getStorageDir();
+    public static SqlStorage SQL_STORAGE = config.getSqlStorage();
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
@@ -171,9 +177,10 @@ public class SqlStorage implements Storage {
                     ps.setString(1, textSection.getText());
                 } else if (textListSection != null) {
                     String text = "";
-                    for (String oneLine : textListSection.getListSection()) {
+                   /* for (String oneLine : textListSection.getListSection()) {
                         text = text + oneLine + "\n";
-                    }
+                    }*/
+                    text = textListSection.getListSection().stream().reduce(text, (result, x) -> result + x + "\n");
                     ps.setString(1, text);
                 }
                 ps.setString(2, r.getUuid());
@@ -193,10 +200,7 @@ public class SqlStorage implements Storage {
 
     private void fillContacts(ResultSet rs, Resume r) throws SQLException {
         String typeContact = rs.getString("type");
-        boolean isContact = false;
-        if (typeContact != null) {
-            isContact = r.getContacts().containsKey(ContactType.valueOf(typeContact));
-        }
+        boolean isContact = typeContact != null && r.getContacts().containsKey(ContactType.valueOf(typeContact));
         if (!isContact) {
             r.addContact(ContactType.valueOf(typeContact), rs.getString("value"));
         }
@@ -204,10 +208,7 @@ public class SqlStorage implements Storage {
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
         String type_section = rs.getString("section_type");
-        boolean isSection = false;
-        if (type_section != null) {
-            isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
-        }
+        boolean isSection = type_section != null && r.getSections().containsKey(SectionType.valueOf(type_section));
         if (!isSection) {
             SectionType sectionType = SectionType.valueOf(type_section);
             String sectionText = rs.getString("text");
