@@ -193,13 +193,22 @@ public class SqlStorage implements Storage {
 
     private void fillContacts(ResultSet rs, Resume r) throws SQLException {
         String typeContact = rs.getString("type");
-        if (typeContact != null)
+        boolean isContact = false;
+        if (typeContact != null) {
+            isContact = r.getContacts().containsKey(ContactType.valueOf(typeContact));
+        }
+        if (!isContact) {
             r.addContact(ContactType.valueOf(typeContact), rs.getString("value"));
+        }
     }
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
         String type_section = rs.getString("section_type");
+        boolean isSection = false;
         if (type_section != null) {
+            isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
+        }
+        if (!isSection) {
             SectionType sectionType = SectionType.valueOf(type_section);
             String sectionText = rs.getString("text");
             Map<SectionType, AbstractSection> sections = r.getSections();
