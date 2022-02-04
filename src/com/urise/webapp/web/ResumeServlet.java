@@ -1,5 +1,6 @@
 package com.urise.webapp.web;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.util.Config;
@@ -17,11 +18,11 @@ public class ResumeServlet extends HttpServlet {
     private static Config config = Config.get();
     private static SqlStorage SQL_STORAGE = config.getSqlStorage();
 
-    static {
+    public ResumeServlet() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new StorageException(e);
         }
     }
 
