@@ -4,19 +4,13 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.sql.ConnectionFactory;
 import com.urise.webapp.sql.SqlHelper;
-import com.urise.webapp.util.Config;
 
-import java.io.File;
 import java.sql.*;
 import java.util.*;
 
 public class SqlStorage implements Storage {
     public final ConnectionFactory connectionFactory;
     public final SqlHelper sqlHelper;
-
-    public static Config config = Config.get();
-    public static File STORAGE_DIR = config.getStorageDir();
-    public static SqlStorage SQL_STORAGE = config.getSqlStorage();
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
@@ -200,24 +194,28 @@ public class SqlStorage implements Storage {
 
     private void fillContacts(ResultSet rs, Resume r) throws SQLException {
         String typeContact = rs.getString("type");
-        boolean isContact = typeContact != null && r.getContacts().containsKey(ContactType.valueOf(typeContact));
-        if (!isContact) {
-            r.addContact(ContactType.valueOf(typeContact), rs.getString("value"));
+        if (typeContact != null) {
+            boolean isContact = r.getContacts().containsKey(ContactType.valueOf(typeContact));
+            if (!isContact) {
+                r.addContact(ContactType.valueOf(typeContact), rs.getString("value"));
+            }
         }
     }
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
         String type_section = rs.getString("section_type");
-        boolean isSection = type_section != null && r.getSections().containsKey(SectionType.valueOf(type_section));
-        if (!isSection) {
-            SectionType sectionType = SectionType.valueOf(type_section);
-            String sectionText = rs.getString("text");
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            switch (sectionType) {
-                case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
-                        SectionType.OBJECTIVE, new TextSection(sectionText));
-                case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText,
-                        sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
+        if (type_section != null) {
+            boolean isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
+            if (!isSection) {
+                SectionType sectionType = SectionType.valueOf(type_section);
+                String sectionText = rs.getString("text");
+                Map<SectionType, AbstractSection> sections = r.getSections();
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
+                            SectionType.OBJECTIVE, new TextSection(sectionText));
+                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText,
+                            sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
+                }
             }
         }
     }

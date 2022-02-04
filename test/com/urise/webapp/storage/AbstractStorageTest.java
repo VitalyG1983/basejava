@@ -16,9 +16,9 @@ import static com.urise.webapp.storage.AbstractStorage.RESUME_NAME_COMPARATOR;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static Config config = Config.get();
+    public static Config config = Config.get();
     protected static File STORAGE_DIR = config.getStorageDir();
-    protected static SqlStorage SQL_STORAGE = config.getSqlStorage();
+    public static SqlStorage SQL_STORAGE = config.getSqlStorage();
     protected Storage storage;
 
     private static final String UUID_1 = "1";//UUID.randomUUID().toString(); //"1";
@@ -107,8 +107,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        Resume actualResume = storage.get(UUID_2);
-        assertEquals(resume2, actualResume);
+        Resume actualResume = storage.get(UUID_1);
+        assertEquals(resume1, actualResume);
     }
 
     @Test(expected = NotExistStorageException.class)
