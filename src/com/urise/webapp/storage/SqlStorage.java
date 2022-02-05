@@ -24,8 +24,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.doCommonCode("SELECT r.uuid AS r.uuid, full_name, c.type, c.value, s.type, s.value" +
-                " FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+        return sqlHelper.doCommonCode("SELECT r.uuid AS rUuid, full_name, c.type AS cType, c.value AS cValue, " +
+                "s.type AS sType, s.value AS sValue FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                 "LEFT JOIN section s ON uuid = s.resume_uuid  WHERE r.uuid =? ", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
@@ -73,14 +73,12 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>();
-        sqlHelper.transactionalExecute(conn -> {
-            try (PreparedStatement psResume = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
-                 PreparedStatement psContact = conn.prepareStatement("SELECT * FROM contact");
-                 PreparedStatement psSection = conn.prepareStatement("SELECT * FROM section")) {
+        return sqlHelper.transactionalExecute(conn -> {
+            Map<String, Resume> resumes;
+            try (PreparedStatement psResume = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
                 ResultSet rsResume = psResume.executeQuery();
                 Resume r = new Resume();
-                Map<String, Resume> resumes = new LinkedHashMap<>();
+                resumes = new LinkedHashMap<>();
                 while (rsResume.next()) {
                     String uuid = rsResume.getString("uuid").trim();
                     if (!resumes.containsKey(uuid)) {
@@ -88,25 +86,30 @@ public class SqlStorage implements Storage {
                         resumes.put(uuid, r);
                     }
                 }
+            }
+            try (PreparedStatement psContact = conn.prepareStatement("SELECT  c.resume_uuid AS cResume_uuid, " +
+                    "c.type AS cType, c.value AS cValue FROM contact c")) {
                 ResultSet rsContact = psContact.executeQuery();
                 while (rsContact.next()) {
-                    String resume_uuid = rsContact.getString("resume_uuid").trim();
+                    String resume_uuid = rsContact.getString("cResume_uuid").trim();
                     if (resumes.containsKey(resume_uuid)) {
                         fillContacts(rsContact, resumes.get(resume_uuid));
                     }
                 }
+            }
+            try (PreparedStatement psSection = conn.prepareStatement("SELECT s.resume_uuid AS sResume_uuid, " +
+                    "s.type AS sType, s.value AS sValue  FROM section s")) {
                 ResultSet rsSection = psSection.executeQuery();
                 while (rsSection.next()) {
-                    String section_uuid = rsSection.getString("resume_uuid").trim();
+                    String section_uuid = rsSection.getString("sResume_uuid").trim();
                     if (resumes.containsKey(section_uuid)) {
                         fillSections(rsSection, resumes.get(section_uuid));
                     }
                 }
-                list.addAll(resumes.values());
             }
-            return null;
+            return new ArrayList<>(resumes.values());
         });
-        return list;
+        // return null;
    /*     return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                         "ORDER BY full_name, uuid",
                 ps -> {
@@ -123,6 +126,7 @@ public class SqlStorage implements Storage {
                     }
                     return new ArrayList<>(resumes.values());
                 });*/
+        // return null;
     }
 
     @Override
@@ -194,22 +198,22 @@ public class SqlStorage implements Storage {
     }
 
     private void fillContacts(ResultSet rs, Resume r) throws SQLException {
-        String typeContact = rs.getString("type");
+        String typeContact = rs.getString("cType");
         if (typeContact != null) {
             boolean isContact = r.getContacts().containsKey(ContactType.valueOf(typeContact));
             if (!isContact) {
-                r.addContact(ContactType.valueOf(typeContact), rs.getString("value"));
+                r.addContact(ContactType.valueOf(typeContact), rs.getString("cValue"));
             }
         }
     }
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
-        String type_section = rs.getString("s.type");
+        String type_section = rs.getString("sType");
         if (type_section != null) {
             boolean isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
             if (!isSection) {
                 SectionType sectionType = SectionType.valueOf(type_section);
-                String sectionText = rs.getString("s.value");
+                String sectionText = rs.getString("sValue");
                 Map<SectionType, AbstractSection> sections = r.getSections();
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
@@ -221,7 +225,9 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType secType) {
+    private void fillTextListSection(String
+                                             sectionText, Map<SectionType, AbstractSection> sections, SectionType
+                                             secType) {
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
         if (sectionText != null) {
