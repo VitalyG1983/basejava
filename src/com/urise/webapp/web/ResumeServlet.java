@@ -18,7 +18,8 @@ public class ResumeServlet extends HttpServlet {
     private static Config config = Config.get();
     private static SqlStorage SQL_STORAGE = config.getSqlStorage();
 
-    public ResumeServlet() {
+    @Override
+    public void init() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -88,8 +89,8 @@ public class ResumeServlet extends HttpServlet {
             for (Resume r : list) {
                 response.getWriter().write(
                         "<tr>" +
-                                "    <th>" + r.getUuid() + "</th>" +
-                                "    <th>" + r.getFullName() + "</th>" +
+                                "    <td>" + r.getUuid() + "</td>" +
+                                "    <td>" + r.getFullName() + "</td>" +
                                 "</tr>");
             }
         }

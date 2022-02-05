@@ -24,8 +24,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.doCommonCode("SELECT * FROM resume LEFT JOIN contact ON uuid = resume_uuid " +
-                "LEFT JOIN section ON uuid = section_uuid  WHERE uuid =? ", ps -> {
+        return sqlHelper.doCommonCode("SELECT r.uuid AS r.uuid, full_name, c.type, c.value, s.type, s.value" +
+                " FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+                "LEFT JOIN section s ON uuid = s.resume_uuid  WHERE r.uuid =? ", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             checkForException(!rs.next(), uuid);
@@ -42,8 +43,8 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doDelete("DELETE FROM contact WHERE resume_uuid=?", r.getUuid(), conn);
-            doDelete("DELETE FROM section WHERE section_uuid=?", r.getUuid(), conn);
+            doDelete("DELETE FROM contact c WHERE c.resume_uuid=?", r.getUuid(), conn);
+            doDelete("DELETE FROM section s WHERE s.resume_uuid=?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
             insertSqlContact(conn, r);
             insertSqlSection(conn, r);
@@ -96,7 +97,7 @@ public class SqlStorage implements Storage {
                 }
                 ResultSet rsSection = psSection.executeQuery();
                 while (rsSection.next()) {
-                    String section_uuid = rsSection.getString("section_uuid").trim();
+                    String section_uuid = rsSection.getString("resume_uuid").trim();
                     if (resumes.containsKey(section_uuid)) {
                         fillSections(rsSection, resumes.get(section_uuid));
                     }
@@ -160,7 +161,7 @@ public class SqlStorage implements Storage {
     }
 
     private void insertSqlSection(Connection conn, Resume r) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (text, section_uuid, section_type) " +
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (value, resume_uuid, type) " +
                 "VALUES (?,?,?)")) {
             Map<SectionType, AbstractSection> sections = r.getSections();
             for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
@@ -203,12 +204,12 @@ public class SqlStorage implements Storage {
     }
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
-        String type_section = rs.getString("section_type");
+        String type_section = rs.getString("s.type");
         if (type_section != null) {
             boolean isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
             if (!isSection) {
                 SectionType sectionType = SectionType.valueOf(type_section);
-                String sectionText = rs.getString("text");
+                String sectionText = rs.getString("s.value");
                 Map<SectionType, AbstractSection> sections = r.getSections();
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
