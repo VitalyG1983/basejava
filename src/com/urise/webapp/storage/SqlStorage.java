@@ -109,24 +109,6 @@ public class SqlStorage implements Storage {
             }
             return new ArrayList<>(resumes.values());
         });
-        // return null;
-   /*     return sqlHelper.doCommonCode("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
-                        "ORDER BY full_name, uuid",
-                ps -> {
-                    Resume r = new Resume();
-                    Map<String, Resume> resumes = new LinkedHashMap<>();
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        String uuid = rs.getString("uuid");
-                        if (!resumes.containsKey(uuid)) {
-                            r = new Resume(uuid, rs.getString("full_name"));
-                            resumes.put(uuid, r);
-                        }
-                        fillResume(rs, r);
-                    }
-                    return new ArrayList<>(resumes.values());
-                });*/
-        // return null;
     }
 
     @Override
@@ -169,18 +151,22 @@ public class SqlStorage implements Storage {
                 "VALUES (?,?,?)")) {
             Map<SectionType, AbstractSection> sections = r.getSections();
             for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                TextSection textSection = entry.getValue() instanceof TextSection ? ((TextSection) entry.getValue()) : null;
-                TextListSection textListSection = entry.getValue() instanceof TextListSection ?
-                        ((TextListSection) entry.getValue()) : null;
-                if (textSection != null) {
-                    ps.setString(1, textSection.getText());
-                } else if (textListSection != null) {
-                    String text = "";
-                   /* for (String oneLine : textListSection.getListSection()) {
-                        text = text + oneLine + "\n";
-                    }*/
-                    text = textListSection.getListSection().stream().reduce(text, (result, x) -> result + x + "\n");
-                    ps.setString(1, text);
+                SectionType sectionType = entry.getKey();
+                Object entryValue = entry.getValue();
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> {
+                        String text = ((TextSection) entryValue).getText();
+                        if (text != null) {
+                            ps.setString(1, text);
+                        }
+                    }
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                        List<String> listSection = ((TextListSection) entryValue).getListSection();
+                        if (listSection != null) {
+                            String joinedList = String.join("\n", listSection);
+                            ps.setString(1, joinedList);
+                        }
+                    }
                 }
                 ps.setString(2, r.getUuid());
                 ps.setString(3, entry.getKey().name());
@@ -225,8 +211,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void fillTextListSection(String
-                                             sectionText, Map<SectionType, AbstractSection> sections, SectionType
+    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType
                                              secType) {
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
