@@ -1,10 +1,11 @@
 package com.urise.webapp.web;
 
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.util.Config;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,16 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeServlet extends HttpServlet {
-    private static Config config = Config.get();
-    private static SqlStorage SQL_STORAGE = config.getSqlStorage();
+    private static SqlStorage storage;
 
     @Override
-    public void init() {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new StorageException(e);
-        }
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        storage = Config.get().getSqlStorage();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -39,7 +36,7 @@ public class ResumeServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         String uuid = request.getParameter("uuid");
         if (uuid != null) {
-            Resume r = SQL_STORAGE.get(uuid);
+            Resume r = storage.get(uuid);
             Map<ContactType, String> contacts = r.getContacts();
             Map<SectionType, AbstractSection> sections = r.getSections();
             response.getWriter().write("<p style=\"font-size:110%;\"><b> Uuid</b>=" + uuid + ";<b>   FullName</b>=" +
@@ -77,7 +74,7 @@ public class ResumeServlet extends HttpServlet {
                 }
             }
         } else {
-            List<Resume> list = SQL_STORAGE.getAllSorted();
+            List<Resume> list = storage.getAllSorted();
             response.getWriter().write("<style>table, th, td {border: 1px solid black; </style>" +
                     "<table style=width:30%>" +
                     "<caption style=\"font-size:120%;\">Resumes in DataBase</caption>" +
