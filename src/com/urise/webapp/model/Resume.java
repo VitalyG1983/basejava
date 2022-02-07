@@ -55,7 +55,7 @@ public class Resume implements Serializable {
         contacts.put(type, value);
     }
 
-    public void addSection(SectionType type, OrganizationsSection section) {
+    public void addSection(SectionType type, AbstractSection section) {
         sections.put(type, section);
     }
 

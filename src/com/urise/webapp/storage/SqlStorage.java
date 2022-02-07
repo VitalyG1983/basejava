@@ -4,6 +4,7 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.sql.ConnectionFactory;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
@@ -46,8 +47,8 @@ public class SqlStorage implements Storage {
             doDelete("DELETE FROM contact c WHERE c.resume_uuid=?", r.getUuid(), conn);
             doDelete("DELETE FROM section s WHERE s.resume_uuid=?", r.getUuid(), conn);
             doSqlResume("UPDATE resume SET full_name = ? WHERE uuid = ?", conn, r);
-            insertSqlContact(conn, r);
-            insertSqlSection(conn, r);
+            insertSqlContacts(conn, r);
+            insertSqlSections(conn, r);
             return null;
         });
     }
@@ -56,8 +57,8 @@ public class SqlStorage implements Storage {
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
             doSqlResume("INSERT INTO resume (full_name, uuid) VALUES (?,?)", conn, r);
-            insertSqlContact(conn, r);
-            insertSqlSection(conn, r);
+            insertSqlContacts(conn, r);
+            insertSqlSections(conn, r);
             return null;
         });
     }
@@ -134,7 +135,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertSqlContact(Connection conn, Resume r) throws SQLException {
+    private void insertSqlContacts(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (value,resume_uuid,type) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, e.getValue());
@@ -146,14 +147,14 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertSqlSection(Connection conn, Resume r) throws SQLException {
+    private void insertSqlSections(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (value, resume_uuid, type) " +
                 "VALUES (?,?,?)")) {
             Map<SectionType, AbstractSection> sections = r.getSections();
             for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
                 SectionType sectionType = entry.getKey();
-                Object entryValue = entry.getValue();
-                switch (sectionType) {
+                AbstractSection entryValue = entry.getValue();
+              /*  switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> {
                         String text = ((TextSection) entryValue).getText();
                         if (text != null) {
@@ -167,7 +168,8 @@ public class SqlStorage implements Storage {
                             ps.setString(1, joinedList);
                         }
                     }
-                }
+                }*/
+                ps.setString(1, JsonParser.write(entryValue, AbstractSection.class));
                 ps.setString(2, r.getUuid());
                 ps.setString(3, entry.getKey().name());
                 ps.addBatch();
@@ -200,19 +202,20 @@ public class SqlStorage implements Storage {
             if (!isSection) {
                 SectionType sectionType = SectionType.valueOf(type_section);
                 String sectionText = rs.getString("sValue");
-                Map<SectionType, AbstractSection> sections = r.getSections();
+                r.addSection(sectionType, JsonParser.read(sectionText, AbstractSection.class));
+               /* Map<SectionType, AbstractSection> sections = r.getSections();
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
                             SectionType.OBJECTIVE, new TextSection(sectionText));
                     case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText,
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-                }
+                }*/
             }
         }
     }
 
     private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType
-                                             secType) {
+            secType) {
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
         if (sectionText != null) {
