@@ -201,11 +201,11 @@ public class SqlStorage implements Storage {
     }
 
     private void fillSections(ResultSet rs, Resume r) throws SQLException {
-        String type_section = rs.getString("sType");
-        if (type_section != null) {
-            boolean isSection = r.getSections().containsKey(SectionType.valueOf(type_section));
+        String typeSection = rs.getString("sType");
+        if (typeSection != null) {
+            boolean isSection = r.getSections().containsKey(SectionType.valueOf(typeSection));
             if (!isSection) {
-                SectionType sectionType = SectionType.valueOf(type_section);
+                SectionType sectionType = SectionType.valueOf(typeSection);
                 String sectionText = rs.getString("sValue");
                 r.addSection(sectionType, JsonParser.read(sectionText, AbstractSection.class));
                /* Map<SectionType, AbstractSection> sections = r.getSections();

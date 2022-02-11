@@ -2,6 +2,7 @@ package com.urise.webapp.util;
 
 import com.urise.webapp.model.*;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public class ResumeTestData {
         sections.put(SectionType.QUALIFICATIONS, tlsQ);
 
 //////////////////////////////--------JobSection------//////////////////////////////////////////////
-        /*OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
+        OrganizationsSection jobSection = new OrganizationsSection(new ArrayList<>());
         List<Organization.Experience> jobDescList1 = new ArrayList<>();
         jobDescList1.add(new Organization.Experience(2013, Month.OCTOBER, "  Автор проекта",
                 "                       Создание, организация и проведение Java онлайн проектов и стажировок."));
@@ -207,7 +208,7 @@ public class ResumeTestData {
                 null));
         Organization eduText7 = new Organization(eduDescList7, "Заочная физико-техническая школа при МФТИ", null);
         eduSection.getListOrganizations().add(eduText7);
-        sections.put(SectionType.EDUCATION, eduSection);*/
+        sections.put(SectionType.EDUCATION, eduSection);
     }
 
     public static void main(String[] args) {
