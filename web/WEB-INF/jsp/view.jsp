@@ -49,21 +49,30 @@
                   </c:if>
              </c:when>
              <c:when test="${typeSection == SectionType.EXPERIENCE || typeSection == SectionType.EDUCATION}">
-                 <h4> ${typeSection}&nbsp;</h4>
+                 <h4> ${typeSection}</h4>
                  <c:if test="${sectionEntry.value != null}">
                       <c:set var="orgSection" value="<%=sectionEntry.getValue()%>"/>
                       <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
                       <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
+                     <table valign="top">
                       <c:forEach var="org" items="${listOrg}">
                           <c:if test="${org.homePage.name != null}">
-                              <p> ${org.homePage.name} </p>
+                              <tr>
+                                  <c:choose>
+                                  <c:when test="${org.homePage.url != null}">
+                                      <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
+                                  </c:when>
+                                  <c:otherwise>
+                                      <td colspan="2"><b>${org.homePage.name}</b></td>
+                                  </c:otherwise>
+                                  </c:choose>
+                              </tr>
                           </c:if>
                           <c:forEach var="experience" items="${org.listExperience}">
-                              <table valign="top">
                                   <tr>
-                                      <td valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
+                                      <td style="width:20%" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
                                       <c:choose>
-                                           <c:when test="${experience.title == null}">
+                                           <c:when test="${experience.title == null || experience.title == ''}">
                                               <td valign="top"> ${experience.description}</td>
                                   </tr>
                                            </c:when>
@@ -74,18 +83,9 @@
                                   </tr>
                                       </c:otherwise>
                                       </c:choose>
-                               <%--   <tr>
-                                      <td>${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
-                                      <td valign="top"> ${experience.title == null ? experience.description:experience.title}</td>
-                                  </tr>
-                                  <tr>
-                                      <td></td>
-                                      <td>${experience.title == null ? experience.description:experience.title}</td>
-                                  </tr>--%>
-                              </table>
-                              <br>
                           </c:forEach>
                       </c:forEach>
+                     </table>
                 </c:if>
              </c:when>
            </c:choose>
