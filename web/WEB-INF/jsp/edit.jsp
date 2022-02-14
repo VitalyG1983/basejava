@@ -1,5 +1,6 @@
 <%@ page import="com.urise.webapp.model.SectionType" %>
 <%@ page import="com.urise.webapp.model.ContactType" %>
+<%@ page import="com.urise.webapp.model.TextListSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>--%>
@@ -32,32 +33,34 @@
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
-
         <%-------------------------------------  Секции--------------------------------------------------%>
-        <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">
+        <c:forEach var="typeSection" items="${SectionType.values()}">
+        <c:set var="sectionEntry" value="${resume.sections.get(typeSection)}">
         <jsp:useBean id="sectionEntry"
                      type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
-        <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>
-            <c:set var="sectionTittle" value="<%=sectionEntry.getKey().getTitle()%>"/>
+            <jsp:useBean id="typeSection" type="com.urise.webapp.model.SectionType"/>
 
-        <c:choose>
+            <%-- <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>--%>
+            <c:set var="sectionTittle" value="<%=typeSection.getTitle()%>"/>
+
+         <c:choose>
             <c:when test="${typeSection == SectionType.PERSONAL || typeSection == SectionType.OBJECTIVE}" >
                 <h3>${sectionTittle}</h3>
                 <c:set var="textSection" value="<%=sectionEntry.getValue()%>"/>
                 <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
                 <c:set var="text" value="<%=textSection.getText()%>"/>
                 <c:if test="${text != null}">
-                        <textarea rows="5" cols="65" name="textSection">${text} </textarea>
+                        <textarea rows="5" cols="65" name="${typeSection}">${text} </textarea>
                 </c:if>
             </c:when>
             <c:when test="${typeSection == SectionType.ACHIEVEMENT || typeSection == SectionType.QUALIFICATIONS}">
-                <h3>${sectionTittle}</h3>
-                <c:if test="${sectionEntry.value != null}">
-                    <c:set var="textListSection" value="<%=sectionEntry.getValue()%>"/>
+              <%--  <h3>${sectionTittle}</h3>--%>
+               <%-- <c:if test="${sectionEntry != null}">--%>
+                <%--    <c:set var="textListSection" value="<%=(TextListSection)sectionEntry.getValue()%>"/>
                     <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
-                    <c:set var="joinedTextList" value='<%=String.join("\n-", textListSection.getListSection())%>'/>
-                    <textarea rows="20" cols="65" name="tls">-${joinedTextList} </textarea>
-                </c:if>
+                    <c:set var="joinedTextList" value='<%=String.join("\n", textListSection.getListSection())%>'/>
+                    <textarea rows="20" cols="65" name="${typeSection}">${joinedTextList} </textarea>--%>
+              <%--  </c:if>--%>
             </c:when>
             <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
             <c:when test="${typeSection == SectionType.EXPERIENCE || typeSection == SectionType.EDUCATION}">
@@ -104,8 +107,8 @@
                 </c:if>
             </c:when>
         </c:choose>
+        </c:set>
         </c:forEach>
-
         <input type="text" name="section" size=30 value="1"><br/>
         <input type="text" name="section" size=30 value="2"><br/>
         <input type="text" name="section" size=30 value="3"><br/>
