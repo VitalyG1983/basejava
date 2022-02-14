@@ -36,6 +36,16 @@ public class ResumeServlet extends HttpServlet {
             }
         }
 
+       /* String textPERSONAL = request.getParameter("textPERSONAL");
+        r.addSection(SectionType.PERSONAL, new TextSection(textPERSONAL));
+        String textOBJECTIVE = request.getParameter("textOBJECTIVE");
+        r.addSection(SectionType.OBJECTIVE, new TextSection(textOBJECTIVE));
+        String tlsACHIEVEMENT = request.getParameter("tlsACHIEVEMENT");
+        String[] s = tlsACHIEVEMENT.trim().split("-");
+
+        r.addSection(SectionType.ACHIEVEMENT, new TextSection(tlsACHIEVEMENT));
+        String tlsQUALIFICATIONS = request.getParameter("tlsQUALIFICATIONS");
+        r.addSection(SectionType.QUALIFICATIONS, new TextSection(tlsQUALIFICATIONS));*/
 
         storage.update(r);
         response.sendRedirect("resume");
