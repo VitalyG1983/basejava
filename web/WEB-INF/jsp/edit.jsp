@@ -1,5 +1,6 @@
 <%@ page import="com.urise.webapp.model.SectionType" %>
 <%@ page import="com.urise.webapp.model.ContactType" %>
+<%@ page import="com.urise.webapp.model.TextSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>--%>
@@ -34,33 +35,47 @@
         </c:forEach>
 
         <%-------------------------------------  Секции--------------------------------------------------%>
-        <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">
-        <jsp:useBean id="sectionEntry"
-                     type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
-        <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>
-            <c:set var="sectionTittle" value="<%=sectionEntry.getKey().getTitle()%>"/>
+        <c:forEach var="sectionType" items="${SectionType.values()}">
+      <%--  <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">--%>
+
+
+            <jsp:useBean id="sectionType" type="com.urise.webapp.model.SectionType"/>
+          <%--  <jsp:useBean id="sectionEntry"
+                     type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>--%>
+       <%-- <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>--%>
+            <c:set var="sectionTittle" value="<%=sectionType.getTitle()%>"/>
 
         <c:choose>
-            <c:when test="${typeSection == SectionType.PERSONAL || typeSection == SectionType.OBJECTIVE}" >
+            <c:when test="${sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE}" >
                 <h3>${sectionTittle}</h3>
-                <c:set var="textSection" value="<%=sectionEntry.getValue()%>"/>
-                <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
-                <c:set var="text" value="<%=textSection.getText()%>"/>
-                <c:if test="${text != null}">
-                        <textarea rows="5" cols="65" name="textSection">${text} </textarea>
-                </c:if>
+                <c:set var="textSection" value="${resume.sections.get(sectionType)}"/>
+                <c:choose>
+                    <c:when test="${textSection != null}">
+                       <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
+                      <c:set var="text" value="<%=textSection.getText()%>"/>
+                       <textarea rows="5" cols="65" name="textSection">${text} </textarea>
+                    </c:when>
+                    <c:otherwise>
+                        <textarea rows="5" cols="65" name="textSection"> </textarea>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
-            <c:when test="${typeSection == SectionType.ACHIEVEMENT || typeSection == SectionType.QUALIFICATIONS}">
+            <c:when test="${sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS}">
                 <h3>${sectionTittle}</h3>
-                <c:if test="${sectionEntry.value != null}">
-                    <c:set var="textListSection" value="<%=sectionEntry.getValue()%>"/>
-                    <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
-                    <c:set var="joinedTextList" value='<%=String.join("\n-", textListSection.getListSection())%>'/>
-                    <textarea rows="20" cols="65" name="tls">-${joinedTextList} </textarea>
-                </c:if>
+                <c:set var="textListSection" value="${resume.sections.get(sectionType)}"/>
+                <c:choose>
+                    <c:when test="${textListSection != null}">
+                        <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
+                        <c:set var="joinedTextList" value='<%=String.join("\n", textListSection.getListSection())%>'/>
+                        <textarea rows="20" cols="65" name="tls">-${joinedTextList} </textarea>
+                    </c:when>
+                    <c:otherwise>
+                        <textarea rows="5" cols="65" name="textSection"> </textarea>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
-            <c:when test="${typeSection == SectionType.EXPERIENCE || typeSection == SectionType.EDUCATION}">
+           <%-- <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
                 <h3>${sectionTittle}</h3>
                 <c:if test="${sectionEntry.value != null}">
                     <c:set var="orgSection" value="<%=sectionEntry.getValue()%>"/>
@@ -102,7 +117,7 @@
                         </c:forEach>
                     </table>
                 </c:if>
-            </c:when>
+            </c:when>--%>
         </c:choose>
         </c:forEach>
 
