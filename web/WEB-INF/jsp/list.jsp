@@ -29,6 +29,9 @@
         </c:forEach>
     </table>
 </section>
+<br>
+<button type="button" OnClick="location.href='resume?action=newResume'">Добавить резюме</button>
+<p><br></p>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

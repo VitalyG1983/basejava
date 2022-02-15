@@ -1,7 +1,6 @@
 package com.urise.webapp.web;
 
-import com.urise.webapp.model.ContactType;
-import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.*;
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.util.Config;
 
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
     private static SqlStorage storage;
@@ -25,8 +25,15 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        String newResume = request.getParameter("newResume");
+        Resume r;
+        if (newResume.equals("true")) {
+             r = new Resume(uuid, fullName);
+        }
+        else {
+             r = storage.get(uuid);
+            r.setFullName(fullName);
+        }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -35,19 +42,23 @@ public class ResumeServlet extends HttpServlet {
                 r.getContacts().remove(type);
             }
         }
-
-       /* String textPERSONAL = request.getParameter("textPERSONAL");
-        r.addSection(SectionType.PERSONAL, new TextSection(textPERSONAL));
-        String textOBJECTIVE = request.getParameter("textOBJECTIVE");
-        r.addSection(SectionType.OBJECTIVE, new TextSection(textOBJECTIVE));
-        String tlsACHIEVEMENT = request.getParameter("tlsACHIEVEMENT");
-        String[] s = tlsACHIEVEMENT.trim().split("-");
-
-        r.addSection(SectionType.ACHIEVEMENT, new TextSection(tlsACHIEVEMENT));
-        String tlsQUALIFICATIONS = request.getParameter("tlsQUALIFICATIONS");
-        r.addSection(SectionType.QUALIFICATIONS, new TextSection(tlsQUALIFICATIONS));*/
-
-        storage.update(r);
+        Map<SectionType, AbstractSection> sections = r.getSections();
+        for (SectionType sectionType : SectionType.values()) {
+            String sectionText = request.getParameter(sectionType.toString());
+            if (sectionText != null && sectionText.trim().length() != 0) {
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
+                            SectionType.OBJECTIVE, new TextSection(sectionText.trim()));
+                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText.trim(),
+                            sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
+                }
+            } else {
+                sections.remove(sectionType);
+            }
+        }
+        if (newResume.equals("true"))
+            storage.save(r);
+        else storage.update(r);
         response.sendRedirect("resume");
     }
 
@@ -68,6 +79,11 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+                request.setAttribute("newResume", false);
+                break;
+            case "newResume":
+                r = new Resume();
+                request.setAttribute("newResume", true);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
@@ -76,5 +92,16 @@ public class ResumeServlet extends HttpServlet {
         request.getRequestDispatcher(
                 ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
         ).forward(request, response);
+    }
+
+    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType secType) {
+        TextListSection tls = new TextListSection(new ArrayList<>());
+        List<String> listString = tls.getListSection();
+        if (sectionText != null) {
+            String[] stringArray = sectionText.split("\n");
+            listString.addAll(Arrays.asList(stringArray));
+            listString.removeIf(String::isBlank);
+        }
+        sections.put(secType, tls);
     }
 }

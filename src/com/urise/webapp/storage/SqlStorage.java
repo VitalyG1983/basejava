@@ -86,7 +86,7 @@ public class SqlStorage implements Storage {
                 Resume r = new Resume();
                 resumes = new LinkedHashMap<>();
                 while (rsResume.next()) {
-                    String uuid = rsResume.getString("uuid").trim();
+                    String uuid = rsResume.getString("uuid");
                     if (!resumes.containsKey(uuid)) {
                         r = new Resume(uuid, rsResume.getString("full_name"));
                         resumes.put(uuid, r);

@@ -22,6 +22,7 @@ public class Resume implements Serializable {
     private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public Resume(String fullName) {

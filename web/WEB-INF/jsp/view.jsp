@@ -25,11 +25,12 @@
         <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
-            <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>
-
+            <c:set var="typeSection" value="<%=sectionEntry.getKey()%>"/>
+                <jsp:useBean id="typeSection" type="com.urise.webapp.model.SectionType"/>
+                <c:set var="sectionTittle" value="<%=typeSection.getTitle()%>"/>
         <c:choose>
         <c:when test="${typeSection == SectionType.PERSONAL || typeSection == SectionType.OBJECTIVE}" >
-    <h4> ${typeSection}&nbsp;</h4>
+    <h3> ${sectionTittle}&nbsp;</h3>
     <c:set var="textSection" value="<%=sectionEntry.getValue()%>"/>
     <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
     <c:set var="text" value="<%=textSection.getText()%>"/>
@@ -38,7 +39,7 @@
     </c:if>
     </c:when>
     <c:when test="${typeSection == SectionType.ACHIEVEMENT || typeSection == SectionType.QUALIFICATIONS}">
-        <h4> ${typeSection}&nbsp;</h4>
+        <h3> ${sectionTittle}&nbsp;</h3>
         <c:if test="${sectionEntry.value != null}">
             <c:set var="textListSection" value="<%=sectionEntry.getValue()%>"/>
             <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
@@ -49,7 +50,7 @@
         </c:if>
     </c:when>
     <c:when test="${typeSection == SectionType.EXPERIENCE || typeSection == SectionType.EDUCATION}">
-        <h4> ${typeSection}</h4>
+        <h3> ${sectionTittle}</h3>
         <c:if test="${sectionEntry.value != null}">
             <c:set var="orgSection" value="<%=sectionEntry.getValue()%>"/>
             <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
@@ -70,7 +71,7 @@
                     </c:if>
                     <c:forEach var="experience" items="${org.listExperience}">
                         <tr>
-                        <td style="width:20%" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
+                        <td style="width:180px" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
                         <c:choose>
                             <c:when test="${experience.title == null || experience.title == ''}">
                                 <td valign="top"> ${experience.description}</td>
@@ -84,6 +85,10 @@
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
+                    <tr >
+                        <td colspan="2"> <p> <br></p>
+                        </td>
+                    </tr>
                 </c:forEach>
             </table>
         </c:if>
