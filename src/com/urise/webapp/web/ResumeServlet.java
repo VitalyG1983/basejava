@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
 public class ResumeServlet extends HttpServlet {
     private static SqlStorage storage;
 
@@ -28,8 +29,14 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        String newResume = request.getParameter("newResume");
+        Resume r;
+        if (newResume.equals("true")) {
+            r = new Resume(uuid, fullName);
+        } else {
+            r = storage.get(uuid);
+            r.setFullName(fullName);
+        }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -47,27 +54,22 @@ public class ResumeServlet extends HttpServlet {
                             SectionType.OBJECTIVE, new TextSection(sectionText));
                     case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText,
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-
                 }
             } else {
                 sections.remove(sectionType);
             }
         }
-        /*    String textPERSONAL = request.getParameter("textPERSONAL");
-            r.addSection(SectionType.PERSONAL, new TextSection(textPERSONAL));
-            String textOBJECTIVE = request.getParameter("textOBJECTIVE");
-            r.addSection(SectionType.OBJECTIVE, new TextSection(textOBJECTIVE));
-            String tlsACHIEVEMENT = request.getParameter("tlsACHIEVEMENT");
-            String[] s = tlsACHIEVEMENT.trim().split("-");
-            r.addSection(SectionType.ACHIEVEMENT, new TextSection(tlsACHIEVEMENT));
-            String tlsQUALIFICATIONS = request.getParameter("tlsQUALIFICATIONS");
-            r.addSection(SectionType.QUALIFICATIONS, new TextSection(tlsQUALIFICATIONS));*/
-
         storage.update(r);
+        if (newResume.equals("true"))
+            storage.save(r);
+        else storage.update(r);
+
         response.sendRedirect("resume");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+            javax.servlet.ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         if (action == null) {
@@ -84,6 +86,11 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+                request.setAttribute("newResume", false);
+                break;
+            case "newResume":
+                r = new Resume();
+                request.setAttribute("newResume", true);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
@@ -94,12 +101,14 @@ public class ResumeServlet extends HttpServlet {
         ).forward(request, response);
     }
 
-    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType
-            secType) {
+    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType secType) {
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
-        String[] stringArray = sectionText.split("\n");
-        listString.addAll(Arrays.asList(stringArray));
+        if (sectionText != null) {
+            String[] stringArray = sectionText.split("\n");
+            listString.addAll(Arrays.asList(stringArray));
+            listString.removeIf(String::isBlank);
+        }
         sections.put(secType, tls);
     }
 }
