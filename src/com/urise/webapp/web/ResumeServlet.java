@@ -10,11 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
     private static SqlStorage storage;
@@ -29,9 +25,9 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        String newResume = request.getParameter("newResume");
+        boolean newRes  = request.getParameter("newResume").equals("true");
         Resume r;
-        if (newResume.equals("true")) {
+        if (newRes) {
             r = new Resume(uuid, fullName);
         } else {
             r = storage.get(uuid);
@@ -51,25 +47,23 @@ public class ResumeServlet extends HttpServlet {
             if (sectionText != null && sectionText.trim().length() != 0) {
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
-                            SectionType.OBJECTIVE, new TextSection(sectionText));
-                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText,
+                            SectionType.OBJECTIVE, new TextSection(sectionText.trim()));
+                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText.trim(),
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
                 }
             } else {
                 sections.remove(sectionType);
             }
         }
-        storage.update(r);
-        if (newResume.equals("true"))
+        if (newRes) {
             storage.save(r);
-        else storage.update(r);
-
+        } else {
+            storage.update(r);
+        }
         response.sendRedirect("resume");
     }
 
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
-            javax.servlet.ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         if (action == null) {

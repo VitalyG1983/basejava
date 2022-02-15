@@ -36,78 +36,6 @@
             </dl>
         </c:forEach>
         <%-------------------------------------  Секции--------------------------------------------------%>
-<<<<<<< HEAD
-        <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">
-        <jsp:useBean id="sectionEntry"
-                     type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
-        <c:set var="typeSection" value="<%=sectionEntry.getKey().name()%>"/>
-            <c:set var="sectionTittle" value="<%=sectionEntry.getKey().getTitle()%>"/>
-
-        <c:choose>
-            <c:when test="${typeSection == SectionType.PERSONAL || typeSection == SectionType.OBJECTIVE}" >
-                <h3>${sectionTittle}</h3>
-                <c:set var="textSection" value="<%=sectionEntry.getValue()%>"/>
-                <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
-                <c:set var="text" value="<%=textSection.getText()%>"/>
-                <c:if test="${text != null}">
-                        <textarea rows="5" cols="65" name="text${typeSection}">${text} </textarea>
-                </c:if>
-            </c:when>
-            <c:when test="${typeSection == SectionType.ACHIEVEMENT || typeSection == SectionType.QUALIFICATIONS}">
-                <h3>${sectionTittle}</h3>
-                <c:if test="${sectionEntry.value != null}">
-                    <c:set var="textListSection" value="<%=sectionEntry.getValue()%>"/>
-                    <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
-                    <c:set var="joinedTextList" value='<%=String.join("\n-", textListSection.getListSection())%>'/>
-                    <textarea rows="20" cols="65" name="tls${typeSection}">-${joinedTextList} </textarea>
-                </c:if>
-            </c:when>
-            <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
-            <c:when test="${typeSection == SectionType.EXPERIENCE || typeSection == SectionType.EDUCATION}">
-                <h3>${sectionTittle}</h3>
-                <c:if test="${sectionEntry.value != null}">
-                    <c:set var="orgSection" value="<%=sectionEntry.getValue()%>"/>
-                    <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
-                    <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
-                    <table>
-                        <c:forEach var="org" items="${listOrg}">
-                            <c:if test="${org.homePage.name != null}">
-                                <tr>
-                                    <c:choose>
-                                        <c:when test="${org.homePage.url != null}">
-                                            <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td colspan="2"><b>${org.homePage.name}</b></td>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </tr>
-                            </c:if>
-                            <c:forEach var="experience" items="${org.listExperience}">
-                                <tr>
-                                <td style="width:180px" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
-                                <c:choose>
-                                    <c:when test="${experience.title == null || experience.title == ''}">
-                                        <td valign="top"> ${experience.description}
-                                        </td>
-                                        </tr>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td valign="top"> <b>${experience.title} </b><br>
-                                                ${experience.description}
-                                        </td>
-                                        </tr>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                            <tr> <td colspan="2"> <p><br></p> </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </c:if>
-            </c:when>
-        </c:choose>
-=======
         <c:forEach var="sectionType" items="${SectionType.values()}">
             <jsp:useBean id="sectionType" type="com.urise.webapp.model.SectionType"/>
             <c:set var="sectionTittle" value="<%=sectionType.getTitle()%>"/>
@@ -141,57 +69,56 @@
                     </c:choose>
                 </c:when>
                 <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
-                 <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
-                     <h3>${sectionTittle}</h3>
-                     <c:set var="orgSection" value="${resume.sections.get(sectionType)}"/>
-                     <c:if test="${orgSection != null}">
-                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
-                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
-                         <table>
-                             <c:forEach var="org" items="${listOrg}">
-                                 <c:if test="${org.homePage.name != null}">
-                                     <tr>
-                                         <c:choose>
-                                             <c:when test="${org.homePage.url != null}">
-                                                 <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
-                                             </c:when>
-                                             <c:otherwise>
-                                                 <td colspan="2"><b>${org.homePage.name}</b></td>
-                                             </c:otherwise>
-                                         </c:choose>
-                                     </tr>
-                                 </c:if>
-                                 <c:forEach var="experience" items="${org.listExperience}">
-                                     <tr>
-                                     <td style="width:180px" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
-                                     <c:choose>
-                                         <c:when test="${experience.title == null || experience.title == ''}">
-                                             <td valign="top"> ${experience.description}
-                                             </td>
-                                             </tr>
-                                         </c:when>
-                                         <c:otherwise>
-                                             <td valign="top"> <b>${experience.title} </b><br>
-                                                     ${experience.description}
-                                             </td>
-                                             </tr>
-                                         </c:otherwise>
-                                     </c:choose>
-                                 </c:forEach>
-                                 <tr> <td colspan="2"> <p><br></p> </td>
-                                 </tr>
-                             </c:forEach>
-                         </table>
-                     </c:if>
-                 </c:when>
+                <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
+                    <h3>${sectionTittle}</h3>
+                    <c:set var="orgSection" value="${resume.sections.get(sectionType)}"/>
+                    <c:if test="${orgSection != null}">
+                        <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
+                        <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
+                        <table>
+                            <c:forEach var="org" items="${listOrg}">
+                                <c:if test="${org.homePage.name != null}">
+                                    <tr>
+                                        <c:choose>
+                                            <c:when test="${org.homePage.url != null}">
+                                                <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td colspan="2"><b>${org.homePage.name}</b></td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tr>
+                                </c:if>
+                                <c:forEach var="experience" items="${org.listExperience}">
+                                    <tr>
+                                    <td style="width:180px" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
+                                    <c:choose>
+                                        <c:when test="${experience.title == null || experience.title == ''}">
+                                            <td valign="top"> ${experience.description}
+                                            </td>
+                                            </tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td valign="top"> <b>${experience.title} </b><br>
+                                                    ${experience.description}
+                                            </td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                                <tr> <td colspan="2"> <p><br></p> </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </c:if>
+                </c:when>
             </c:choose>
->>>>>>> d348c4f71b171aab5e99ec7efffef574f087300f
         </c:forEach>
 
-     <%--   <input type="text" name="section" size=30 value="1"><br/>
-        <input type="text" name="section" size=30 value="2"><br/>
-        <input type="text" name="section" size=30 value="3"><br/>
-        <hr>--%>
+        <%--   <input type="text" name="section" size=30 value="1"><br/>
+           <input type="text" name="section" size=30 value="2"><br/>
+           <input type="text" name="section" size=30 value="3"><br/>
+           <hr>--%>
         <button type="submit" onsubmit="return checkFields(this);">Сохранить </button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
         <script type="text/javascript">
