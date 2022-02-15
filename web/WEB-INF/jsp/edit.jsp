@@ -27,7 +27,7 @@
         <dl>
             <dt>Имя:</dt>
             <dd><input type="text" name="fullName" size=50 value="${resume.fullName}" required
-                       pattern="[А-Яа-яa-zA-Z0-9\s]{1,}" title="'Имя' не должно быть пустым"></dd>
+                       pattern="[А-Яа-яa-zA-Z0-9]{1,}" title="'Имя' не должно быть пустым и содержать пробелы"></dd>
         </dl>
         <h3>Контакты:</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
