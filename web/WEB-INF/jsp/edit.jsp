@@ -42,17 +42,17 @@
             <jsp:useBean id="sectionType" type="com.urise.webapp.model.SectionType"/>
             <c:set var="sectionTittle" value="<%=sectionType.getTitle()%>"/>
             <c:choose>
-                <c:when test="${sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE}" >
+                <c:when test="${sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE}">
                     <h3>${sectionTittle}</h3>
                     <c:set var="textSection" value="${resume.sections.get(sectionType)}"/>
                     <c:choose>
                         <c:when test="${textSection != null}">
                             <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
                             <c:set var="text" value="<%=textSection.getText()%>"/>
-                            <textarea rows="5" cols="65" name="${sectionType}">${text} </textarea>
+                            <textarea rows="5" cols="65" name="${sectionType}">${text}</textarea>
                         </c:when>
                         <c:otherwise>
-                            <textarea rows="5" cols="65" name="${sectionType}"> </textarea>
+                            <textarea rows="5" cols="65" name="${sectionType}"></textarea>
                         </c:otherwise>
                     </c:choose>
                 </c:when>
@@ -62,11 +62,12 @@
                     <c:choose>
                         <c:when test="${textListSection != null}">
                             <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
-                            <c:set var="joinedTextList" value='<%=String.join("\n", textListSection.getListSection())%>'/>
-                            <textarea rows="20" cols="65" name="${sectionType}">${joinedTextList} </textarea>
+                            <c:set var="joinedTextList"
+                                   value='<%=String.join("\n", textListSection.getListSection())%>'/>
+                            <textarea rows="20" cols="65" name="${sectionType}">${joinedTextList}</textarea>
                         </c:when>
                         <c:otherwise>
-                            <textarea rows="5" cols="65" name="${sectionType}"> </textarea>
+                            <textarea rows="5" cols="65" name="${sectionType}"></textarea>
                         </c:otherwise>
                     </c:choose>
                 </c:when>
@@ -74,45 +75,43 @@
                 <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
                     <h3>${sectionTittle}</h3>
                     <c:set var="orgSection" value="${resume.sections.get(sectionType)}"/>
-                    <c:if test="${orgSection != null}">
+                  <%--  <c:if test="${orgSection != null}">--%>
                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
-                        <table>
-                            <c:forEach var="org" items="${listOrg}">
-                                <c:if test="${org.homePage.name != null}">
-                                    <tr>
-                                        <c:choose>
-                                            <c:when test="${org.homePage.url != null}">
-                                                <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td colspan="2"><b>${org.homePage.name}</b></td>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tr>
-                                </c:if>
+                            <c:forEach var="org" items="${listOrg}" varStatus="counter">
+                             <%--   <c:if test="${org.homePage.name != null}">--%>
+
+                                     <%--   <c:choose>--%>
+                                          <%--  <c:when test="${org.homePage.url != null}">--%>
+                                <dl>
+                                    <dt><h4>Имя организации</h4></dt>
+                                    <dd><input type="text" name="orgName" size="80" value="${org.homePage.name}"></dd>
+                                </dl>
+                                <dl>
+                                    <dt>URL адрес</dt>
+                                    <dd><input style="width: auto" type="url" name="urlAddress" size=30 value="${org.homePage.url}"></dd>
+                                </dl>
                                 <c:forEach var="experience" items="${org.listExperience}">
-                                    <tr>
-                                    <td style="width:180px" valign="top">${experience.startDate} - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
-                                    <c:choose>
-                                        <c:when test="${experience.title == null || experience.title == ''}">
-                                            <td valign="top"> ${experience.description}
-                                            </td>
-                                            </tr>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td valign="top"> <b>${experience.title} </b><br>
-                                                    ${experience.description}
-                                            </td>
-                                            </tr>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <dl>
+                                        <dt>Дата начала</dt>
+                                        <dd><input type="date" name="startDate" size=30 value="${experience.startDate}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Дата конца</dt>
+                                        <dd><input type="date" name="endDate" size=30 value="${experience.endDate}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Должность</dt>
+                                        <dd><input type="text" name="expTitle" size=50 value="${experience.title}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Описание</dt>
+                                        <dd><textarea rows="5" cols="65" name="expDesc">"${experience.description}"</textarea></dd>
+                                    </dl>
                                 </c:forEach>
-                                <tr> <td colspan="2"> <p><br></p> </td>
-                                </tr>
                             </c:forEach>
-                        </table>
-                    </c:if>
+                    <div class="add">+</div>
+                   <%-- </c:if>--%>
                 </c:when>
             </c:choose>
         </c:forEach>
@@ -121,7 +120,7 @@
            <input type="text" name="section" size=30 value="2"><br/>
            <input type="text" name="section" size=30 value="3"><br/>
            <hr>--%>
-        <button type="submit" onsubmit="return checkFields(this);">Сохранить </button>
+        <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
         <script type="text/javascript">
             function checkFields(editForm) {
@@ -129,7 +128,7 @@
                     alert("Пожалуйста, введите правильное 'Имя'");
                     return false;
                 }
-                return true ;
+                return true;
             }
         </script>
     </form>

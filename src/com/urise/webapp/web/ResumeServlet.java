@@ -24,7 +24,7 @@ public class ResumeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
-        String fullName = request.getParameter("fullName");
+        String fullName = request.getParameter("fullName").trim();
         boolean newRes  = request.getParameter("newResume").equals("true");
         Resume r;
         if (newRes) {
