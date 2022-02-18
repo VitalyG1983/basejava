@@ -76,6 +76,14 @@ public class Organization implements Serializable {
         public Experience() {
         }
 
+        public Experience(String title, String description) {
+            //Objects.requireNonNull(startDate, "startDate required non null");
+            // Objects.requireNonNull(endDate, "endDate required non null");
+            //Objects.requireNonNull(description, "description required non null");
+            this.title = title;
+            this.description = description;
+        }
+
         public Experience(int startYear, Month startMonth, String title, String description) {
             this(of(startYear, startMonth), NOW, title, description);
         }

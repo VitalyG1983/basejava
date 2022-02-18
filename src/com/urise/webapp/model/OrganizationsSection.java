@@ -38,6 +38,10 @@ public class OrganizationsSection extends AbstractSection implements Serializabl
         return Objects.hash(organizations);
     }
 
+    public void setOrganizations(List<Organization> organizations) {
+        this.organizations = organizations;
+    }
+
     public List<Organization> getListOrganizations() {
         return organizations;
     }

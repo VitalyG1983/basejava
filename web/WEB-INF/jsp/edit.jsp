@@ -78,16 +78,16 @@
                 <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
                 <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
                     <c:set var="orgSection" value="${resume.sections.get(sectionType)}"/>
+                    <input type="hidden" name="${sectionType}" value="${orgSection}">
+                    <h3>${sectionTittle}</h3>
                     <c:if test="${orgSection != null}">
-                        <h3>${sectionTittle}</h3>
                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
-                     <%--   <jsp:useBean id="orgName" type="java.lang.String"/>--%>
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
                         <c:forEach var="org" items="${listOrg}" varStatus="counter">
-                            <input type="hidden" name="${sectionType}" value="${counter.count}">
                             <dl>
                                 <dt><b>Имя организации</b></dt>
-                                <dd><input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}"></dd>
+                                <dd><input type="text" name="${sectionType}orgName" size="80"
+                                           value="${org.homePage.name}"></dd>
                             </dl>
                             <label>URL адрес
                                 <input type="url" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
@@ -107,7 +107,9 @@
                                 </label><br>
                                 <dl>
                                     <dt>Описание</dt>
-                                    <dd><textarea rows="5" cols="65" name="${sectionType}${counter.index}expDesc">${experience.description}</textarea></dd>
+                                    <dd><textarea rows="5" cols="65"
+                                                  name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
+                                    </dd>
                                 </dl>
                             </c:forEach>
                         </c:forEach>
