@@ -53,7 +53,7 @@ public class ResumeServlet extends HttpServlet {
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
                     case EXPERIENCE, EDUCATION -> {
                         if (Integer.parseInt(sectionValue) > 0) {
-                            readOrgSection(request, r, sectionValue, sections, sectionType.equals(SectionType.EXPERIENCE) ?
+                            readOrgSection(request, sections, sectionType.equals(SectionType.EXPERIENCE) ?
                                     SectionType.EXPERIENCE : SectionType.EDUCATION);
                         }
                     }
@@ -113,7 +113,7 @@ public class ResumeServlet extends HttpServlet {
         sections.put(secType, tls);
     }
 
-    private void readOrgSection(HttpServletRequest request, Resume r, String list, Map<SectionType, AbstractSection> sections, SectionType sectionType) {
+    private void readOrgSection(HttpServletRequest request, Map<SectionType, AbstractSection> sections, SectionType sectionType) {
         OrganizationsSection section = (OrganizationsSection) sections.get(sectionType);
         List<Organization> organizations = section.getListOrganizations();
         String[] orgName = request.getParameterMap().get(sectionType + "orgName");
