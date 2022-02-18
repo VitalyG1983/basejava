@@ -73,45 +73,70 @@
                 </c:when>
                 <%-------------------------------------  EXPERIENCE, EDUCATION--------------------------------------------------%>
                 <c:when test="${sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION}">
-                    <h3>${sectionTittle}</h3>
                     <c:set var="orgSection" value="${resume.sections.get(sectionType)}"/>
-                  <%--  <c:if test="${orgSection != null}">--%>
+                    <c:if test="${orgSection != null}">
+                        <h3>${sectionTittle}</h3>
                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
+                     <%--   <jsp:useBean id="orgName" type="java.lang.String"/>--%>
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
-                            <c:forEach var="org" items="${listOrg}" varStatus="counter">
-                             <%--   <c:if test="${org.homePage.name != null}">--%>
-
-                                     <%--   <c:choose>--%>
-                                          <%--  <c:when test="${org.homePage.url != null}">--%>
+                        <c:forEach var="org" items="${listOrg}" varStatus="counter">
+                            <input type="hidden" name="${sectionType}" value="${counter.count}">
+                            <%--   <c:if test="${org.homePage.name != null}">--%>
+                            <%--   <c:choose>--%>
+                            <%--  <c:when test="${org.homePage.url != null}">--%>
+                            <p> ${counter.index}</p>
+                            <p> ${counter.count}</p>
+                            <dl>
+                                <dt><b>Имя организации</b></dt>
+                                <dd><input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}"></dd>
+                            </dl>
+                            <label>URL адрес
+                                <input type="text" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
+                            </label>
+                            <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
+                                <label><br>Дата начала
+                                    <input type="text" name="${sectionType}startDate" size="30" value="${experience.startDate}">
+                                </label><br>
+                                <label>Дата конца
+                                    <input type="text" name="${sectionType}endDate" size="30" value="${experience.endDate}">
+                                </label><br>
+                                <label>Должность
+                                    <input type="text" name="${sectionType}expTitle" size="50" value="${experience.title}">
+                                </label>
                                 <dl>
-                                    <dt><h4>Имя организации</h4></dt>
-                                    <dd><input type="text" name="orgName" size="80" value="${org.homePage.name}"></dd>
+                                    <dt>Описание</dt>
+                                    <dd><textarea rows="5" cols="65" name="${sectionType}expDesc">"${experience.description}"</textarea></dd>
                                 </dl>
-                                <dl>
-                                    <dt>URL адрес</dt>
-                                    <dd><input style="width: auto" type="url" name="urlAddress" size=30 value="${org.homePage.url}"></dd>
-                                </dl>
-                                <c:forEach var="experience" items="${org.listExperience}">
-                                    <dl>
-                                        <dt>Дата начала</dt>
-                                        <dd><input type="date" name="startDate" size=30 value="${experience.startDate}"></dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Дата конца</dt>
-                                        <dd><input type="date" name="endDate" size=30 value="${experience.endDate}"></dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Должность</dt>
-                                        <dd><input type="text" name="expTitle" size=50 value="${experience.title}"></dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Описание</dt>
-                                        <dd><textarea rows="5" cols="65" name="expDesc">"${experience.description}"</textarea></dd>
-                                    </dl>
-                                </c:forEach>
                             </c:forEach>
-                    <div class="add">+</div>
-                   <%-- </c:if>--%>
+                        </c:forEach>
+                    </c:if>
+                    <br>
+                    <c:if test="${sectionType == SectionType.EXPERIENCE}">
+                        <h3>Добавить новое место работы</h3>
+                    </c:if>
+                    <c:if test="${sectionType == SectionType.EDUCATION}">
+                        <h3>Добавить новое место учебы</h3>
+                    </c:if>
+                    <label>Имя организации
+                        <input type="text" name="NewOrgName${sectionType}" size="80">
+                    </label><br>
+                    <label>URL адрес
+                        <input type="text" name="NewUrlAddress${sectionType}" size="30">
+                    </label><br>
+                    <label>Дата начала
+                        <input type="text" name="NewStartDate${sectionType}" size="30">
+                    </label><br>
+                    <label>Дата конца
+                        <input type="text" name="NewEndDate${sectionType}" size="30">
+                    </label><br>
+                    <label>Должность
+                        <input type="text" name="NewExpTitle${sectionType}" size="50">
+                    </label>
+                    <dl>
+                        <dt>Описание</dt>
+                        <dd><textarea rows="5" cols="65" name="NewExpDesc${sectionType}"></textarea></dd>
+                    </dl>
+
                 </c:when>
             </c:choose>
         </c:forEach>
@@ -120,6 +145,7 @@
            <input type="text" name="section" size=30 value="2"><br/>
            <input type="text" name="section" size=30 value="3"><br/>
            <hr>--%>
+        <p><br></p>
         <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
         <script type="text/javascript">

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
@@ -25,7 +26,7 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName").trim();
-        boolean newRes  = request.getParameter("newResume").equals("true");
+        boolean newRes = request.getParameter("newResume").equals("true");
         Resume r;
         if (newRes) {
             r = new Resume(uuid, fullName);
@@ -43,13 +44,18 @@ public class ResumeServlet extends HttpServlet {
         }
         Map<SectionType, AbstractSection> sections = r.getSections();
         for (SectionType sectionType : SectionType.values()) {
-            String sectionText = request.getParameter(sectionType.toString());
-            if (sectionText != null && sectionText.trim().length() != 0) {
+            String sectionValue = request.getParameter(sectionType.toString());
+            if (sectionValue != null && sectionValue.trim().length() != 0) {
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sections.put(sectionType.equals(SectionType.PERSONAL) ? SectionType.PERSONAL :
-                            SectionType.OBJECTIVE, new TextSection(sectionText.trim()));
-                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionText.trim(),
+                            SectionType.OBJECTIVE, new TextSection(sectionValue.trim()));
+                    case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionValue.trim(),
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
+                    case EXPERIENCE, EDUCATION -> {
+                        //String listOrg = request.getParameter("listOrg");
+                        readOrgSection(request, r, sectionValue, sections, sectionType.equals(SectionType.EXPERIENCE) ?
+                                SectionType.EXPERIENCE : SectionType.EDUCATION);
+                    }
                 }
             } else {
                 sections.remove(sectionType);
@@ -104,5 +110,31 @@ public class ResumeServlet extends HttpServlet {
             listString.removeIf(String::isBlank);
         }
         sections.put(secType, tls);
+    }
+
+    private void readOrgSection(HttpServletRequest request, Resume r, String list, Map<SectionType, AbstractSection> sections, SectionType sectionType) {
+        OrganizationsSection section = (OrganizationsSection) sections.get(sectionType);
+        List<Organization> organizations = section.getListOrganizations();
+        String[] orgName = request.getParameterMap().get(sectionType + "orgName");
+        String[] urlAddress = request.getParameterMap().get(sectionType + "urlAddress");
+        String[] startDate = request.getParameterMap().get(sectionType + "startDate");
+        String[] endDate = request.getParameterMap().get(sectionType + "endDate");
+        String[] expTitle = request.getParameterMap().get(sectionType + "expTitle");
+        String[] expDesc = request.getParameterMap().get(sectionType + "expDesc");
+        for (int i = 0; i < organizations.size(); i++) {
+            // String orgName = request.getParameter("orgName");
+            Organization org = organizations.get(i);
+            org.getHomePage().setName(orgName[i]);
+            org.getHomePage().setUrl(urlAddress[i]);
+            List<Organization.Experience> expList = org.getListExperience();
+            for (int z = i; z < expList.size(); z++) {
+
+                Organization.Experience exp = expList.get(z);
+                exp.startDate = LocalDate.parse(startDate[z]);
+                exp.endDate = LocalDate.parse(endDate[z]);
+                exp.title = expTitle[z];
+                exp.description = expDesc[z];
+            }
+        }
     }
 }

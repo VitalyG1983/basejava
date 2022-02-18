@@ -66,12 +66,12 @@ public class Organization implements Serializable {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Experience implements Serializable {
-        private String title;
+        public String title;
         @XmlJavaTypeAdapter(XmlLocalDateAdapter.class)
         public LocalDate startDate;
         @XmlJavaTypeAdapter(XmlLocalDateAdapter.class)
         public LocalDate endDate;
-        private String description;
+        public String description;
 
         public Experience() {
         }
