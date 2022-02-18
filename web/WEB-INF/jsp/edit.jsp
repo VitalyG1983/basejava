@@ -16,6 +16,10 @@
     table {
         border-spacing: 2px 10px;
     }
+    label {
+        vertical-align: top;
+    }
+
 </style>--%>
 <body>
 <jsp:include page="fragments/header.jsp"/>
@@ -81,31 +85,29 @@
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
                         <c:forEach var="org" items="${listOrg}" varStatus="counter">
                             <input type="hidden" name="${sectionType}" value="${counter.count}">
-                            <%--   <c:if test="${org.homePage.name != null}">--%>
-                            <%--   <c:choose>--%>
-                            <%--  <c:when test="${org.homePage.url != null}">--%>
-                            <p> ${counter.index}</p>
-                            <p> ${counter.count}</p>
                             <dl>
                                 <dt><b>Имя организации</b></dt>
                                 <dd><input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}"></dd>
                             </dl>
                             <label>URL адрес
-                                <input type="text" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
+                                <input type="url" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
                             </label>
                             <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
                                 <label><br>Дата начала
-                                    <input type="text" name="${sectionType}startDate" size="30" value="${experience.startDate}">
+                                    <input type="date" name="${sectionType}${counter.index}startDate" size="30"
+                                           value="${experience.startDate}">
                                 </label><br>
                                 <label>Дата конца
-                                    <input type="text" name="${sectionType}endDate" size="30" value="${experience.endDate}">
+                                    <input type="date" name="${sectionType}${counter.index}endDate" size="30"
+                                           value="${experience.endDate}">
                                 </label><br>
                                 <label>Должность
-                                    <input type="text" name="${sectionType}expTitle" size="50" value="${experience.title}">
-                                </label>
+                                    <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
+                                           value="${experience.title}">
+                                </label><br>
                                 <dl>
                                     <dt>Описание</dt>
-                                    <dd><textarea rows="5" cols="65" name="${sectionType}expDesc">"${experience.description}"</textarea></dd>
+                                    <dd><textarea rows="5" cols="65" name="${sectionType}${counter.index}expDesc">${experience.description}</textarea></dd>
                                 </dl>
                             </c:forEach>
                         </c:forEach>
@@ -118,23 +120,23 @@
                         <h3>Добавить новое место учебы</h3>
                     </c:if>
                     <label>Имя организации
-                        <input type="text" name="NewOrgName${sectionType}" size="80">
+                        <input type="text" name="${sectionType}NewOrgName" size="80">
                     </label><br>
                     <label>URL адрес
-                        <input type="text" name="NewUrlAddress${sectionType}" size="30">
+                        <input type="url" name="${sectionType}NewUrlAddress" size="30">
                     </label><br>
                     <label>Дата начала
-                        <input type="text" name="NewStartDate${sectionType}" size="30">
+                        <input type="date" name="${sectionType}NewStartDate" size="30">
                     </label><br>
                     <label>Дата конца
-                        <input type="text" name="NewEndDate${sectionType}" size="30">
+                        <input type="date" name="${sectionType}NewEndDate" size="30">
                     </label><br>
                     <label>Должность
-                        <input type="text" name="NewExpTitle${sectionType}" size="50">
+                        <input type="text" name="${sectionType}NewExpTitle" size="50">
                     </label>
                     <dl>
                         <dt>Описание</dt>
-                        <dd><textarea rows="5" cols="65" name="NewExpDesc${sectionType}"></textarea></dd>
+                        <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
                     </dl>
 
                 </c:when>

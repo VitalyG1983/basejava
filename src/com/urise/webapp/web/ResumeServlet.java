@@ -52,9 +52,10 @@ public class ResumeServlet extends HttpServlet {
                     case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionValue.trim(),
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
                     case EXPERIENCE, EDUCATION -> {
-                        //String listOrg = request.getParameter("listOrg");
-                        readOrgSection(request, r, sectionValue, sections, sectionType.equals(SectionType.EXPERIENCE) ?
-                                SectionType.EXPERIENCE : SectionType.EDUCATION);
+                        if (Integer.parseInt(sectionValue) > 0) {
+                            readOrgSection(request, r, sectionValue, sections, sectionType.equals(SectionType.EXPERIENCE) ?
+                                    SectionType.EXPERIENCE : SectionType.EDUCATION);
+                        }
                     }
                 }
             } else {
@@ -117,24 +118,34 @@ public class ResumeServlet extends HttpServlet {
         List<Organization> organizations = section.getListOrganizations();
         String[] orgName = request.getParameterMap().get(sectionType + "orgName");
         String[] urlAddress = request.getParameterMap().get(sectionType + "urlAddress");
-        String[] startDate = request.getParameterMap().get(sectionType + "startDate");
-        String[] endDate = request.getParameterMap().get(sectionType + "endDate");
-        String[] expTitle = request.getParameterMap().get(sectionType + "expTitle");
-        String[] expDesc = request.getParameterMap().get(sectionType + "expDesc");
         for (int i = 0; i < organizations.size(); i++) {
-            // String orgName = request.getParameter("orgName");
             Organization org = organizations.get(i);
-            org.getHomePage().setName(orgName[i]);
-            org.getHomePage().setUrl(urlAddress[i]);
+            org.getHomePage().setName(orgName[i].trim());
+            org.getHomePage().setUrl(urlAddress[i].trim());
             List<Organization.Experience> expList = org.getListExperience();
-            for (int z = i; z < expList.size(); z++) {
-
+            for (int z = 0; z < expList.size(); z++) {
+                String[] startDate = request.getParameterMap().get(sectionType + Integer.toString(i) + "startDate");
+                String[] endDate = request.getParameterMap().get(sectionType + Integer.toString(i) + "endDate");
+                String[] expTitle = request.getParameterMap().get(sectionType + Integer.toString(i) + "expTitle");
+                String[] expDesc = request.getParameterMap().get(sectionType + Integer.toString(i) + "expDesc");
                 Organization.Experience exp = expList.get(z);
                 exp.startDate = LocalDate.parse(startDate[z]);
                 exp.endDate = LocalDate.parse(endDate[z]);
-                exp.title = expTitle[z];
-                exp.description = expDesc[z];
+                exp.title = expTitle[z].trim();
+                exp.description = expDesc[z].trim();
             }
         }
+        String NewOrgName = request.getParameter(sectionType + "NewOrgName").trim();
+        if (!NewOrgName.isBlank()) {
+            List<Organization.Experience> listExp = new ArrayList<>();
+            Organization.Experience experience = new Organization.Experience(
+                    LocalDate.parse(request.getParameter(sectionType + "NewStartDate")),
+                    LocalDate.parse(request.getParameter(sectionType + "NewEndDate")),
+                    request.getParameter(sectionType + "NewExpTitle").trim(),
+                    request.getParameter(sectionType + "NewExpDesc").trim());
+            listExp.add(experience);
+            organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
+        }
+
     }
 }
