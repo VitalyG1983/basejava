@@ -140,7 +140,6 @@
                         <dt>Описание</dt>
                         <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
                     </dl>
-
                 </c:when>
             </c:choose>
         </c:forEach>
@@ -150,9 +149,9 @@
            <input type="text" name="section" size=30 value="3"><br/>
            <hr>--%>
         <p><br></p>
-        <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
+        <button type="submit" <%--onsubmit="return checkFields(this);"--%>>Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
-        <script type="text/javascript">
+  <%--      <script type="text/javascript">
             function checkFields(editForm) {
                 if (editForm.fullName.value === "") {
                     alert("Пожалуйста, введите правильное 'Имя'");
@@ -160,7 +159,7 @@
                 }
                 return true;
             }
-        </script>
+        </script>--%>
     </form>
 
 </section>

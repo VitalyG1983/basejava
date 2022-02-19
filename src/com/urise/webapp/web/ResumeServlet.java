@@ -51,28 +51,19 @@ public class ResumeServlet extends HttpServlet {
                             SectionType.OBJECTIVE, new TextSection(sectionValue.trim()));
                     case ACHIEVEMENT, QUALIFICATIONS -> fillTextListSection(sectionValue.trim(),
                             sections, sectionType.equals(SectionType.ACHIEVEMENT) ? SectionType.ACHIEVEMENT : SectionType.QUALIFICATIONS);
-                    /* case EXPERIENCE, EDUCATION -> {*/
-                    /* if (Integer.parseInt(sectionValue) > 0) {*/
-                          /*  readOrgSection(request, sections, sectionType.equals(SectionType.EXPERIENCE) ?
-                                    SectionType.EXPERIENCE : SectionType.EDUCATION);*/
-                    /* }*/
                 }
             } else {
                 sections.remove(sectionType);
             }
             switch (sectionType) {
-                case EXPERIENCE, EDUCATION -> {
-                    /* if (Integer.parseInt(sectionValue) > 0) {*/
-                    readOrgSection(request, r, sections, sectionType.equals(SectionType.EXPERIENCE) ?
-                            SectionType.EXPERIENCE : SectionType.EDUCATION);
-                    /* }*/
-                }
+                case EXPERIENCE, EDUCATION -> readOrgSection(request, r, sections, sectionType.equals(SectionType.EXPERIENCE) ?
+                        SectionType.EXPERIENCE : SectionType.EDUCATION);
             }
-            if (newRes) {
-                storage.save(r);
-            } else {
-                storage.update(r);
-            }
+        }
+        if (newRes) {
+            storage.save(r);
+        } else {
+            storage.update(r);
         }
         response.sendRedirect("resume");
     }
@@ -88,21 +79,20 @@ public class ResumeServlet extends HttpServlet {
         }
         Resume r;
         switch (action) {
-            case "delete":
+            case "delete" -> {
                 storage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
-            case "view":
-            case "edit":
+            }
+            case "view", "edit" -> {
                 r = storage.get(uuid);
                 request.setAttribute("newResume", false);
-                break;
-            case "newResume":
+            }
+            case "newResume" -> {
                 r = new Resume();
                 request.setAttribute("newResume", true);
-                break;
-            default:
-                throw new IllegalArgumentException("Action " + action + " is illegal");
+            }
+            default -> throw new IllegalArgumentException("Action " + action + " is illegal");
         }
         request.setAttribute("resume", r);
         request.getRequestDispatcher(
@@ -130,25 +120,24 @@ public class ResumeServlet extends HttpServlet {
             organizations = section.getListOrganizations();
             String[] orgName = request.getParameterMap().get(sectionType + "orgName");
             String[] urlAddress = request.getParameterMap().get(sectionType + "urlAddress");
-            Map<String, String[]> startDateMap = request.getParameterMap();
-            Map<String, String[]> endDateMap = request.getParameterMap();
-            Map<String, String[]> expTitleMap = request.getParameterMap();
-            Map<String, String[]> expDescMap = request.getParameterMap();
+            Map<String, String[]> parameterMap = request.getParameterMap();
             for (int i = 0; i < organizations.size(); i++) {
                 Organization org = organizations.get(i);
                 org.getHomePage().setName(orgName[i].trim());
                 org.getHomePage().setUrl(urlAddress[i].trim());
                 List<Organization.Experience> expList = org.getListExperience();
-                String[] startDate = startDateMap.get(sectionType + Integer.toString(i) + "startDate");
-                String[] endDate = endDateMap.get(sectionType + Integer.toString(i) + "endDate");
-                String[] expTitle = expTitleMap.get(sectionType + Integer.toString(i) + "expTitle");
-                String[] expDesc = expDescMap.get(sectionType + Integer.toString(i) + "expDesc");
+                String[] startDate = parameterMap.get(sectionType + Integer.toString(i) + "startDate");
+                String[] endDate = parameterMap.get(sectionType + Integer.toString(i) + "endDate");
+                String[] expTitle = parameterMap.get(sectionType + Integer.toString(i) + "expTitle");
+                String[] expDesc = parameterMap.get(sectionType + Integer.toString(i) + "expDesc");
                 for (int z = 0; z < expList.size(); z++) {
                     Organization.Experience exp = expList.get(z);
                     if (!startDate[z].isBlank())
                         exp.startDate = LocalDate.parse(startDate[z]);
+                    else exp.startDate = null;
                     if (!endDate[z].isBlank())
                         exp.endDate = LocalDate.parse(endDate[z]);
+                    else exp.endDate = null;
                     exp.title = expTitle[z].trim();
                     exp.description = expDesc[z].trim();
                 }
@@ -156,7 +145,7 @@ public class ResumeServlet extends HttpServlet {
         } else {
             organizations = new ArrayList<>();
             OrganizationsSection newOrg = new OrganizationsSection(organizations);
-           r.addSection(sectionType, newOrg);
+            r.addSection(sectionType, newOrg);
         }
         String NewOrgName = request.getParameter(sectionType + "NewOrgName").trim();
         if (!NewOrgName.isBlank()) {
@@ -167,9 +156,11 @@ public class ResumeServlet extends HttpServlet {
             String NewStartDate = request.getParameter(sectionType + "NewStartDate");
             if (!NewStartDate.isBlank())
                 experience.startDate = LocalDate.parse(NewStartDate);
+            else experience.startDate = null;
             String NewEndDate = request.getParameter(sectionType + "NewEndDate");
             if (!NewEndDate.isBlank())
                 experience.endDate = LocalDate.parse(NewEndDate);
+            else experience.endDate = null;
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
         }

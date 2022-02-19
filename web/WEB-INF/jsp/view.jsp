@@ -72,7 +72,7 @@
                                 <c:forEach var="experience" items="${org.listExperience}">
                                     <tr>
                                     <td style="width:180px" valign="top">${experience.startDate}
-                                        - ${experience.endDate == null ? "сейчас":experience.endDate}</td>
+                                        - ${experience.startDate !=null && experience.endDate == null ? "сейчас":experience.endDate}</td>
                                     <c:choose>
                                         <c:when test="${experience.title == null || experience.title == ''}">
                                             <td valign="top"> ${experience.description}</td>
