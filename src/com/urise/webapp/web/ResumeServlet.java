@@ -144,8 +144,8 @@ public class ResumeServlet extends HttpServlet {
             }
         } else {
             organizations = new ArrayList<>();
-            OrganizationsSection newOrg = new OrganizationsSection(organizations);
-            r.addSection(sectionType, newOrg);
+            OrganizationsSection newOrgSec = new OrganizationsSection(organizations);
+            r.addSection(sectionType, newOrgSec);
         }
         String NewOrgName = request.getParameter(sectionType + "NewOrgName").trim();
         if (!NewOrgName.isBlank()) {
@@ -154,13 +154,13 @@ public class ResumeServlet extends HttpServlet {
                     request.getParameter(sectionType + "NewExpTitle").trim(),
                     request.getParameter(sectionType + "NewExpDesc").trim());
             String NewStartDate = request.getParameter(sectionType + "NewStartDate");
-            if (!NewStartDate.isBlank())
+            if (!NewStartDate.isBlank()) {
                 experience.startDate = LocalDate.parse(NewStartDate);
-            else experience.startDate = null;
+            }
             String NewEndDate = request.getParameter(sectionType + "NewEndDate");
-            if (!NewEndDate.isBlank())
+            if (!NewEndDate.isBlank()) {
                 experience.endDate = LocalDate.parse(NewEndDate);
-            else experience.endDate = null;
+            }
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
         }
