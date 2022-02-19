@@ -84,11 +84,9 @@
                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
                         <c:forEach var="org" items="${listOrg}" varStatus="counter">
-                            <dl>
-                                <dt><b>Имя организации</b></dt>
-                                <dd><input type="text" name="${sectionType}orgName" size="80"
-                                           value="${org.homePage.name}"></dd>
-                            </dl>
+                            <label><b>Имя организации</b>
+                                <input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}">
+                            </label><br>
                             <label>URL адрес
                                 <input type="url" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
                             </label>
@@ -105,16 +103,35 @@
                                     <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
                                            value="${experience.title}">
                                 </label><br>
-                                <dl>
-                                    <dt>Описание</dt>
-                                    <dd><textarea rows="5" cols="65"
-                                                  name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
-                                    </dd>
-                                </dl>
+                                <label style="vertical-align: top">Описание
+                                    <textarea rows="5" cols="65"
+                                              name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
+                                </label><br>
                             </c:forEach>
                         </c:forEach>
+                        <br>
+                        <h4>Добавление позиции для организации</h4>
+                        <label>Выберите организацию
+                            <select>
+                                <option></option>
+                                <c:forEach var="org" items="${listOrg}">
+                                    <option name="newPosition"<%--value=”${org.homePage.name}”--%>>${org.homePage.name}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
+                        <label><br>Дата начала
+                            <input type="date" name="startDatePos" size="30">
+                        </label><br>
+                        <label>Дата конца
+                            <input type="date" name="endDatePos" size="30">
+                        </label><br>
+                        <label>Должность
+                            <input type="text" name="expTitlePos" size="50">
+                        </label><br>
+                        <label style="vertical-align: top">Описание
+                            <textarea rows="5" cols="65" name="expDescPos"></textarea>
+                        </label><br>
                     </c:if>
-                    <br>
                     <c:if test="${sectionType == SectionType.EXPERIENCE}">
                         <h3>Добавить новое место работы</h3>
                     </c:if>
@@ -140,6 +157,7 @@
                         <dt>Описание</dt>
                         <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
                     </dl>
+
                 </c:when>
             </c:choose>
         </c:forEach>
@@ -149,9 +167,9 @@
            <input type="text" name="section" size=30 value="3"><br/>
            <hr>--%>
         <p><br></p>
-        <button type="submit" <%--onsubmit="return checkFields(this);"--%>>Сохранить</button>
+        <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
-  <%--      <script type="text/javascript">
+        <script type="text/javascript">
             function checkFields(editForm) {
                 if (editForm.fullName.value === "") {
                     alert("Пожалуйста, введите правильное 'Имя'");
@@ -159,9 +177,8 @@
                 }
                 return true;
             }
-        </script>--%>
+        </script>
     </form>
-
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
