@@ -59,7 +59,7 @@
                                 <c:if test="${org.homePage.name != null}">
                                     <tr>
                                         <c:choose>
-                                            <c:when test="${org.homePage.url != null}">
+                                            <c:when test="${org.homePage.url != null && org.homePage.url!=''}">
                                                 <td colspan="2"><b><a
                                                         href="${org.homePage.url}">${org.homePage.name}</a></b></td>
                                             </c:when>
