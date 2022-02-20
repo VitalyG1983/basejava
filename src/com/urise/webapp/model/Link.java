@@ -43,7 +43,7 @@ public class Link implements Serializable {
         Link link = (Link) o;
 
         if (name != null ? !name.equals(link.name) : link.name != null) return false;
-        if (url != null ? !url.equals(link.url) : link.url != null) return false;
+        if ((url != null && !url.isBlank()) ? !url.equals(link.url) : link.url != null && !link.url.isBlank()) return false;
 
         return true;
     }

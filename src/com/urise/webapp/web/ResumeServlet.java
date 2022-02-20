@@ -132,14 +132,19 @@ public class ResumeServlet extends HttpServlet {
                 String[] expDesc = parameterMap.get(sectionType + Integer.toString(i) + "expDesc");
                 for (int z = 0; z < expList.size(); z++) {
                     Organization.Experience exp = expList.get(z);
-                    if (!startDate[z].isBlank())
-                        exp.startDate = LocalDate.parse(startDate[z]);
-                    else exp.startDate = null;
-                    if (!endDate[z].isBlank())
-                        exp.endDate = LocalDate.parse(endDate[z]);
-                    else exp.endDate = null;
-                    exp.title = expTitle[z].trim();
-                    exp.description = expDesc[z].trim();
+                    if ((startDate[z].isBlank() || startDate[z] == null) && (endDate[z].isBlank() || endDate[z] == null)
+                            && (expTitle[z].isBlank() || expTitle[z] == null) && (expDesc[z].isBlank() || expDesc[z] == null)) {
+                        expList.remove(exp);
+                    } else {
+                        if (!startDate[z].isBlank())
+                            exp.startDate = LocalDate.parse(startDate[z]);
+                        else exp.startDate = null;
+                        if (!endDate[z].isBlank())
+                            exp.endDate = LocalDate.parse(endDate[z]);
+                        else exp.endDate = null;
+                        exp.title = expTitle[z].trim();
+                        exp.description = expDesc[z].trim();
+                    }
                 }
             }
         } else {
@@ -147,30 +152,47 @@ public class ResumeServlet extends HttpServlet {
             OrganizationsSection newOrgSec = new OrganizationsSection(organizations);
             r.addSection(sectionType, newOrgSec);
         }
+        ////////////////////////////////////    New Organization adding    /////////////////////////////////////////////
         String NewOrgName = request.getParameter(sectionType + "NewOrgName").trim();
         if (!NewOrgName.isBlank()) {
             List<Organization.Experience> listExp = new ArrayList<>();
-            Organization.Experience experience = new Organization.Experience(
-                    request.getParameter(sectionType + "NewExpTitle").trim(),
-                    request.getParameter(sectionType + "NewExpDesc").trim());
-            String NewStartDate = request.getParameter(sectionType + "NewStartDate");
-            if (!NewStartDate.isBlank()) {
-                experience.startDate = LocalDate.parse(NewStartDate);
-            }
-            String NewEndDate = request.getParameter(sectionType + "NewEndDate");
-            if (!NewEndDate.isBlank()) {
-                experience.endDate = LocalDate.parse(NewEndDate);
-            }
+            Organization.Experience experience = addExperienceData(request, sectionType, "NewExpTitle",
+                    "NewExpDesc", "NewStartDate", "NewEndDate");
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
         }
-        String newPosition = request.getParameter( sectionType + "newPosition");
-        if (!newPosition.isBlank()) {
-            int index= newPosition.indexOf("http");
-            String url= newPosition.substring(index);
-            String name= newPosition.substring(0,index);
-            Organization org = section.getOrganization(new Link(name,url));
-            org.getHomePage();
+        ////////////////////////////////////   New Position for Organization adding    /////////////////////////////////
+        String newPosition = request.getParameter(sectionType + "newPosition");
+        if (newPosition != null && !newPosition.isBlank()) {
+            int index = newPosition.indexOf("http");
+            String url = null;
+            String name;
+            if (index >= 0) {
+                url = newPosition.substring(index);
+                name = newPosition.substring(0, index);
+            } else {
+                name = newPosition;
+            }
+            Organization org = section.getOrganization(new Link(name, url));
+            Organization.Experience expPos = addExperienceData(request, sectionType, "expTitlePos",
+                    "expDescPos", "startDatePos", "endDatePos");
+            org.getListExperience().add(expPos);
         }
+    }
+
+    private Organization.Experience addExperienceData(HttpServletRequest request, SectionType sectionType, String tittle,
+                                                      String description, String startDate, String endDate) {
+        Organization.Experience experience = new Organization.Experience(
+                request.getParameter(sectionType + tittle).trim(),
+                request.getParameter(sectionType + description).trim());
+        String NewStartDate = request.getParameter(sectionType + startDate);
+        if (!NewStartDate.isBlank()) {
+            experience.startDate = LocalDate.parse(NewStartDate);
+        }
+        String NewEndDate = request.getParameter(sectionType + endDate);
+        if (!NewEndDate.isBlank()) {
+            experience.endDate = LocalDate.parse(NewEndDate);
+        }
+        return experience;
     }
 }

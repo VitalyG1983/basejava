@@ -84,6 +84,7 @@
                         <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
                         <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
                         <c:forEach var="org" items="${listOrg}" varStatus="counter">
+                            <p></p>
                             <label><b>Имя организации</b>
                                 <input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}">
                             </label><br>
@@ -110,7 +111,7 @@
                             </c:forEach>
                         </c:forEach>
                         <br>
-                        <h4>Добавление позиции для организации</h4>
+                        <h4>Добавление описания(позиции) для организации</h4>
                         <label>Выберите организацию
                             <select name="${sectionType}newPosition">
                                 <option></option>
@@ -120,16 +121,16 @@
                             </select>
                         </label>
                         <label><br>Дата начала
-                            <input type="date" name="startDatePos" size="30">
+                            <input type="date" name="${sectionType}startDatePos" size="30">
                         </label><br>
                         <label>Дата конца
-                            <input type="date" name="endDatePos" size="30">
+                            <input type="date" name="${sectionType}endDatePos" size="30">
                         </label><br>
                         <label>Должность
-                            <input type="text" name="expTitlePos" size="50">
+                            <input type="text" name="${sectionType}expTitlePos" size="50">
                         </label><br>
                         <label style="vertical-align: top">Описание
-                            <textarea rows="5" cols="65" name="expDescPos"></textarea>
+                            <textarea rows="5" cols="65" name="${sectionType}expDescPos"></textarea>
                         </label><br>
                     </c:if>
                     <c:if test="${sectionType == SectionType.EXPERIENCE}">
