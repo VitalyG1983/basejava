@@ -112,10 +112,10 @@
                         <br>
                         <h4>Добавление позиции для организации</h4>
                         <label>Выберите организацию
-                            <select>
+                            <select name="${sectionType}newPosition">
                                 <option></option>
-                                <c:forEach var="org" items="${listOrg}">
-                                    <option name="newPosition"<%--value=”${org.homePage.name}”--%>>${org.homePage.name}</option>
+                                <c:forEach var="organiz" items="${listOrg}" varStatus="orgCounter">
+                                    <option value="${organiz.homePage.name}${organiz.homePage.url}">${organiz.homePage.name}</option>
                                 </c:forEach>
                             </select>
                         </label>

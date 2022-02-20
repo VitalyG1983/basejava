@@ -164,5 +164,13 @@ public class ResumeServlet extends HttpServlet {
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
         }
+        String newPosition = request.getParameter( sectionType + "newPosition");
+        if (!newPosition.isBlank()) {
+            int index= newPosition.indexOf("http");
+            String url= newPosition.substring(index);
+            String name= newPosition.substring(0,index);
+            Organization org = section.getOrganization(new Link(name,url));
+            org.getHomePage();
+        }
     }
 }

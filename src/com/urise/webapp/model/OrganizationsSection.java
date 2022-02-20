@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationsSection extends AbstractSection implements Serializable {
-    private  List<Organization> organizations;
+    private List<Organization> organizations;
 
     public OrganizationsSection() {
     }
@@ -44,5 +44,9 @@ public class OrganizationsSection extends AbstractSection implements Serializabl
 
     public List<Organization> getListOrganizations() {
         return organizations;
+    }
+
+    public Organization getOrganization(Link homePage) {
+        return organizations.stream().filter(org -> org.getHomePage().equals(homePage)).toList().get(0);
     }
 }
