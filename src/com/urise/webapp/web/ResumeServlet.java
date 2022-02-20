@@ -156,7 +156,7 @@ public class ResumeServlet extends HttpServlet {
         String NewOrgName = request.getParameter(sectionType + "NewOrgName").trim();
         if (!NewOrgName.isBlank()) {
             List<Organization.Experience> listExp = new ArrayList<>();
-            Organization.Experience experience = addExperienceData(request, sectionType, "NewExpTitle",
+            Organization.Experience experience = addExperience(request, sectionType, "NewExpTitle",
                     "NewExpDesc", "NewStartDate", "NewEndDate");
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
@@ -174,14 +174,14 @@ public class ResumeServlet extends HttpServlet {
                 name = newPosition;
             }
             Organization org = section.getOrganization(new Link(name, url));
-            Organization.Experience expPos = addExperienceData(request, sectionType, "expTitlePos",
+            Organization.Experience expPos = addExperience(request, sectionType, "expTitlePos",
                     "expDescPos", "startDatePos", "endDatePos");
             org.getListExperience().add(expPos);
         }
     }
 
-    private Organization.Experience addExperienceData(HttpServletRequest request, SectionType sectionType, String tittle,
-                                                      String description, String startDate, String endDate) {
+    private Organization.Experience addExperience(HttpServletRequest request, SectionType sectionType, String tittle,
+                                                  String description, String startDate, String endDate) {
         Organization.Experience experience = new Organization.Experience(
                 request.getParameter(sectionType + tittle).trim(),
                 request.getParameter(sectionType + description).trim());
