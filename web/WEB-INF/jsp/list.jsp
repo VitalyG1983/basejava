@@ -10,8 +10,12 @@
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
+<p></p>
+<button type="button" OnClick="location.href='resume?action=newResume'">Создать резюме</button>
+<p></p>
 <section>
     <table border="1" cellpadding="8" cellspacing="0">
+        <caption><h3>Список резюме</h3></caption>
         <tr>
             <th>Имя</th>
             <th>Email</th>
@@ -29,8 +33,6 @@
         </c:forEach>
     </table>
 </section>
-<br>
-<button type="button" OnClick="location.href='resume?action=newResume'">Добавить резюме</button>
 <p><br></p>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
