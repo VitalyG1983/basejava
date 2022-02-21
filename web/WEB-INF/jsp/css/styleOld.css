@@ -34,7 +34,7 @@
     height: 2px;
     margin: 43px 0 77px 0;
 
-    background: var(--spacer-background);
+   /* background: var(--spacer-background);*/
     border-radius: 10px;
 }
 

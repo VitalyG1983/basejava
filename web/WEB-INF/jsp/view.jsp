@@ -59,7 +59,7 @@
                                 <c:if test="${org.homePage.name != null}">
                                     <tr>
                                         <c:choose>
-                                            <c:when test="${org.homePage.url != null && org.homePage.url!=''}">
+                                            <c:when test="${not empty org.homePage.url}">
                                                 <td colspan="2"><b><a
                                                         href="${org.homePage.url}">${org.homePage.name}</a></b></td>
                                             </c:when>
@@ -74,7 +74,7 @@
                                     <td style="width:180px" valign="top">${experience.startDate}
                                         - ${experience.startDate !=null && experience.endDate == null ? "сейчас":experience.endDate}</td>
                                     <c:choose>
-                                        <c:when test="${experience.title == null || experience.title == ''}">
+                                        <c:when test="${empty experience.title}">
                                             <td valign="top"> ${experience.description}</td>
                                             </tr>
                                         </c:when>
