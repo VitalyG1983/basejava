@@ -100,11 +100,11 @@
                                 <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
                                     <label><br>Дата начала
                                         <input type="date" name="${sectionType}${counter.index}startDate" size="30"
-                                               value="${experience.startDate}">
+                                               value="${experience.startDate}" placeholder="MM/yyyy">
                                     </label><br>
                                     <label>Дата конца
                                         <input type="date" name="${sectionType}${counter.index}endDate" size="30"
-                                               value="${experience.endDate}">
+                                               value="${experience.endDate}" placeholder="MM/yyyy">
                                     </label><br>
                                     <label>Должность
                                         <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
