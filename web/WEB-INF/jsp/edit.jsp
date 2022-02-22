@@ -16,8 +16,13 @@
     table {
         border-spacing: 2px 10px;
     }
+
     label {
         vertical-align: top;
+    }
+
+    input {
+        margin-left: 25px;
     }
 
 </style>--%>
@@ -91,24 +96,26 @@
                             <label>URL адрес
                                 <input type="url" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
                             </label>
-                            <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
-                                <label><br>Дата начала
-                                    <input type="date" name="${sectionType}${counter.index}startDate" size="30"
-                                           value="${experience.startDate}">
-                                </label><br>
-                                <label>Дата конца
-                                    <input type="date" name="${sectionType}${counter.index}endDate" size="30"
-                                           value="${experience.endDate}">
-                                </label><br>
-                                <label>Должность
-                                    <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
-                                           value="${experience.title}">
-                                </label><br>
-                                <label style="vertical-align: top">Описание
-                                    <textarea rows="5" cols="65"
-                                              name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
-                                </label><br>
-                            </c:forEach>
+                            <div style="margin-left: 30px">
+                                <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
+                                    <label><br>Дата начала
+                                        <input type="date" name="${sectionType}${counter.index}startDate" size="30"
+                                               value="${experience.startDate}">
+                                    </label><br>
+                                    <label>Дата конца
+                                        <input type="date" name="${sectionType}${counter.index}endDate" size="30"
+                                               value="${experience.endDate}">
+                                    </label><br>
+                                    <label>Должность
+                                        <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
+                                               value="${experience.title}">
+                                    </label><br>
+                                    <label style="vertical-align: top">Описание
+                                        <textarea rows="5" cols="65"
+                                                  name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
+                                    </label><br>
+                                </c:forEach>
+                            </div>
                         </c:forEach>
                         <br>
                         <h4>Добавление описания(позиции) для организации</h4>
