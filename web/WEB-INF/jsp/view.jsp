@@ -73,9 +73,10 @@
                     <c:forEach var="experience" items="${org.listExperience}">
                         <jsp:useBean id="experience" type="com.urise.webapp.model.Organization.Experience"/>
                         <tr>
-                        <td style="width:180px" valign="top"><%=DateUtil.TRIMMEDDAY.format(experience.startDate)%>
+                        <td style="width:180px" valign="top"><%=experience.startDate != null ?
+                                DateUtil.TRIMMEDDAY.format(experience.startDate) : ""%>
                             - <%=experience.startDate != null && experience.endDate == null ?
-                                    "сейчас" : DateUtil.TRIMMEDDAY.format(experience.endDate)%>
+                                    "сейчас" : (experience.endDate != null ? DateUtil.TRIMMEDDAY.format(experience.endDate) : "")%>
                         </td>
                         <c:choose>
                             <c:when test="${empty experience.title}">

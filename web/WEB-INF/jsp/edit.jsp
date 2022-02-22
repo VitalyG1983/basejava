@@ -1,9 +1,9 @@
 <%@ page import="com.urise.webapp.model.SectionType" %>
 <%@ page import="com.urise.webapp.model.ContactType" %>
 <%@ page import="com.urise.webapp.model.TextSection" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>--%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -119,26 +119,28 @@
                         </c:forEach>
                         <br>
                         <h4>Добавление описания(позиции) для организации</h4>
-                        <label>Выберите организацию
-                            <select name="${sectionType}newPosition">
-                                <option></option>
-                                <c:forEach var="organiz" items="${listOrg}" varStatus="orgCounter">
-                                    <option value="${organiz.homePage.name}${organiz.homePage.url}">${organiz.homePage.name}</option>
-                                </c:forEach>
-                            </select>
-                        </label>
-                        <label><br>Дата начала
-                            <input type="date" name="${sectionType}startDatePos" size="30">
-                        </label><br>
-                        <label>Дата конца
-                            <input type="date" name="${sectionType}endDatePos" size="30">
-                        </label><br>
-                        <label>Должность
-                            <input type="text" name="${sectionType}expTitlePos" size="50">
-                        </label><br>
-                        <label style="vertical-align: top">Описание
-                            <textarea rows="5" cols="65" name="${sectionType}expDescPos"></textarea>
-                        </label><br>
+                        <div style="margin-left: 30px">
+                            <label>Выберите организацию
+                                <select name="${sectionType}newPosition">
+                                    <option></option>
+                                    <c:forEach var="org" items="${listOrg}" varStatus="orgCounter">
+                                        <option value="${org.homePage.name}${org.homePage.url}">${org.homePage.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </label>
+                            <label><br>Дата начала
+                                <input type="date" name="${sectionType}startDatePos" size="30">
+                            </label><br>
+                            <label>Дата конца
+                                <input type="date" name="${sectionType}endDatePos" size="30">
+                            </label><br>
+                            <label>Должность
+                                <input type="text" name="${sectionType}expTitlePos" size="50">
+                            </label><br>
+                            <label style="vertical-align: top">Описание
+                                <textarea rows="5" cols="65" name="${sectionType}expDescPos"></textarea>
+                            </label><br>
+                        </div>
                     </c:if>
                     <c:if test="${sectionType == SectionType.EXPERIENCE}">
                         <h3>Добавить новое место работы</h3>
@@ -146,26 +148,27 @@
                     <c:if test="${sectionType == SectionType.EDUCATION}">
                         <h3>Добавить новое место учебы</h3>
                     </c:if>
-                    <label>Имя организации
-                        <input type="text" name="${sectionType}NewOrgName" size="80">
-                    </label><br>
-                    <label>URL адрес
-                        <input type="url" name="${sectionType}NewUrlAddress" size="30">
-                    </label><br>
-                    <label>Дата начала
-                        <input type="date" name="${sectionType}NewStartDate" size="30">
-                    </label><br>
-                    <label>Дата конца
-                        <input type="date" name="${sectionType}NewEndDate" size="30">
-                    </label><br>
-                    <label>Должность
-                        <input type="text" name="${sectionType}NewExpTitle" size="50">
-                    </label>
-                    <dl>
-                        <dt>Описание</dt>
-                        <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
-                    </dl>
-
+                    <div style="margin-left: 30px">
+                        <label>Имя организации
+                            <input type="text" name="${sectionType}NewOrgName" size="80">
+                        </label><br>
+                        <label>URL адрес
+                            <input type="url" name="${sectionType}NewUrlAddress" size="30">
+                        </label><br>
+                        <label>Дата начала
+                            <input type="date" name="${sectionType}NewStartDate" size="30">
+                        </label><br>
+                        <label>Дата конца
+                            <input type="date" name="${sectionType}NewEndDate" size="30">
+                        </label><br>
+                        <label>Должность
+                            <input type="text" name="${sectionType}NewExpTitle" size="50">
+                        </label>
+                        <dl>
+                            <dt>Описание</dt>
+                            <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
+                        </dl>
+                    </div>
                 </c:when>
             </c:choose>
         </c:forEach>
