@@ -11,7 +11,9 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <p></p>
-<button type="button" OnClick="location.href='resume?action=newResume'">Создать резюме</button>
+<label id="New resume"> Добавить новое резюме
+    <button type="button" OnClick="location.href='resume?action=newResume'">Создать резюме</button>
+</label>
 <p></p>
 <section>
     <table border="1" cellpadding="8" cellspacing="0">

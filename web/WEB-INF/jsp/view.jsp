@@ -35,7 +35,7 @@
     <jsp:useBean id="textSection" type="com.urise.webapp.model.TextSection"/>
     <c:set var="text" value="<%=textSection.getText()%>"/>
     <c:if test="${text != null}">
-        <p style="white-space: pre">${text}</p>
+        <p style="white-space: pre;  margin-left: 40px;">${text}</p>
     </c:if>
     </c:when>
     <c:when test="${typeSection == SectionType.ACHIEVEMENT || typeSection == SectionType.QUALIFICATIONS}">
@@ -45,7 +45,7 @@
             <jsp:useBean id="textListSection" type="com.urise.webapp.model.TextListSection"/>
             <c:set var="listText" value="<%=textListSection.getListSection()%>"/>
             <c:forEach var="text" items="${listText}">
-                <p style="white-space: pre"> - ${text}</p>
+                <p style="white-space: pre;  margin-left: 40px;"> - ${text}</p>
             </c:forEach>
         </c:if>
     </c:when>
@@ -55,7 +55,7 @@
             <c:set var="orgSection" value="<%=sectionEntry.getValue()%>"/>
             <jsp:useBean id="orgSection" type="com.urise.webapp.model.OrganizationsSection"/>
             <c:set var="listOrg" value="<%=orgSection.getListOrganizations()%>"/>
-            <table valign="top">
+            <table class="view\table:EXP_EDU" valign="top">
                 <c:forEach var="org" items="${listOrg}">
                     <c:if test="${org.homePage.name != null}">
                         <tr>

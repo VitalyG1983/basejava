@@ -22,7 +22,11 @@
     }
 
     input {
-        margin-left: 25px;
+        margin-left: 50px;
+    }
+
+    h2, h3 {
+        margin: 50px 0 15px;
     }
 
 </style>--%>
@@ -33,15 +37,14 @@
           enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <input type="hidden" name="newResume" value="${newResume}">
-        <dl>
-            <dt>Имя:</dt>
-            <dd><input type="text" name="fullName" size=50 value="${resume.fullName}" required
+        <h3>Имя:<input type="text" name="fullName" size=50 value="${resume.fullName}" required
                        pattern="[\s]{0,}[А-Яа-яa-zA-Z0-9]{1,}[А-Яа-яa-zA-Z0-9\s]{0,}"
-                       title="'Имя' не должно быть пустым и содержать специальных символов"></dd>
-        </dl>
+                       title="'Имя' не должно быть пустым и содержать специальных символов"
+                       style="margin-left: 200px">
+        </h3>
         <h3>Контакты:</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
-            <dl>
+            <dl <%--style="margin-left: 30px"--%>>
                 <dt>${type.title}</dt>
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
@@ -94,89 +97,101 @@
                                 <input type="text" name="${sectionType}orgName" size="80" value="${org.homePage.name}">
                             </label><br>
                             <label>URL адрес
-                                <input type="url" name="${sectionType}urlAddress" size="30" value="${org.homePage.url}">
+                                <input style="margin-left: 55px" type="url" name="${sectionType}urlAddress" size="30"
+                                       value="${org.homePage.url}">
                             </label>
-                            <div style="margin-left: 30px">
+                            <div class="edit\experience">
                                 <c:forEach var="experience" items="${org.listExperience}" varStatus="expCounter">
-                                    <label><br>Дата начала
-                                        <input type="date" name="${sectionType}${counter.index}startDate" size="30"
-                                               value="${experience.startDate}" placeholder="MM/yyyy">
-                                    </label><br>
-                                    <label>Дата конца
-                                        <input type="date" name="${sectionType}${counter.index}endDate" size="30"
-                                               value="${experience.endDate}" placeholder="MM/yyyy">
-                                    </label><br>
-                                    <label>Должность
-                                        <input type="text" name="${sectionType}${counter.index}expTitle" size="50"
-                                               value="${experience.title}">
-                                    </label><br>
-                                    <label style="vertical-align: top">Описание
-                                        <textarea rows="5" cols="65"
-                                                  name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
-                                    </label><br>
+                                    <dl>
+                                        <dt>Дата начала</dt>
+                                        <dd><input type="date" name="${sectionType}${counter.index}startDate" size="30"
+                                                   value="${experience.startDate}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Дата конца</dt>
+                                        <dd><input type="date" name="${sectionType}${counter.index}endDate" size="30"
+                                                   value="${experience.endDate}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Должность</dt>
+                                        <dd><input type="text" name="${sectionType}${counter.index}expTitle" size="50"
+                                                   value="${experience.title}"></dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Описание</dt>
+                                        <dd><textarea rows="5" cols="65"
+                                                      name="${sectionType}${counter.index}expDesc">${experience.description}</textarea>
+                                        </dd>
+                                    </dl>
                                 </c:forEach>
                             </div>
                         </c:forEach>
                         <br>
-                        <h4>Добавление описания(позиции) для организации</h4>
-                        <div style="margin-left: 30px">
-                            <label>Выберите организацию
-                                <select name="${sectionType}newPosition">
-                                    <option></option>
-                                    <c:forEach var="org" items="${listOrg}" varStatus="orgCounter">
-                                        <option value="${org.homePage.name}${org.homePage.url}">${org.homePage.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </label>
-                            <label><br>Дата начала
-                                <input type="date" name="${sectionType}startDatePos" size="30">
-                            </label><br>
-                            <label>Дата конца
-                                <input type="date" name="${sectionType}endDatePos" size="30">
-                            </label><br>
-                            <label>Должность
-                                <input type="text" name="${sectionType}expTitlePos" size="50">
-                            </label><br>
-                            <label style="vertical-align: top">Описание
-                                <textarea rows="5" cols="65" name="${sectionType}expDescPos"></textarea>
-                            </label><br>
-                        </div>
-                    </c:if>
-                    <c:if test="${sectionType == SectionType.EXPERIENCE}">
-                        <h3>Добавить новое место работы</h3>
-                    </c:if>
-                    <c:if test="${sectionType == SectionType.EDUCATION}">
-                        <h3>Добавить новое место учебы</h3>
-                    </c:if>
-                    <div style="margin-left: 30px">
-                        <label>Имя организации
-                            <input type="text" name="${sectionType}NewOrgName" size="80">
-                        </label><br>
-                        <label>URL адрес
-                            <input type="url" name="${sectionType}NewUrlAddress" size="30">
-                        </label><br>
-                        <label>Дата начала
-                            <input type="date" name="${sectionType}NewStartDate" size="30">
-                        </label><br>
-                        <label>Дата конца
-                            <input type="date" name="${sectionType}NewEndDate" size="30">
-                        </label><br>
-                        <label>Должность
-                            <input type="text" name="${sectionType}NewExpTitle" size="50">
-                        </label>
+                        <div style="margin-left: 150px">
+                        <c:if test="${sectionType == SectionType.EXPERIENCE}">
+                            <h4>Добавление описания(позиции) для места работы</h4>
+                        </c:if>
+                        <c:if test="${sectionType == SectionType.EDUCATION}">
+                            <h4>Добавление описания(позиции) для места учебы</h4>
+                        </c:if>
+                        <label>Выберите организацию</label>
+                        <select style="margin-left: 32px" name="${sectionType}newPosition">
+                            <option></option>
+                            <c:forEach var="org" items="${listOrg}" varStatus="orgCounter">
+                                <option value="${org.homePage.name}${org.homePage.url}">${org.homePage.name}</option>
+                            </c:forEach>
+                        </select>
+                        <dl>
+                            <dt>Дата начала</dt>
+                            <dd><input type="date" name="${sectionType}startDatePos" size="30"></dd>
+                        </dl>
+                        <dl>
+                            <dt>Дата конца</dt>
+                            <dd><input type="date" name="${sectionType}endDatePos" size="30"></dd>
+                        </dl>
+                        <dl>
+                            <dt>Должность</dt>
+                            <dd><input type="text" name="${sectionType}expTitlePos" size="50"></dd>
+                        </dl>
                         <dl>
                             <dt>Описание</dt>
-                            <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
+                            <dd><textarea rows="5" cols="65" name="${sectionType}expDescPos"></textarea></dd>
                         </dl>
+                    </c:if>
+                    <c:if test="${sectionType == SectionType.EXPERIENCE}">
+                        <h4>Добавить новое место работы</h4>
+                    </c:if>
+                    <c:if test="${sectionType == SectionType.EDUCATION}">
+                        <h4>Добавить новое место учебы</h4>
+                    </c:if>
+                    <dl>
+                        <dt>Имя организации</dt>
+                        <dd><input type="text" name="${sectionType}NewOrgName" size="80"></dd>
+                    </dl>
+                    <dl>
+                        <dt>URL адрес</dt>
+                        <dd><input type="url" name="${sectionType}NewUrlAddress" size="30"></dd>
+                    </dl>
+                    <dl>
+                        <dt>Дата начала</dt>
+                        <dd><input type="date" name="${sectionType}NewStartDate" size="30"></dd>
+                    </dl>
+                    <dl>
+                        <dt>Дата конца</dt>
+                        <dd><input type="date" name="${sectionType}NewEndDate" size="30"></dd>
+                    </dl>
+                    <dl>
+                        <dt>Должность</dt>
+                        <dd><input type="text" name="${sectionType}NewExpTitle" size="50"></dd>
+                    </dl>
+                    <dl>
+                        <dt>Описание</dt>
+                        <dd><textarea rows="5" cols="65" name="${sectionType}NewExpDesc"></textarea></dd>
+                    </dl>
                     </div>
                 </c:when>
             </c:choose>
         </c:forEach>
-
-        <%--   <input type="text" name="section" size=30 value="1"><br/>
-           <input type="text" name="section" size=30 value="2"><br/>
-           <input type="text" name="section" size=30 value="3"><br/>
-           <hr>--%>
         <p><br></p>
         <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
