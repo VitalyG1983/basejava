@@ -100,8 +100,7 @@ public class ResumeServlet extends HttpServlet {
         ).forward(request, response);
     }
 
-    private void fillTextListSection(String
-                                             sectionText, Map<SectionType, AbstractSection> sections, SectionType secType) {
+    private void fillTextListSection(String sectionText, Map<SectionType, AbstractSection> sections, SectionType secType) {
         TextListSection tls = new TextListSection(new ArrayList<>());
         List<String> listString = tls.getListSection();
         if (sectionText != null) {
@@ -161,7 +160,7 @@ public class ResumeServlet extends HttpServlet {
             listExp.add(experience);
             organizations.add(new Organization(listExp, NewOrgName, request.getParameter(sectionType + "NewUrlAddress")));
         }
-        ////////////////////////////////////   New Position for Organization adding    /////////////////////////////////
+        ////////////////////////////////////   New Experience(Position) for Organization adding    /////////////////////////////////
         String newPosition = request.getParameter(sectionType + "newPosition");
         if (newPosition != null && !newPosition.isBlank()) {
             int index = newPosition.indexOf("http");

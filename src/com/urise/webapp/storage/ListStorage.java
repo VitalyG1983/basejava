@@ -1,7 +1,6 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.util.ResumeTestData;
 
 import java.util.ArrayList;
 import java.util.List;

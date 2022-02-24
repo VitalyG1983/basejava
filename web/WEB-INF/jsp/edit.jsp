@@ -193,17 +193,8 @@
             </c:choose>
         </c:forEach>
         <p><br></p>
-        <button type="submit" onsubmit="return checkFields(this);">Сохранить</button>
+        <button style="margin-left: 200px" type="submit">Сохранить</button>
         <button type="reset" onclick="window.history.back();return false">Отменить</button>
-        <script type="text/javascript">
-            function checkFields(editForm) {
-                if (editForm.fullName.value === "") {
-                    alert("Пожалуйста, введите правильное 'Имя'");
-                    return false;
-                }
-                return true;
-            }
-        </script>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
