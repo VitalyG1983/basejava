@@ -21,6 +21,7 @@
                          type="java.util.Map.Entry<com.urise.webapp.model.ContactType, java.lang.String>"/>
                 <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
+    <hr/>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sections.entrySet()}">
             <jsp:useBean id="sectionEntry"

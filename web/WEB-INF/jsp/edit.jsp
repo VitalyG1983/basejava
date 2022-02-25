@@ -33,7 +33,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <form name="editForm" method="post" action="resume" onsubmit="return checkFields(this);"
+    <form name="editForm" method="post" action="resume"
           enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <input type="hidden" name="newResume" value="${newResume}">
@@ -49,6 +49,7 @@
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
+        <hr/>
         <%-------------------------------------  Секции--------------------------------------------------%>
         <c:forEach var="sectionType" items="${SectionType.values()}">
             <jsp:useBean id="sectionType" type="com.urise.webapp.model.SectionType"/>
