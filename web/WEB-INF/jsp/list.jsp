@@ -11,12 +11,12 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <p></p>
-<label style="margin-left: 640px" id="New resume"> Добавить новое резюме
-    <br><button style="margin-left: 665px" type="button" OnClick="location.href='resume?action=newResume'">Создать резюме</button>
+<label style="margin-left: 630px"  id="New resume"> Добавить новое резюме
+    <br><button style="margin-left: 655px" type="button" OnClick="location.href='resume?action=newResume'">Создать резюме</button>
 </label>
 <p></p>
 <section>
-    <table style="margin-left: 440px" border="1" cellpadding="8" cellspacing="0">
+    <table style="margin: auto" border="1" cellpadding="8" cellspacing="0">
         <caption><h3>Список резюме</h3></caption>
         <tr>
             <th>Имя</th>
