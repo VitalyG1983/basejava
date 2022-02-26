@@ -6,8 +6,8 @@ create table resume
     full_name text not null
 );
 
-alter table resume
-    owner to postgres;
+/*alter table resume
+    owner to postgres;*/
 
 create table contact
 (
@@ -38,8 +38,8 @@ create table section
             primary key
 );
 
-alter table section
-    owner to postgres;
+/*alter table section
+    owner to postgres;*/
 
 create unique index section_resume_uuid_type_uindex
     on section (resume_uuid, type);

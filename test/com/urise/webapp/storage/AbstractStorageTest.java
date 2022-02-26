@@ -29,9 +29,9 @@ public abstract class AbstractStorageTest {
 
     private final Resume resume1 = new Resume(UUID_1, "Alex");
           //  ResumeTestData.createResume(UUID_1, "fullName1", true);     //new Resume(UUID_1, "Alex");
-    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Vit", false);//new Resume(UUID_2, "fullName");
+    private final Resume resume2 = ResumeTestData.createResume(UUID_2, "Grigory Kislin", false);//new Resume(UUID_2, "fullName");
     private final Resume resume3 = ResumeTestData.createResume(UUID_3, "John", false);//new Resume(UUID_3, "fullName");
-    private final Resume resume4 = ResumeTestData.createResume(UUID_4, "Roma", false);//new Resume(UUID_4, "fullName");
+    private final Resume resume4 = ResumeTestData.createResumeVit(UUID_4, "Vitaliy Gavrilov", false);//new Resume(UUID_4, "fullName");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
