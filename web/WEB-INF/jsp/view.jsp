@@ -62,8 +62,7 @@
                         <tr>
                             <c:choose>
                                 <c:when test="${not empty org.homePage.url}">
-                                    <td colspan="2"><b><a
-                                            href="${org.homePage.url}">${org.homePage.name}</a></b></td>
+                                    <td colspan="2"><b><a href="${org.homePage.url}">${org.homePage.name}</a></b></td>
                                 </c:when>
                                 <c:otherwise>
                                     <td colspan="2"><b>${org.homePage.name}</b></td>

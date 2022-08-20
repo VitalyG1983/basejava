@@ -79,20 +79,21 @@ public class ResumeServlet extends HttpServlet {
         }
         Resume r;
         switch (action) {
-            case "delete" -> {
+            case "delete":
                 storage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
-            }
-            case "view", "edit" -> {
+            case "view":
+            case "edit":
                 r = storage.get(uuid);
                 request.setAttribute("newResume", false);
-            }
-            case "newResume" -> {
+                break;
+            case "newResume":
                 r = new Resume();
                 request.setAttribute("newResume", true);
-            }
-            default -> throw new IllegalArgumentException("Action " + action + " is illegal");
+                break;
+            default:
+                throw new IllegalArgumentException("Action " + action + " is illegal");
         }
         request.setAttribute("resume", r);
         request.getRequestDispatcher(

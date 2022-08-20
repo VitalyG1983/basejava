@@ -49,8 +49,8 @@ public class MainConcurrency {
             thread.start();
             threads.add(thread);
         }
-
-        threads.forEach(t -> {
+       // Thread.sleep(500);
+       threads.forEach(t -> {
             try {
                 t.join();
             } catch (InterruptedException e) {

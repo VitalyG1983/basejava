@@ -2,7 +2,7 @@
 out
 *.iml
 log
-/README.md
+#README.md
 
 /storage/
 
